@@ -1262,6 +1262,28 @@
 			"path" : "/opt/ros/noetic/share/apriltag/cmake/apriltagTargets-none.cmake"
 		},
 		{
+			"path" : "setup.py"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "build/catkin_generated/setup_py_interrogation.cmake"
+		},
+		{
+			"path" : "package.xml"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "build/catkin_generated/package.cmake"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/opt/ros/noetic/share/catkin/cmake/templates/python_distutils_install.sh.in"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/opt/ros/noetic/share/catkin/cmake/templates/safe_execute_install.cmake.in"
+		},
+		{
 			"path" : "package.xml"
 		},
 		{
@@ -1299,6 +1321,13 @@
 		{
 			"isExternal" : true,
 			"path" : "/opt/ros/noetic/share/catkin/cmake/templates/pkgConfig-version.cmake.in"
+		},
+		{
+			"path" : "scripts/centauro_opendrawer.py"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/opt/ros/noetic/share/catkin/cmake/templates/script.py.in"
 		},
 		{
 			"isExternal" : true,
