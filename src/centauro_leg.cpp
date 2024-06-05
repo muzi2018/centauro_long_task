@@ -198,11 +198,14 @@ int main(int argc, char **argv)
     bool state4_support = false;
 
     int i=1; // mpc step index 
-    double long_x = 0.1; // step long distance
-    double leg_height = 0.1; // step height
-    double seg_num = 1; // mpc segment number
-    double seg_time = phase_time / seg_num; // mpc segment duration
-    double seg_dis = long_x / seg_num; // each mpc step long
+    double leg_long = 0.1; // step long distance
+    double leg_heigh = 0.1; // step height
+    double leg_long_e, leg_height_e;
+
+    double seg_num = 300; // mpc segment number
+    double seg_time = phase_time / seg_num; // phase_time = 3 seg_num = 100 seg_time = 0.01
+
+    double seg_dis = leg_long / seg_num;
 
     double com_shift_x, com_shift_y;
 
@@ -214,19 +217,15 @@ int main(int argc, char **argv)
     Eigen::Vector6d E;
     while (ros::ok())
     {
-        if (1) // leg 1
+        if (!state1_support) // leg 1
         {
             model->getCOM(com_pos);
             model->getPointPosition(leg1_frame, Eigen::Vector3d::Zero(),leg1_pos);
             model->getPointPosition(leg2_frame, Eigen::Vector3d::Zero(),leg2_pos);
             model->getPointPosition(leg3_frame, Eigen::Vector3d::Zero(),leg3_pos);
             model->getPointPosition(leg4_frame, Eigen::Vector3d::Zero(),leg4_pos); 
-
             std::cout << "length = " << leg1_pos[0] - leg3_pos[2] << std::endl;
             std::cout << "wide = " << leg1_pos[1] - leg2_pos[1] << std::endl;
-
-
-
             leg_mid = ( leg2_pos + leg3_pos + leg4_pos)/3;
             com_shift_x = (leg_mid[0] - com_pos[0]);
             com_shift_y = (leg_mid[1] - com_pos[1]);
@@ -234,7 +233,6 @@ int main(int argc, char **argv)
             com_shift_y = com_shift_y ;
             std::cout << "com_shift_x = " << com_shift_x << std::endl;
             std::cout << "com_shift_y = " << com_shift_y << std::endl;
-
             /**
              * Velocity Controller
             */
@@ -248,8 +246,52 @@ int main(int argc, char **argv)
             {
                 /* code */
                 E.setZero();
+                state1_support = true;
             }
             com_cartesian->setVelocityReference(E);
+        }else{
+            if (current_state1 == 0)
+            {
+                double leg_x_e, leg_z_e;
+                if (i >= seg_num)
+                {
+                    leg1_cartesian->getPoseReference(Leg1_T_ref);
+                    leg1_cartesian->setPoseTarget(Leg1_T_ref, seg_time); 
+                }else{
+                    leg_x_e = seg_dis;
+                    leg_z_e = leg_long * sin(3.14 * i / seg_num) - leg_heigh * sin(3.14 * (i-1) / seg_num);
+                    leg1_cartesian->getPoseReference(Leg1_T_ref);
+                    Leg1_T_ref.pretranslate(Eigen::Vector3d(leg_x_e,0,leg_z_e));
+                    leg1_cartesian->setPoseTarget(Leg1_T_ref, seg_time);
+                }
+                i++;
+                current_state1++;
+            }
+            if(current_state1 == 1)
+            {
+                if (leg1_cartesian->getTaskState() == State::Reaching)
+                {
+                    {
+                        // std::cout << "Motion started!" << std::endl;
+                        current_state1++;
+                    }
+                }
+
+            }
+            if(current_state1 == 2) // here we wait for it to be completed
+            {
+                if(leg1_cartesian->getTaskState() == State::Online)
+                {
+                    Eigen::Affine3d T;
+                    leg1_cartesian->getCurrentPose(T);
+                    // std::cout << "Motion completed" << std::endl;
+                    current_state1=0;
+
+
+                }
+            }
+
+
         }
 
         std::cout << "Motion started!" << std::endl;
