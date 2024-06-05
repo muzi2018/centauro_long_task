@@ -34,10 +34,10 @@
                 <mxCell id="9" value="Drawer" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="13" vertex="1">
                     <mxGeometry x="60" y="10" width="60" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="14" value="2. wheel" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                <mxCell id="14" value="3. wheel" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="250" y="100" width="60" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="15" value="2. open drawer&lt;br&gt;3. pick&amp;nbsp;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                <mxCell id="15" value="4. open drawer&lt;br&gt;5. pick&amp;nbsp;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="300" y="200" width="60" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="16" value="4. put&lt;br&gt;5. take up&lt;br&gt;6. turn around" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
@@ -63,12 +63,6 @@
                 </mxCell>
                 <mxCell id="24" value="1. turn around 2.search" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
                     <mxGeometry x="160" y="50" width="110" height="30" as="geometry"/>
-                </mxCell>
-                <mxCell id="25" value="search" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-                    <mxGeometry x="540" y="70" width="200" height="200" as="geometry"/>
-                </mxCell>
-                <mxCell id="26" value="turn around -&amp;gt; &lt;br&gt;looking for tag -&amp;gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="25">
-                    <mxGeometry x="20" y="45" width="110" height="40" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
