@@ -133,6 +133,7 @@ ${cartesian_interface_INCLUDE_DIRS}
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(centauro_wheel_node src/centauro_wheel_node.cpp)
 add_executable(centauro_turnaround_node src/centauro_turnaround.cpp)
+add_executable(centauro_search_node src/centauro_search.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -151,6 +152,11 @@ target_link_libraries(centauro_wheel_node
 target_link_libraries(centauro_turnaround_node 
   ${catkin_LIBRARIES} ${cartesian_interface_LIBRARIES}
 )
+
+target_link_libraries(centauro_search_node 
+  ${catkin_LIBRARIES} ${cartesian_interface_LIBRARIES}
+)
+
 #############
 ## Install ##
 #############
@@ -174,6 +180,7 @@ target_link_libraries(centauro_turnaround_node
 ## Mark libraries for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_libraries.html
  install(TARGETS centauro_wheel_node centauro_turnaround_node
+                 centauro_search_node
    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
@@ -190,7 +197,10 @@ install(DIRECTORY launch/
    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/config
    PATTERN ".svn" EXCLUDE
  )
-
+ install(DIRECTORY rviz/
+   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/rviz
+   PATTERN ".svn" EXCLUDE
+ )
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 # install(FILES
 #   # myfile1
