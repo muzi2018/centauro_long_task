@@ -2,7 +2,7 @@
 
   <!-- Load the URDF/SRDF into the ROS Parameter Server -->
     <!-- visualization config -->
-  <arg name="rviz"               default="false" />
+  <arg name="rviz"               default="true" />
 
   <!-- external launch file  -->
   <!-- <include file="$(find centauro_gazebo)/launch/centauro_world.launch"/> -->
@@ -25,11 +25,9 @@
           textfile="$(find centauro_long_task)/config/cartesio_stack_wheel.yaml"/> 
 
     <!--Test node-->
-  <!-- <node pkg="centauro_long_task" name="centauro_wheel" type="centauro_wheel_node" output="screen"/> -->
+  <node pkg="centauro_long_task" name="centauro_wheel" type="centauro_wheel_node" output="screen"/>
   <!-- <node pkg="centauro_long_task" name="centauro_turnaround" type="centauro_turnaround_node" output="screen"/> -->
   <!-- <node pkg="centauro_long_task" name="centauro_search" type="centauro_search_node" output="screen"/> -->
-  <!-- <node pkg="centauro_long_task" type="centauro_opendrawer.py" name="centauro_opendrawer" output="screen"/> -->
-  <node pkg="centauro_long_task" type="centauro_opendoor.py" name="centauro_opendoor" output="screen"/>
 
 
 </launch>
