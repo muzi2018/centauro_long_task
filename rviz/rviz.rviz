@@ -849,7 +849,7 @@ Visualization Manager:
   Global Options:
     Background Color: 48; 48; 48
     Default Light: true
-    Fixed Frame: world
+    Fixed Frame: pelvis
     Frame Rate: 30
   Name: root
   Tools:
