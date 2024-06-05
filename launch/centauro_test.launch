@@ -21,8 +21,11 @@
 
 
 
+  <!-- <param name="problem_description"
+          textfile="$(find centauro_long_task)/config/cartesio_stack_wheel.yaml"/>  -->
   <param name="problem_description"
-          textfile="$(find centauro_long_task)/config/cartesio_stack_wheel.yaml"/> 
+          textfile="$(find centauro_long_task)/config/cartesio_stack_leg.yaml"/> 
+
 
     <!--Test node-->
   <!-- <node pkg="centauro_long_task" name="centauro_wheel" type="centauro_wheel_node" output="screen"/> -->
@@ -30,6 +33,7 @@
   <!-- <node pkg="centauro_long_task" name="centauro_search" type="centauro_search_node" output="screen"/> -->
   <!-- <node pkg="centauro_long_task" type="centauro_opendrawer.py" name="centauro_opendrawer" output="screen"/> -->
   <!-- <node pkg="centauro_long_task" type="centauro_opendoor.py" name="centauro_opendoor" output="screen"/> -->
+  <node pkg="centauro_long_task" name="centauro_leg" type="centauro_leg_node" output="screen"/>
 
 
 </launch>

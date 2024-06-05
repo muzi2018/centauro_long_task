@@ -181,6 +181,19 @@ centauro_search_node/fast:
 .PHONY : centauro_search_node/fast
 
 #=============================================================================
+# Target rules for targets named centauro_leg_node
+
+# Build rule for target.
+centauro_leg_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 centauro_leg_node
+.PHONY : centauro_leg_node
+
+# fast build rule for target.
+centauro_leg_node/fast:
+	$(MAKE) -f CMakeFiles/centauro_leg_node.dir/build.make CMakeFiles/centauro_leg_node.dir/build
+.PHONY : centauro_leg_node/fast
+
+#=============================================================================
 # Target rules for targets named tf2_msgs_generate_messages_nodejs
 
 # Build rule for target.
@@ -1103,6 +1116,33 @@ gtest/fast:
 	$(MAKE) -f gtest/googletest/CMakeFiles/gtest.dir/build.make gtest/googletest/CMakeFiles/gtest.dir/build
 .PHONY : gtest/fast
 
+src/centauro_leg.o: src/centauro_leg.cpp.o
+
+.PHONY : src/centauro_leg.o
+
+# target to build an object file
+src/centauro_leg.cpp.o:
+	$(MAKE) -f CMakeFiles/centauro_leg_node.dir/build.make CMakeFiles/centauro_leg_node.dir/src/centauro_leg.cpp.o
+.PHONY : src/centauro_leg.cpp.o
+
+src/centauro_leg.i: src/centauro_leg.cpp.i
+
+.PHONY : src/centauro_leg.i
+
+# target to preprocess a source file
+src/centauro_leg.cpp.i:
+	$(MAKE) -f CMakeFiles/centauro_leg_node.dir/build.make CMakeFiles/centauro_leg_node.dir/src/centauro_leg.cpp.i
+.PHONY : src/centauro_leg.cpp.i
+
+src/centauro_leg.s: src/centauro_leg.cpp.s
+
+.PHONY : src/centauro_leg.s
+
+# target to generate assembly for a file
+src/centauro_leg.cpp.s:
+	$(MAKE) -f CMakeFiles/centauro_leg_node.dir/build.make CMakeFiles/centauro_leg_node.dir/src/centauro_leg.cpp.s
+.PHONY : src/centauro_leg.cpp.s
+
 src/centauro_search.o: src/centauro_search.cpp.o
 
 .PHONY : src/centauro_search.o
@@ -1196,6 +1236,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... test"
 	@echo "... centauro_search_node"
+	@echo "... centauro_leg_node"
 	@echo "... tf2_msgs_generate_messages_nodejs"
 	@echo "... tf2_msgs_generate_messages_lisp"
 	@echo "... tf2_msgs_generate_messages_cpp"
@@ -1269,6 +1310,9 @@ help:
 	@echo "... gmock"
 	@echo "... gtest_main"
 	@echo "... gtest"
+	@echo "... src/centauro_leg.o"
+	@echo "... src/centauro_leg.i"
+	@echo "... src/centauro_leg.s"
 	@echo "... src/centauro_search.o"
 	@echo "... src/centauro_search.i"
 	@echo "... src/centauro_search.s"

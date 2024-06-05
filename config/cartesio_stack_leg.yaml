@@ -1,0 +1,37 @@
+## stack of tasks definition ##
+stack:
+    - ["Wheel1", "Wheel2", "Wheel3", "Wheel4", "Com"]
+    - ["Postural"]
+constraints: ["JointLimits"]
+
+## task and constraint definition ##
+
+JointLimits:
+    type: "JointLimits"
+
+# RightArm:
+#     type: "Cartesian"
+#     distal_link: "arm2_8"
+
+Wheel1:
+    type: "Cartesian"
+    distal_link: "wheel_1"
+
+Wheel2:
+    type: "Cartesian"
+    distal_link: "wheel_2"
+
+Wheel3:
+    type: "Cartesian"
+    distal_link: "wheel_3"
+
+Wheel4:
+    type: "Cartesian"
+    distal_link: "wheel_4"
+
+Com:
+    type: "Com"
+    indices: [0, 1]
+
+Postural:
+    type: "Postural"
