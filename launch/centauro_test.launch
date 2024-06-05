@@ -5,7 +5,7 @@
   <arg name="rviz"               default="false" />
 
   <!-- external launch file  -->
-  <include file="$(find centauro_gazebo)/launch/centauro_world.launch"/>
+  <!-- <include file="$(find centauro_gazebo)/launch/centauro_world.launch"/> -->
 
   <!-- parameter load  -->
   <param name="robot_description" textfile="$(find centauro_urdf)/urdf/centauro.urdf"/>

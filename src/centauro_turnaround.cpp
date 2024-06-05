@@ -22,12 +22,12 @@
 #include <xbot_msgs/JointCommand.h>
 
 using namespace XBot::Cartesian;
-bool start_searching_bool = false;
+bool start_turn_bool = false;
 const double dt = 0.01;
 int turn_num = 100;
-bool start_searching(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
+bool start_turn(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
 {
-    start_searching_bool = !start_searching_bool;
+    start_turn_bool = !start_turn_bool;
     return true;
 };
 
@@ -90,7 +90,7 @@ int main(int argc, char **argv)
     auto solver = XBot::Cartesian::CartesianInterfaceImpl::MakeInstance("OpenSot",
                                                        ik_pb, ctx
                                                        );
-    ros::ServiceServer service = nodeHandle.advertiseService("start_searching", start_searching);
+    ros::ServiceServer service = nodeHandle.advertiseService("start_turn", start_turn);
     ros::Rate r(10);
     double time = 0 ;
     Eigen::VectorXd q, qdot, qddot;
@@ -99,7 +99,7 @@ int main(int argc, char **argv)
     auto car_cartesian = std::dynamic_pointer_cast<XBot::Cartesian::CartesianTask>(car_task);
     while (ros::ok())
     {
-        while (!start_searching_bool)
+        while (!start_turn_bool)
         {
             ros::spinOnce();
             r.sleep();
