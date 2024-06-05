@@ -217,9 +217,16 @@ int main(int argc, char **argv)
         if (1) // leg 1
         {
             model->getCOM(com_pos);
+            model->getPointPosition(leg1_frame, Eigen::Vector3d::Zero(),leg1_pos);
             model->getPointPosition(leg2_frame, Eigen::Vector3d::Zero(),leg2_pos);
             model->getPointPosition(leg3_frame, Eigen::Vector3d::Zero(),leg3_pos);
             model->getPointPosition(leg4_frame, Eigen::Vector3d::Zero(),leg4_pos); 
+
+            std::cout << "length = " << leg1_pos[0] - leg3_pos[2] << std::endl;
+            std::cout << "wide = " << leg1_pos[1] - leg2_pos[1] << std::endl;
+
+
+
             leg_mid = ( leg2_pos + leg3_pos + leg4_pos)/3;
             com_shift_x = (leg_mid[0] - com_pos[0]);
             com_shift_y = (leg_mid[1] - com_pos[1]);
@@ -237,6 +244,11 @@ int main(int argc, char **argv)
             E[3] = 0;
             E[4] = 0;
             E[5] = 0 * 0;
+            if (abs(com_shift_x) <= 0.08)
+            {
+                /* code */
+                E.setZero();
+            }
             com_cartesian->setVelocityReference(E);
         }
 
