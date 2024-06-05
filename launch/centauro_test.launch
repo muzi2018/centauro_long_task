@@ -22,7 +22,7 @@
 
 
   <param name="problem_description"
-          textfile="$(find centauro_long_task)/config/cartesio_stack.yaml"/> 
+          textfile="$(find centauro_long_task)/config/cartesio_stack_wheel.yaml"/> 
 
     <!--Test node-->
   <node pkg="centauro_long_task" name="centauro_wheel" type="centauro_wheel_node" output="screen"/>
