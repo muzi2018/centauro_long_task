@@ -203,6 +203,10 @@ install(DIRECTORY launch/
    DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/rviz
    PATTERN ".svn" EXCLUDE
  )
+ install(DIRECTORY trajectory/
+ DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/trajectory
+ PATTERN ".svn" EXCLUDE
+)
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 # install(FILES
 #   # myfile1

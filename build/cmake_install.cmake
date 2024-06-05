@@ -223,6 +223,10 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/centauro_long_task/rviz" TYPE DIRECTORY FILES "/home/wang/forest_ws/src/centauro_long_task/rviz/" REGEX "/\\.svn$" EXCLUDE)
 endif()
 
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/centauro_long_task/trajectory" TYPE DIRECTORY FILES "/home/wang/forest_ws/src/centauro_long_task/trajectory/" REGEX "/\\.svn$" EXCLUDE)
+endif()
+
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/home/wang/forest_ws/src/centauro_long_task/build/gtest/cmake_install.cmake")

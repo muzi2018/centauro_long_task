@@ -82,7 +82,8 @@ index_ = 0
 ns = 0
 # with open('/home/wang/horizon_wbc/output_1.txt', 'r') as file:
 #     lines = file.readlines()
-with open('/home/wang/horizon_wbc/output_1.txt', 'r') as file:
+filename = rospkg.RosPack().get_path('centauro_long_task') + "/trajectory/opendrawer.txt"
+with open(filename, 'r') as file:
     lines = file.readlines()
 matrix = []
 
@@ -94,8 +95,8 @@ for line in lines:
         ns = ns + 1
     index_ = index_ + 1
 
-for i in range(20):
-    value[0] -= i * 0.005
+for i in range(15):
+    value[0] -= i * 0.002
     matrix.append(value)
     ns = ns + 1
 
@@ -106,6 +107,8 @@ T = 5.
 dt = T / ns
 prb = Problem(ns, receding=True, casadi_type=cs.SX)
 prb.setDt(dt)
+print("ns = ", ns) # 120
+print("dt = ", dt) # 0.04
 
 # try construct RobotInterface
 cfg = co.ConfigOptions()
@@ -330,8 +333,7 @@ pub_state = rospy.Publisher('centauro_state', Float64MultiArray, queue_size=1)
 
 
 T_end = 3.5
-T = T_end
-
+# T = T_end
 # Tee = model_fk.getPose('base_link')
 # print('end effector pose w.r.t. world frame is:\n{}'.format(Tee))
 # print(type(Tee))
@@ -339,21 +341,19 @@ T = T_end
 num_T = T // dt
 print("num_T = ", num_T+1)
 data = np.zeros((3, int(num_T+1)))
+print("solution['a'].shape = ", solution['a'].shape)
 
 while time <= T:
-    # solution['q'][44,i] = 0.4 + i * 0.01
-    # if solution['q'][44,i] >= 1.00:
-        # solution['q'][44,i] = 1.00
-    # solution['v'][43,i] = 0.0
     solution['q'][44,i] = 0.0
-    # if solution['q'][33,i] < 0.0:
-    #     solution['q'][33,i] = 0.0
     solution['v'][43,i] = 0.0
 
+    if i >= solution['a'].shape[1]:
+        i = solution['a'].shape[1] - 1
     ## update model
     q = model_fk.getJointPosition()
     qdot = solution['v'][:,i]
     qddot = solution['a'][:,i]
+    print("solution['a'].shape = ", solution['a'].shape)
     q += dt * qdot + 0.5 * pow(dt, 2) * qddot
     qdot += dt * qddot
     model_fk.setJointPosition(q)
