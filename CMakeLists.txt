@@ -168,6 +168,7 @@ target_link_libraries(centauro_search_node
 ## in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
   scripts/centauro_opendrawer.py
+  scripts/centauro_opendoor.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 ## Mark executables for installation
