@@ -207,6 +207,19 @@ tf2_msgs_generate_messages_cpp/fast:
 .PHONY : tf2_msgs_generate_messages_cpp/fast
 
 #=============================================================================
+# Target rules for targets named centauro_turnaround_node
+
+# Build rule for target.
+centauro_turnaround_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 centauro_turnaround_node
+.PHONY : centauro_turnaround_node
+
+# fast build rule for target.
+centauro_turnaround_node/fast:
+	$(MAKE) -f CMakeFiles/centauro_turnaround_node.dir/build.make CMakeFiles/centauro_turnaround_node.dir/build
+.PHONY : centauro_turnaround_node/fast
+
+#=============================================================================
 # Target rules for targets named actionlib_msgs_generate_messages_py
 
 # Build rule for target.
@@ -1077,6 +1090,33 @@ gtest/fast:
 	$(MAKE) -f gtest/googletest/CMakeFiles/gtest.dir/build.make gtest/googletest/CMakeFiles/gtest.dir/build
 .PHONY : gtest/fast
 
+src/centauro_turnaround.o: src/centauro_turnaround.cpp.o
+
+.PHONY : src/centauro_turnaround.o
+
+# target to build an object file
+src/centauro_turnaround.cpp.o:
+	$(MAKE) -f CMakeFiles/centauro_turnaround_node.dir/build.make CMakeFiles/centauro_turnaround_node.dir/src/centauro_turnaround.cpp.o
+.PHONY : src/centauro_turnaround.cpp.o
+
+src/centauro_turnaround.i: src/centauro_turnaround.cpp.i
+
+.PHONY : src/centauro_turnaround.i
+
+# target to preprocess a source file
+src/centauro_turnaround.cpp.i:
+	$(MAKE) -f CMakeFiles/centauro_turnaround_node.dir/build.make CMakeFiles/centauro_turnaround_node.dir/src/centauro_turnaround.cpp.i
+.PHONY : src/centauro_turnaround.cpp.i
+
+src/centauro_turnaround.s: src/centauro_turnaround.cpp.s
+
+.PHONY : src/centauro_turnaround.s
+
+# target to generate assembly for a file
+src/centauro_turnaround.cpp.s:
+	$(MAKE) -f CMakeFiles/centauro_turnaround_node.dir/build.make CMakeFiles/centauro_turnaround_node.dir/src/centauro_turnaround.cpp.s
+.PHONY : src/centauro_turnaround.cpp.s
+
 src/centauro_wheel_node.o: src/centauro_wheel_node.cpp.o
 
 .PHONY : src/centauro_wheel_node.o
@@ -1118,6 +1158,7 @@ help:
 	@echo "... tf2_msgs_generate_messages_nodejs"
 	@echo "... tf2_msgs_generate_messages_lisp"
 	@echo "... tf2_msgs_generate_messages_cpp"
+	@echo "... centauro_turnaround_node"
 	@echo "... actionlib_msgs_generate_messages_py"
 	@echo "... apriltag_ros_generate_messages_eus"
 	@echo "... nodelet_generate_messages_eus"
@@ -1187,6 +1228,9 @@ help:
 	@echo "... gmock"
 	@echo "... gtest_main"
 	@echo "... gtest"
+	@echo "... src/centauro_turnaround.o"
+	@echo "... src/centauro_turnaround.i"
+	@echo "... src/centauro_turnaround.s"
 	@echo "... src/centauro_wheel_node.o"
 	@echo "... src/centauro_wheel_node.i"
 	@echo "... src/centauro_wheel_node.s"
