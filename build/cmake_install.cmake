@@ -129,6 +129,10 @@ file(INSTALL DESTINATION "/usr/local" TYPE FILE FILES "/home/wang/forest_ws/src/
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  include("/home/wang/forest_ws/src/centauro_long_task/build/catkin_generated/safe_execute_install.cmake")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/pkgconfig" TYPE FILE FILES "/home/wang/forest_ws/src/centauro_long_task/build/catkin_generated/installspace/centauro_long_task.pc")
 endif()
 
@@ -141,6 +145,10 @@ endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
   file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share/centauro_long_task" TYPE FILE FILES "/home/wang/forest_ws/src/centauro_long_task/package.xml")
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task" TYPE PROGRAM FILES "/home/wang/forest_ws/src/centauro_long_task/build/catkin_generated/installspace/centauro_opendrawer.py")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
