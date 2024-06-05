@@ -20,30 +20,67 @@
 #include <Eigen/Dense>
 #include <std_srvs/Empty.h>
 #include <xbot_msgs/JointCommand.h>
-
+# define Offset_yaw 3.14/2
 using namespace XBot::Cartesian;
-bool start_turn_bool = false;
+bool start_searching_bool = false;
+bool tagDetected = false;
+int direction = 1; // -1: right, 1: left
+double offset_yaw = Offset_yaw;
+double roll_e, pitch_e, yaw_e;
+
 const double dt = 0.01;
-int turn_num = 100;
-bool start_turn(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
+bool start_searching(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
 {
-    start_turn_bool = !start_turn_bool;
+    start_searching_bool = !start_searching_bool;
     return true;
 };
 
+void tagDetectionsCallback(const apriltag_ros::AprilTagDetectionArray::ConstPtr& msg)
+{
+    if (msg->detections.size() > 0) {
+        tagDetected = true;
+    }else{
+        tagDetected = false;
+    }
+}
 
 void TurnAround(XBot::Cartesian::CartesianTask* car_cartesian){
     Eigen::Vector6d E;
-    double yaw_e = -1 * 3.14 * 1/5;
-    E[0] = 0;
-    E[1] = 0;
-    E[2] = 0;
-    E[3] = 0;
-    E[4] = 0;
-    E[5] = 0.2 * yaw_e;
-    car_cartesian->setVelocityReference(E); 
-    // num -- ;
+    if (!tagDetected)
+    {
+        double yaw_e_ = direction * 1 * 3.14 * 1/5;
+        E[0] = 0;
+        E[1] = 0;
+        E[2] = 0;
+        E[3] = 0;
+        E[4] = 0;
+        E[5] = 0.2 * yaw_e_;
+        car_cartesian->setVelocityReference(E); 
+        offset_yaw = Offset_yaw;
+    }else{
+
+        E[0] = 0;
+        E[1] = 0;
+        E[2] = 0;
+        E[3] = 0;
+        E[4] = 0;
+        E[5] = 0.2 * (offset_yaw);
+        offset_yaw -= 0.02 ;
+        if (abs(offset_yaw) < 1.3)
+        {
+            offset_yaw = 0;
+            E.setZero();
+        }
+        car_cartesian->setVelocityReference(E);
+        // std::cout << "offset_yaw " << offset_yaw << std::endl;
+        // std::cout << "1 * offset_yaw = " << 1 * offset_yaw << std::endl;
+        // std::cout << "E[5]" << E[5] << std::endl;
+    }
+    
+
 }
+
+
 
 
 
@@ -55,6 +92,9 @@ int main(int argc, char **argv)
     ros::NodeHandle nodeHandle("");
 
     std_srvs::Empty srv;
+    // Create a Buffer and a TransformListener
+    tf2_ros::Buffer tfBuffer;
+    tf2_ros::TransformListener tfListener(tfBuffer);
 
     auto cfg = XBot::ConfigOptionsFromParamServer();
     // and we can make the model class
@@ -90,21 +130,48 @@ int main(int argc, char **argv)
     auto solver = XBot::Cartesian::CartesianInterfaceImpl::MakeInstance("OpenSot",
                                                        ik_pb, ctx
                                                        );
-    ros::ServiceServer service = nodeHandle.advertiseService("start_turn", start_turn);
+    ros::Subscriber sub = nodeHandle.subscribe("/tag_detections", 1000, tagDetectionsCallback);
+    ros::ServiceServer service = nodeHandle.advertiseService("start_searching", start_searching);
     ros::Rate r(10);
-    double time = 0 ;
-    Eigen::VectorXd q, qdot, qddot;
 
+    // time
+    
+    double time = 0 ;
+    //frame name
+    std::string parent_frame = "base_link";
+    std::string child_frame = "tag_0";
+
+    Eigen::VectorXd q, qdot, qddot;
+    // tag to base translation
+    geometry_msgs::TransformStamped tag_base_T; 
     auto car_task = solver->getTask("base_link");
     auto car_cartesian = std::dynamic_pointer_cast<XBot::Cartesian::CartesianTask>(car_task);
+
     while (ros::ok())
     {
-        while (!start_turn_bool)
+        // while (!start_searching_bool)
+        // {
+        //     // std::cout << "start_searching_bool: " << start_searching_bool << std::endl;
+        //     ros::spinOnce();
+        //     r.sleep();
+        // }
+        if (tagDetected)
         {
-            ros::spinOnce();
-            r.sleep();
+            tag_base_T = tfBuffer.lookupTransform(parent_frame, child_frame, ros::Time(0));
+
+            tf2::Quaternion q_;
+            q_.setW(tag_base_T.transform.rotation.w);
+            q_.setX(tag_base_T.transform.rotation.x);
+            q_.setY(tag_base_T.transform.rotation.y);
+            q_.setZ(tag_base_T.transform.rotation.z);
+            tf2::Matrix3x3 m(q_);
+            m.getRPY(roll_e, pitch_e, yaw_e);
+            yaw_e = yaw_e + 1.6;
+            // std::cout << "yaw: " << yaw_e << std::endl;
         }
+        
         TurnAround(car_cartesian.get());
+
         solver->update(time, dt);
         model->getJointPosition(q);
         model->getJointVelocity(qdot);
@@ -124,7 +191,7 @@ int main(int argc, char **argv)
         */
         ros::spinOnce();
         r.sleep();
-        }        
+    }        
 }
 
 
