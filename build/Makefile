@@ -168,6 +168,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named centauro_search_node
+
+# Build rule for target.
+centauro_search_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 centauro_search_node
+.PHONY : centauro_search_node
+
+# fast build rule for target.
+centauro_search_node/fast:
+	$(MAKE) -f CMakeFiles/centauro_search_node.dir/build.make CMakeFiles/centauro_search_node.dir/build
+.PHONY : centauro_search_node/fast
+
+#=============================================================================
 # Target rules for targets named tf2_msgs_generate_messages_nodejs
 
 # Build rule for target.
@@ -1090,6 +1103,33 @@ gtest/fast:
 	$(MAKE) -f gtest/googletest/CMakeFiles/gtest.dir/build.make gtest/googletest/CMakeFiles/gtest.dir/build
 .PHONY : gtest/fast
 
+src/centauro_search.o: src/centauro_search.cpp.o
+
+.PHONY : src/centauro_search.o
+
+# target to build an object file
+src/centauro_search.cpp.o:
+	$(MAKE) -f CMakeFiles/centauro_search_node.dir/build.make CMakeFiles/centauro_search_node.dir/src/centauro_search.cpp.o
+.PHONY : src/centauro_search.cpp.o
+
+src/centauro_search.i: src/centauro_search.cpp.i
+
+.PHONY : src/centauro_search.i
+
+# target to preprocess a source file
+src/centauro_search.cpp.i:
+	$(MAKE) -f CMakeFiles/centauro_search_node.dir/build.make CMakeFiles/centauro_search_node.dir/src/centauro_search.cpp.i
+.PHONY : src/centauro_search.cpp.i
+
+src/centauro_search.s: src/centauro_search.cpp.s
+
+.PHONY : src/centauro_search.s
+
+# target to generate assembly for a file
+src/centauro_search.cpp.s:
+	$(MAKE) -f CMakeFiles/centauro_search_node.dir/build.make CMakeFiles/centauro_search_node.dir/src/centauro_search.cpp.s
+.PHONY : src/centauro_search.cpp.s
+
 src/centauro_turnaround.o: src/centauro_turnaround.cpp.o
 
 .PHONY : src/centauro_turnaround.o
@@ -1155,6 +1195,7 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... test"
+	@echo "... centauro_search_node"
 	@echo "... tf2_msgs_generate_messages_nodejs"
 	@echo "... tf2_msgs_generate_messages_lisp"
 	@echo "... tf2_msgs_generate_messages_cpp"
@@ -1228,6 +1269,9 @@ help:
 	@echo "... gmock"
 	@echo "... gtest_main"
 	@echo "... gtest"
+	@echo "... src/centauro_search.o"
+	@echo "... src/centauro_search.i"
+	@echo "... src/centauro_search.s"
 	@echo "... src/centauro_turnaround.o"
 	@echo "... src/centauro_turnaround.i"
 	@echo "... src/centauro_turnaround.s"
