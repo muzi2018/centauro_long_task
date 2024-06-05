@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="DQU-kqcON3Z1oUUEVBNg" name="Page-1">
-        <mxGraphModel dx="2016" dy="740" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1822" dy="617" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -58,11 +58,17 @@
                         <mxPoint x="260" y="250" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="21" value="7 leg and whell search" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                <mxCell id="21" value="7 leg and wheel search" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
                     <mxGeometry x="110" y="280" width="60" height="45" as="geometry"/>
                 </mxCell>
-                <mxCell id="24" value="1. search" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
-                    <mxGeometry x="160" y="50" width="60" height="30" as="geometry"/>
+                <mxCell id="24" value="1. turn around 2.search" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="160" y="50" width="110" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="25" value="search" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="540" y="70" width="200" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="turn around -&amp;gt; &lt;br&gt;looking for tag -&amp;gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="25">
+                    <mxGeometry x="20" y="45" width="110" height="40" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
