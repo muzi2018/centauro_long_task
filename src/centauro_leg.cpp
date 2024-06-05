@@ -211,34 +211,33 @@ int main(int argc, char **argv)
 
     // D435_head_camera_color_optical_frame
     // tag_0
-
+    Eigen::Vector6d E;
     while (ros::ok())
     {
-        if (leg_state == 1) // leg 1
+        if (1) // leg 1
         {
-            if (!state1_support) // com not in support area
-            {
-                model->getCOM(com_pos);
-                model->getPointPosition(leg2_frame, Eigen::Vector3d::Zero(),leg2_pos);
-                model->getPointPosition(leg3_frame, Eigen::Vector3d::Zero(),leg3_pos);
-                model->getPointPosition(leg4_frame, Eigen::Vector3d::Zero(),leg4_pos); 
-                leg_mid = ( leg2_pos + leg3_pos + leg4_pos)/3;
-                com_shift_x = (leg_mid[0] - com_pos[0]);
-                com_shift_y = (leg_mid[1] - com_pos[1]);
-                com_shift_x = com_shift_x / seg_num;
-                com_shift_y = com_shift_y / seg_num;
-                std::cout << "com_shift_x = " << com_shift_x << std::endl;
-                std::cout << "com_shift_y = " << com_shift_y << std::endl;
+            model->getCOM(com_pos);
+            model->getPointPosition(leg2_frame, Eigen::Vector3d::Zero(),leg2_pos);
+            model->getPointPosition(leg3_frame, Eigen::Vector3d::Zero(),leg3_pos);
+            model->getPointPosition(leg4_frame, Eigen::Vector3d::Zero(),leg4_pos); 
+            leg_mid = ( leg2_pos + leg3_pos + leg4_pos)/3;
+            com_shift_x = (leg_mid[0] - com_pos[0]);
+            com_shift_y = (leg_mid[1] - com_pos[1]);
+            com_shift_x = com_shift_x ;
+            com_shift_y = com_shift_y ;
+            std::cout << "com_shift_x = " << com_shift_x << std::endl;
+            std::cout << "com_shift_y = " << com_shift_y << std::endl;
 
-                com_cartesian->getPoseReference(Com_T_ref);
-                Com_T_ref.pretranslate(Eigen::Vector3d(com_shift_x,com_shift_y,0));
-                com_cartesian->setPoseTarget(Com_T_ref, seg_time);
-                current_state1++;
-                i++;
-
-                std::cout << "current_state1 in" <<" time" << time << ": " << current_state1 << std::endl;
-            }
-            leg_state++; 
+            /**
+             * Velocity Controller
+            */
+            E[0] = 0.1 * com_shift_x;
+            E[1] = 0.1 * com_shift_y;
+            E[2] = 0;
+            E[3] = 0;
+            E[4] = 0;
+            E[5] = 0 * 0;
+            com_cartesian->setVelocityReference(E);
         }
 
         std::cout << "Motion started!" << std::endl;
