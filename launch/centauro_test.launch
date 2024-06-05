@@ -25,8 +25,8 @@
           textfile="$(find centauro_long_task)/config/cartesio_stack.yaml"/> 
 
     <!--Test node-->
-  <!-- <node pkg="centauro_long_task" name="centauro_wheel" type="centauro_wheel_node" output="screen"/> -->
-  <node pkg="centauro_long_task" name="centauro_turnaround" type="centauro_turnaround_node" output="screen"/>
+  <node pkg="centauro_long_task" name="centauro_wheel" type="centauro_wheel_node" output="screen"/>
+  <!-- <node pkg="centauro_long_task" name="centauro_turnaround" type="centauro_turnaround_node" output="screen"/> -->
   <!-- <node pkg="centauro_long_task" name="centauro_search" type="centauro_search_node" output="screen"/> -->
 
 

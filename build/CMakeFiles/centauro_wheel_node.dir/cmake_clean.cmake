@@ -1,5 +1,5 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel_node.cpp.o"
+  "CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel.cpp.o"
   "devel/lib/centauro_long_task/centauro_wheel_node"
   "devel/lib/centauro_long_task/centauro_wheel_node.pdb"
 )

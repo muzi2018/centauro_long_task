@@ -1157,32 +1157,32 @@ src/centauro_turnaround.cpp.s:
 	$(MAKE) -f CMakeFiles/centauro_turnaround_node.dir/build.make CMakeFiles/centauro_turnaround_node.dir/src/centauro_turnaround.cpp.s
 .PHONY : src/centauro_turnaround.cpp.s
 
-src/centauro_wheel_node.o: src/centauro_wheel_node.cpp.o
+src/centauro_wheel.o: src/centauro_wheel.cpp.o
 
-.PHONY : src/centauro_wheel_node.o
+.PHONY : src/centauro_wheel.o
 
 # target to build an object file
-src/centauro_wheel_node.cpp.o:
-	$(MAKE) -f CMakeFiles/centauro_wheel_node.dir/build.make CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel_node.cpp.o
-.PHONY : src/centauro_wheel_node.cpp.o
+src/centauro_wheel.cpp.o:
+	$(MAKE) -f CMakeFiles/centauro_wheel_node.dir/build.make CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel.cpp.o
+.PHONY : src/centauro_wheel.cpp.o
 
-src/centauro_wheel_node.i: src/centauro_wheel_node.cpp.i
+src/centauro_wheel.i: src/centauro_wheel.cpp.i
 
-.PHONY : src/centauro_wheel_node.i
+.PHONY : src/centauro_wheel.i
 
 # target to preprocess a source file
-src/centauro_wheel_node.cpp.i:
-	$(MAKE) -f CMakeFiles/centauro_wheel_node.dir/build.make CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel_node.cpp.i
-.PHONY : src/centauro_wheel_node.cpp.i
+src/centauro_wheel.cpp.i:
+	$(MAKE) -f CMakeFiles/centauro_wheel_node.dir/build.make CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel.cpp.i
+.PHONY : src/centauro_wheel.cpp.i
 
-src/centauro_wheel_node.s: src/centauro_wheel_node.cpp.s
+src/centauro_wheel.s: src/centauro_wheel.cpp.s
 
-.PHONY : src/centauro_wheel_node.s
+.PHONY : src/centauro_wheel.s
 
 # target to generate assembly for a file
-src/centauro_wheel_node.cpp.s:
-	$(MAKE) -f CMakeFiles/centauro_wheel_node.dir/build.make CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel_node.cpp.s
-.PHONY : src/centauro_wheel_node.cpp.s
+src/centauro_wheel.cpp.s:
+	$(MAKE) -f CMakeFiles/centauro_wheel_node.dir/build.make CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel.cpp.s
+.PHONY : src/centauro_wheel.cpp.s
 
 # Help Target
 help:
@@ -1275,9 +1275,9 @@ help:
 	@echo "... src/centauro_turnaround.o"
 	@echo "... src/centauro_turnaround.i"
 	@echo "... src/centauro_turnaround.s"
-	@echo "... src/centauro_wheel_node.o"
-	@echo "... src/centauro_wheel_node.i"
-	@echo "... src/centauro_wheel_node.s"
+	@echo "... src/centauro_wheel.o"
+	@echo "... src/centauro_wheel.i"
+	@echo "... src/centauro_wheel.s"
 .PHONY : help
 
 

@@ -57,27 +57,27 @@ include CMakeFiles/centauro_wheel_node.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/centauro_wheel_node.dir/flags.make
 
-CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel_node.cpp.o: CMakeFiles/centauro_wheel_node.dir/flags.make
-CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel_node.cpp.o: ../src/centauro_wheel_node.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel_node.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel_node.cpp.o -c /home/wang/forest_ws/src/centauro_long_task/src/centauro_wheel_node.cpp
+CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel.cpp.o: CMakeFiles/centauro_wheel_node.dir/flags.make
+CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel.cpp.o: ../src/centauro_wheel.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel.cpp.o -c /home/wang/forest_ws/src/centauro_long_task/src/centauro_wheel.cpp
 
-CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel_node.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel_node.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wang/forest_ws/src/centauro_long_task/src/centauro_wheel_node.cpp > CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel_node.cpp.i
+CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/wang/forest_ws/src/centauro_long_task/src/centauro_wheel.cpp > CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel.cpp.i
 
-CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel_node.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel_node.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wang/forest_ws/src/centauro_long_task/src/centauro_wheel_node.cpp -o CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel_node.cpp.s
+CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/wang/forest_ws/src/centauro_long_task/src/centauro_wheel.cpp -o CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel.cpp.s
 
 # Object files for target centauro_wheel_node
 centauro_wheel_node_OBJECTS = \
-"CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel_node.cpp.o"
+"CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel.cpp.o"
 
 # External object files for target centauro_wheel_node
 centauro_wheel_node_EXTERNAL_OBJECTS =
 
-devel/lib/centauro_long_task/centauro_wheel_node: CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel_node.cpp.o
+devel/lib/centauro_long_task/centauro_wheel_node: CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel.cpp.o
 devel/lib/centauro_long_task/centauro_wheel_node: CMakeFiles/centauro_wheel_node.dir/build.make
 devel/lib/centauro_long_task/centauro_wheel_node: /home/wang/forest_ws/install/lib/libapriltag_ros_common.so
 devel/lib/centauro_long_task/centauro_wheel_node: /home/wang/forest_ws/install/lib/libapriltag_ros_continuous_detector.so

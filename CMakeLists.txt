@@ -131,7 +131,7 @@ ${cartesian_interface_INCLUDE_DIRS}
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(centauro_wheel_node src/centauro_wheel_node.cpp)
+add_executable(centauro_wheel_node src/centauro_wheel.cpp)
 add_executable(centauro_turnaround_node src/centauro_turnaround.cpp)
 add_executable(centauro_search_node src/centauro_search.cpp)
 
