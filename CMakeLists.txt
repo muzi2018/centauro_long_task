@@ -135,7 +135,7 @@ add_executable(centauro_wheel_node src/centauro_wheel.cpp)
 add_executable(centauro_leg_node src/centauro_leg.cpp)
 add_executable(centauro_turnaround_node src/centauro_turnaround.cpp)
 add_executable(centauro_search_node src/centauro_search.cpp)
-
+add_executable(centauro_lower_node src/centauro_lower.cpp)
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -158,6 +158,11 @@ target_link_libraries(centauro_turnaround_node
 )
 
 target_link_libraries(centauro_search_node 
+  ${catkin_LIBRARIES} ${cartesian_interface_LIBRARIES}
+)
+
+
+target_link_libraries(centauro_lower_node 
   ${catkin_LIBRARIES} ${cartesian_interface_LIBRARIES}
 )
 
@@ -185,6 +190,7 @@ catkin_install_python(PROGRAMS
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_libraries.html
  install(TARGETS centauro_wheel_node centauro_turnaround_node
                  centauro_search_node centauro_leg_node
+                 centauro_lower_node
    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
