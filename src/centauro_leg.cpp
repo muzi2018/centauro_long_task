@@ -14,25 +14,19 @@
 #include <tf2_ros/buffer.h>
 #include <geometry_msgs/PoseStamped.h>
 #include "geometry_msgs/TransformStamped.h"
+
+
 #include <Eigen/Dense>
+
 #include <std_srvs/Empty.h>
 
-// #define MY_MACRO
 
 
 using namespace XBot::Cartesian;
+
+
 bool start_walking_bool = false;
-bool support_state = false;
-std::vector<std::string> leg_frame{"wheel_1", "wheel_2", "wheel_3", "wheel_4"};
-std::vector<Eigen::Vector3d> leg_pos(4);
-int i = 0, step_num = 300;
-int current_state = 0;
-int leg_index = 0;
-double dt = 0.01;
-double leg_long = 0.1; // step long distance
-double leg_heigh = 0.1; // step height
-std::shared_ptr<XBot::Cartesian::CartesianTask> com_cartesian;
-std::vector<std::shared_ptr<XBot::Cartesian::CartesianTask>> leg_cartesian; 
+
 
 
 bool start_walking(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
@@ -41,94 +35,6 @@ bool start_walking(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res
     return true;
 };
 
-
-
-void processLegMovement(std::shared_ptr<XBot::ModelInterface> model, 
-                         std::shared_ptr<XBot::Cartesian::CartesianTask> com_cartesian, 
-                         std::vector<std::shared_ptr<XBot::Cartesian::CartesianTask>>& leg_cartesian, 
-                         std::vector<std::string>& leg_frame, 
-                         bool& support_state, int& current_state, 
-                         double leg_long, double leg_heigh, int leg_index) {
-    if (!support_state) {
-        Eigen::Vector3d com_pos; // get the robot com position
-        model->getCOM(com_pos);
-        Eigen::Vector3d support_middle;
-        if (leg_index == 0) // get the support middle position
-        {
-            std::vector<Eigen::Vector3d> support_leg_pos(3);
-            model->getPointPosition(leg_frame[1], Eigen::Vector3d::Zero(), support_leg_pos[1]);
-            model->getPointPosition(leg_frame[2], Eigen::Vector3d::Zero(), support_leg_pos[2]);
-            model->getPointPosition(leg_frame[3], Eigen::Vector3d::Zero(), support_leg_pos[3]);
-            support_middle = (support_leg_pos[1] + support_leg_pos[2] + support_leg_pos[3]) / 3;
-        }else if (leg_index == 1)
-        {
-            std::vector<Eigen::Vector3d> support_leg_pos(3);
-            model->getPointPosition(leg_frame[0], Eigen::Vector3d::Zero(), support_leg_pos[0]);
-            model->getPointPosition(leg_frame[2], Eigen::Vector3d::Zero(), support_leg_pos[2]);
-            model->getPointPosition(leg_frame[3], Eigen::Vector3d::Zero(), support_leg_pos[3]);
-            support_middle = (support_leg_pos[0] + support_leg_pos[2] + support_leg_pos[3]) / 3;
-        }else if (leg_index == 2)   
-        {
-            std::vector<Eigen::Vector3d> support_leg_pos(3);
-            model->getPointPosition(leg_frame[0], Eigen::Vector3d::Zero(), support_leg_pos[0]);
-            model->getPointPosition(leg_frame[1], Eigen::Vector3d::Zero(), support_leg_pos[1]);
-            model->getPointPosition(leg_frame[3], Eigen::Vector3d::Zero(), support_leg_pos[3]);
-            support_middle = (support_leg_pos[0] + support_leg_pos[1] + support_leg_pos[3]) / 3;
-        }else if (leg_index == 3)
-        {
-            std::vector<Eigen::Vector3d> support_leg_pos(3);
-            model->getPointPosition(leg_frame[0], Eigen::Vector3d::Zero(), support_leg_pos[0]);
-            model->getPointPosition(leg_frame[1], Eigen::Vector3d::Zero(), support_leg_pos[1]); 
-            model->getPointPosition(leg_frame[2], Eigen::Vector3d::Zero(), support_leg_pos[2]);
-            support_middle = (support_leg_pos[0] + support_leg_pos[1] + support_leg_pos[2]) / 3;
-        }
-        
-        double com_shift_x = (support_middle[0] - com_pos[0]);
-        double com_shift_y = (support_middle[1] - com_pos[1]);
-        Eigen::VectorXd E(6);
-        E[0] = 0.1 * com_shift_x;
-        E[1] = 0.1 * com_shift_y;
-        E[2] = 0;
-        E[3] = 0;
-        E[4] = 0;
-        E[5] = 0;
-        if (abs(com_shift_x) <= 0.08) {
-            E.setZero();
-            support_state = true;
-        }
-        com_cartesian->setVelocityReference(E);
-    } else {
-                if (current_state == 0) {
-                    double leg_x_e, leg_z_e;
-                    Eigen::Affine3d Leg_T_ref;
-                    if (i >= step_num) {
-                        leg_cartesian[leg_index]->getPoseReference(Leg_T_ref);
-                        leg_cartesian[leg_index]->setPoseTarget(Leg_T_ref, dt);
-                    } else {
-                        leg_x_e = leg_long / step_num;
-                        leg_z_e = leg_heigh * sin(3.14 * i / step_num) - leg_heigh * sin(3.14 * (i - 1) / step_num);
-                        leg_cartesian[leg_index]->getPoseReference(Leg_T_ref);
-                        Leg_T_ref.pretranslate(Eigen::Vector3d(leg_x_e, 0, leg_z_e));
-                        leg_cartesian[leg_index]->setPoseTarget(Leg_T_ref, dt);
-                    }
-                        i++;
-                        current_state ++;
-                 }
-                if (current_state == 1) {
-                    if (leg_cartesian[leg_index]->getTaskState() == XBot::Cartesian::State::Reaching) {
-                        current_state++;
-                    }
-                }
-
-                if (current_state == 2) {
-                    if (leg_cartesian[leg_index]->getTaskState() == XBot::Cartesian::State::Online) {
-                        Eigen::Affine3d T;
-                        leg_cartesian[leg_index]->getCurrentPose(T);
-                        current_state = 0;
-                    }
-                }
-    }
-}
 
 
 
@@ -177,7 +83,8 @@ int main(int argc, char **argv)
     // before constructing the problem description, let us build a
     // context object which stores some information, such as
     // the control period
-    double time = 0;
+    const double dt = 0.01;
+    double time = 0, plan_time = 0;
     auto ctx = std::make_shared<XBot::Cartesian::Context>(
                 std::make_shared<XBot::Cartesian::Parameters>(dt),
                 model
@@ -220,14 +127,10 @@ int main(int argc, char **argv)
     /**leg task*/
     auto leg4_task = solver->getTask("wheel_4");
     auto leg4_cartesian = std::dynamic_pointer_cast<XBot::Cartesian::CartesianTask>(leg4_task);
-    leg_cartesian.push_back(leg1_cartesian);
-    leg_cartesian.push_back(leg2_cartesian);
-    leg_cartesian.push_back(leg3_cartesian);
-    leg_cartesian.push_back(leg4_cartesian);
 
     /**com task*/
     auto com_task = solver->getTask("com");
-    com_cartesian = std::dynamic_pointer_cast<XBot::Cartesian::CartesianTask>(com_task);
+    auto com_cartesian = std::dynamic_pointer_cast<XBot::Cartesian::CartesianTask>(com_task);
 
     
     // // // get pose reference from task
@@ -299,7 +202,9 @@ int main(int argc, char **argv)
     bool state3_support = false;
     bool state4_support = false;
 
-
+    int i=1; // mpc step index 
+    double leg_long = 0.1; // step long distance
+    double leg_heigh = 0.1; // step height
     double leg_long_e, leg_height_e;
 
     double seg_num = 300; // mpc segment number
@@ -316,11 +221,82 @@ int main(int argc, char **argv)
     // tag_0
     Eigen::Vector6d E;
     while (ros::ok())
-    {        
-        std::cout << "Motion started!" << std::endl;
+    {
+        if (!state1_support) // leg 1
+        {
+            model->getCOM(com_pos);
+            model->getPointPosition(leg1_frame, Eigen::Vector3d::Zero(),leg1_pos);
+            model->getPointPosition(leg2_frame, Eigen::Vector3d::Zero(),leg2_pos);
+            model->getPointPosition(leg3_frame, Eigen::Vector3d::Zero(),leg3_pos);
+            model->getPointPosition(leg4_frame, Eigen::Vector3d::Zero(),leg4_pos); 
+            std::cout << "length = " << leg1_pos[0] - leg3_pos[2] << std::endl;
+            std::cout << "wide = " << leg1_pos[1] - leg2_pos[1] << std::endl;
+            leg_mid = ( leg2_pos + leg3_pos + leg4_pos)/3;
+            com_shift_x = (leg_mid[0] - com_pos[0]);
+            com_shift_y = (leg_mid[1] - com_pos[1]);
+            com_shift_x = com_shift_x ;
+            com_shift_y = com_shift_y ;
+            std::cout << "com_shift_x = " << com_shift_x << std::endl;
+            std::cout << "com_shift_y = " << com_shift_y << std::endl;
+            /**
+             * Velocity Controller
+            */
+            E[0] = 0.1 * com_shift_x;
+            E[1] = 0.1 * com_shift_y;
+            E[2] = 0;
+            E[3] = 0;
+            E[4] = 0;
+            E[5] = 0 * 0;
+            if (abs(com_shift_x) <= 0.08)
+            {
+                /* code */
+                E.setZero();
+                state1_support = true;
+            }
+            com_cartesian->setVelocityReference(E);
+        }else{
+            if (current_state1 == 0)
+            {
+                double leg_x_e, leg_z_e;
+                if (i >= seg_num)
+                {
+                    leg1_cartesian->getPoseReference(Leg1_T_ref);
+                    leg1_cartesian->setPoseTarget(Leg1_T_ref, seg_time); 
+                }else{
+                    leg_x_e = seg_dis;
+                    leg_z_e = leg_long * sin(3.14 * i / seg_num) - leg_heigh * sin(3.14 * (i-1) / seg_num);
+                    leg1_cartesian->getPoseReference(Leg1_T_ref);
+                    Leg1_T_ref.pretranslate(Eigen::Vector3d(leg_x_e,0,leg_z_e));
+                    leg1_cartesian->setPoseTarget(Leg1_T_ref, seg_time);
+                }
+                i++;
+                current_state1++;
+            }
+            if(current_state1 == 1)
+            {
+                if (leg1_cartesian->getTaskState() == State::Reaching)
+                {
+                    {
+                        // std::cout << "Motion started!" << std::endl;
+                        current_state1++;
+                    }
+                }
 
-        processLegMovement(model, com_cartesian, leg_cartesian, leg_frame, 
-                            support_state, current_state, leg_long, leg_heigh, leg_index);
+            }
+            if(current_state1 == 2) // here we wait for it to be completed
+            {
+                if(leg1_cartesian->getTaskState() == State::Online)
+                {
+                    Eigen::Affine3d T;
+                    leg1_cartesian->getCurrentPose(T);
+                    // std::cout << "Motion completed" << std::endl;
+                    current_state1=0;
+
+
+                }
+            }
+        }
+        // std::cout << "Motion started!" << std::endl;
         solver->update(time, dt);
         model->getJointPosition(q);
         model->getJointVelocity(qdot);
@@ -340,13 +316,6 @@ int main(int argc, char **argv)
     }
     
 }
-
-
-
-
-
-
-
 
 
 
