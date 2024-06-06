@@ -14,24 +14,120 @@
 #include <tf2_ros/buffer.h>
 #include <geometry_msgs/PoseStamped.h>
 #include "geometry_msgs/TransformStamped.h"
-
-
 #include <Eigen/Dense>
-
 #include <std_srvs/Empty.h>
 
+// #define MY_MACRO
 
 
 using namespace XBot::Cartesian;
-
-
 bool start_walking_bool = false;
+std::vector<std::string> leg_frame{"wheel_1", "wheel_2", "wheel_3", "wheel_4"};
+std::vector<Eigen::Vector3d> leg_pos(4);
+int i = 0, step_num = 300;
+double dt = 0.01;
+double leg_long = 0.1; // step long distance
+double leg_heigh = 0.1; // step height
+std::vector<std::shared_ptr<XBot::Cartesian::CartesianTask>> com_cartesian;
+std::vector<std::shared_ptr<XBot::Cartesian::CartesianTask>> leg_cartesian; 
+
 
 bool start_walking(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
 {
     start_walking_bool = !start_walking_bool;
     return true;
 };
+
+
+
+void processLegMovement(std::shared_ptr<XBot::ModelInterface> model, 
+                         std::vector<std::shared_ptr<XBot::Cartesian::CartesianTask>>& com_cartesian, 
+                         std::vector<std::shared_ptr<XBot::Cartesian::CartesianTask>>& leg_cartesian, 
+                         std::vector<std::string>& leg_frame, 
+                         bool& support_state, int& current_state, 
+                         double leg_long, double leg_heigh) {
+    if (!support_state) {
+        Eigen::Vector3d com_pos; // get the robot com position
+        model->getCOM(com_pos);
+        Eigen::Vector3d support_middle;
+        if (current_state == 0) // get the support middle position
+        {
+            std::vector<Eigen::Vector3d> support_leg_pos(3);
+            model->getPointPosition(leg_frame[1], Eigen::Vector3d::Zero(), support_leg_pos[1]);
+            model->getPointPosition(leg_frame[2], Eigen::Vector3d::Zero(), support_leg_pos[2]);
+            model->getPointPosition(leg_frame[3], Eigen::Vector3d::Zero(), support_leg_pos[3]);
+            support_middle = (support_leg_pos[1] + support_leg_pos[2] + support_leg_pos[3]) / 3;
+        }else if (current_state == 1)
+        {
+            std::vector<Eigen::Vector3d> support_leg_pos(3);
+            model->getPointPosition(leg_frame[0], Eigen::Vector3d::Zero(), support_leg_pos[0]);
+            model->getPointPosition(leg_frame[2], Eigen::Vector3d::Zero(), support_leg_pos[2]);
+            model->getPointPosition(leg_frame[3], Eigen::Vector3d::Zero(), support_leg_pos[3]);
+            support_middle = (support_leg_pos[0] + support_leg_pos[2] + support_leg_pos[3]) / 3;
+        }else if (current_state == 2)   
+        {
+            std::vector<Eigen::Vector3d> support_leg_pos(3);
+            model->getPointPosition(leg_frame[0], Eigen::Vector3d::Zero(), support_leg_pos[0]);
+            model->getPointPosition(leg_frame[1], Eigen::Vector3d::Zero(), support_leg_pos[1]);
+            model->getPointPosition(leg_frame[3], Eigen::Vector3d::Zero(), support_leg_pos[3]);
+            support_middle = (support_leg_pos[0] + support_leg_pos[1] + support_leg_pos[3]) / 3;
+        }else if (current_state == 3)
+        {
+            std::vector<Eigen::Vector3d> support_leg_pos(3);
+            model->getPointPosition(leg_frame[0], Eigen::Vector3d::Zero(), support_leg_pos[0]);
+            model->getPointPosition(leg_frame[1], Eigen::Vector3d::Zero(), support_leg_pos[1]); 
+            model->getPointPosition(leg_frame[2], Eigen::Vector3d::Zero(), support_leg_pos[2]);
+            support_middle = (support_leg_pos[0] + support_leg_pos[1] + support_leg_pos[2]) / 3;
+        }
+        
+        double com_shift_x = (support_middle[0] - com_pos[0]);
+        double com_shift_y = (support_middle[1] - com_pos[1]);
+        Eigen::VectorXd E(6);
+        E[0] = 0.1 * com_shift_x;
+        E[1] = 0.1 * com_shift_y;
+        E[2] = 0;
+        E[3] = 0;
+        E[4] = 0;
+        E[5] = 0;
+        if (abs(com_shift_x) <= 0.08) {
+            E.setZero();
+            support_state = true;
+        }
+        com_cartesian[i]->setVelocityReference(E);
+    } else {
+                if (current_state == 0) {
+                    double leg_x_e, leg_z_e;
+                    Eigen::Affine3d Leg_T_ref;
+                    if (i >= step_num) {
+                        leg_cartesian[i]->getPoseReference(Leg_T_ref);
+                        leg_cartesian[i]->setPoseTarget(Leg_T_ref, dt);
+                    } else {
+                        leg_x_e = leg_long / step_num;
+                        leg_z_e = leg_heigh * sin(3.14 * i / step_num) - leg_heigh * sin(3.14 * (i - 1) / step_num);
+                        leg_cartesian[i]->getPoseReference(Leg_T_ref);
+                        Leg_T_ref.pretranslate(Eigen::Vector3d(leg_x_e, 0, leg_z_e));
+                        leg_cartesian[i]->setPoseTarget(Leg_T_ref, dt);
+                    }
+                        i++;
+                        current_state ++;
+                 }
+                if (current_state == 1) {
+                    if (leg_cartesian[i]->getTaskState() == XBot::Cartesian::State::Reaching) {
+                        current_state++;
+                    }
+                }
+
+                if (current_state == 2) {
+                    if (leg_cartesian[i]->getTaskState() == XBot::Cartesian::State::Online) {
+                        Eigen::Affine3d T;
+                        leg_cartesian[i]->getCurrentPose(T);
+                        current_state = 0;
+                    }
+                }
+    }
+}
+
+
 
 int main(int argc, char **argv)
 {
@@ -78,8 +174,7 @@ int main(int argc, char **argv)
     // before constructing the problem description, let us build a
     // context object which stores some information, such as
     // the control period
-    const double dt = 0.01;
-    double time = 0, plan_time = 0;
+    double time = 0;
     auto ctx = std::make_shared<XBot::Cartesian::Context>(
                 std::make_shared<XBot::Cartesian::Parameters>(dt),
                 model
@@ -197,9 +292,7 @@ int main(int argc, char **argv)
     bool state3_support = false;
     bool state4_support = false;
 
-    int i=1; // mpc step index 
-    double leg_long = 0.1; // step long distance
-    double leg_heigh = 0.1; // step height
+
     double leg_long_e, leg_height_e;
 
     double seg_num = 300; // mpc segment number
@@ -290,11 +383,8 @@ int main(int argc, char **argv)
 
                 }
             }
-
-
         }
-
-        std::cout << "Motion started!" << std::endl;
+        // std::cout << "Motion started!" << std::endl;
         solver->update(time, dt);
         model->getJointPosition(q);
         model->getJointVelocity(qdot);
@@ -314,6 +404,13 @@ int main(int argc, char **argv)
     }
     
 }
+
+
+
+
+
+
+
 
 
 
