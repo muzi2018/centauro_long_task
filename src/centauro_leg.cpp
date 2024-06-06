@@ -219,43 +219,36 @@ int main(int argc, char **argv)
 
     // D435_head_camera_color_optical_frame
     // tag_0
+    bool state_support = false;
+    int leg_index = 0;
+    int current_state = 0;
     Eigen::Vector6d E;
     while (ros::ok())
     {
-        if (!state1_support) // leg 1
+        model->getCOM(com_pos);
+        model->getPointPosition(leg1_frame, Eigen::Vector3d::Zero(),leg1_pos);
+        model->getPointPosition(leg2_frame, Eigen::Vector3d::Zero(),leg2_pos);
+        model->getPointPosition(leg3_frame, Eigen::Vector3d::Zero(),leg3_pos);
+        model->getPointPosition(leg4_frame, Eigen::Vector3d::Zero(),leg4_pos); 
+        if (!state_support) // leg 1
         {
-            model->getCOM(com_pos);
-            model->getPointPosition(leg1_frame, Eigen::Vector3d::Zero(),leg1_pos);
-            model->getPointPosition(leg2_frame, Eigen::Vector3d::Zero(),leg2_pos);
-            model->getPointPosition(leg3_frame, Eigen::Vector3d::Zero(),leg3_pos);
-            model->getPointPosition(leg4_frame, Eigen::Vector3d::Zero(),leg4_pos); 
-            std::cout << "length = " << leg1_pos[0] - leg3_pos[2] << std::endl;
-            std::cout << "wide = " << leg1_pos[1] - leg2_pos[1] << std::endl;
-            leg_mid = ( leg2_pos + leg3_pos + leg4_pos)/3;
+            if (leg_index == 0)
+            {
+                leg_mid = ( leg2_pos + leg3_pos + leg4_pos)/3;
+            }
             com_shift_x = (leg_mid[0] - com_pos[0]);
             com_shift_y = (leg_mid[1] - com_pos[1]);
-            com_shift_x = com_shift_x ;
-            com_shift_y = com_shift_y ;
-            std::cout << "com_shift_x = " << com_shift_x << std::endl;
-            std::cout << "com_shift_y = " << com_shift_y << std::endl;
-            /**
-             * Velocity Controller
-            */
-            E[0] = 0.1 * com_shift_x;
-            E[1] = 0.1 * com_shift_y;
-            E[2] = 0;
-            E[3] = 0;
-            E[4] = 0;
-            E[5] = 0 * 0;
+            E[0] = 0.1 * com_shift_x; E[1] = 0.1 * com_shift_y; E[2] = 0;
+            E[3] = 0 ; E[4] = 0 ; E[5] = 0 ;
             if (abs(com_shift_x) <= 0.08)
             {
-                /* code */
                 E.setZero();
-                state1_support = true;
+                state_support = true;
             }
             com_cartesian->setVelocityReference(E);
         }else{
-            if (current_state1 == 0)
+            std::cout << "current_state = " << current_state << std::endl;
+            if (current_state == 0)
             {
                 double leg_x_e, leg_z_e;
                 if (i >= seg_num)
@@ -265,34 +258,29 @@ int main(int argc, char **argv)
                 }else{
                     leg_x_e = seg_dis;
                     leg_z_e = leg_long * sin(3.14 * i / seg_num) - leg_heigh * sin(3.14 * (i-1) / seg_num);
+                    std::cout << "leg_z_e " << leg_z_e << std::endl;
                     leg1_cartesian->getPoseReference(Leg1_T_ref);
                     Leg1_T_ref.pretranslate(Eigen::Vector3d(leg_x_e,0,leg_z_e));
                     leg1_cartesian->setPoseTarget(Leg1_T_ref, seg_time);
                 }
                 i++;
-                current_state1++;
+                current_state++;
             }
-            if(current_state1 == 1)
+            if(current_state == 1)
             {
                 if (leg1_cartesian->getTaskState() == State::Reaching)
                 {
-                    {
-                        // std::cout << "Motion started!" << std::endl;
-                        current_state1++;
-                    }
+                        current_state++;
                 }
 
             }
-            if(current_state1 == 2) // here we wait for it to be completed
+            if(current_state == 2) // here we wait for it to be completed
             {
                 if(leg1_cartesian->getTaskState() == State::Online)
                 {
                     Eigen::Affine3d T;
                     leg1_cartesian->getCurrentPose(T);
-                    // std::cout << "Motion completed" << std::endl;
-                    current_state1=0;
-
-
+                    current_state=0;
                 }
             }
         }
