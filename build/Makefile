@@ -1013,6 +1013,19 @@ actionlib_msgs_generate_messages_cpp/fast:
 .PHONY : actionlib_msgs_generate_messages_cpp/fast
 
 #=============================================================================
+# Target rules for targets named centauro_home_node
+
+# Build rule for target.
+centauro_home_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 centauro_home_node
+.PHONY : centauro_home_node
+
+# fast build rule for target.
+centauro_home_node/fast:
+	$(MAKE) -f CMakeFiles/centauro_home_node.dir/build.make CMakeFiles/centauro_home_node.dir/build
+.PHONY : centauro_home_node/fast
+
+#=============================================================================
 # Target rules for targets named actionlib_generate_messages_py
 
 # Build rule for target.
@@ -1128,6 +1141,33 @@ gtest: cmake_check_build_system
 gtest/fast:
 	$(MAKE) -f gtest/googletest/CMakeFiles/gtest.dir/build.make gtest/googletest/CMakeFiles/gtest.dir/build
 .PHONY : gtest/fast
+
+src/centauro_home.o: src/centauro_home.cpp.o
+
+.PHONY : src/centauro_home.o
+
+# target to build an object file
+src/centauro_home.cpp.o:
+	$(MAKE) -f CMakeFiles/centauro_home_node.dir/build.make CMakeFiles/centauro_home_node.dir/src/centauro_home.cpp.o
+.PHONY : src/centauro_home.cpp.o
+
+src/centauro_home.i: src/centauro_home.cpp.i
+
+.PHONY : src/centauro_home.i
+
+# target to preprocess a source file
+src/centauro_home.cpp.i:
+	$(MAKE) -f CMakeFiles/centauro_home_node.dir/build.make CMakeFiles/centauro_home_node.dir/src/centauro_home.cpp.i
+.PHONY : src/centauro_home.cpp.i
+
+src/centauro_home.s: src/centauro_home.cpp.s
+
+.PHONY : src/centauro_home.s
+
+# target to generate assembly for a file
+src/centauro_home.cpp.s:
+	$(MAKE) -f CMakeFiles/centauro_home_node.dir/build.make CMakeFiles/centauro_home_node.dir/src/centauro_home.cpp.s
+.PHONY : src/centauro_home.cpp.s
 
 src/centauro_leg.o: src/centauro_leg.cpp.o
 
@@ -1342,6 +1382,7 @@ help:
 	@echo "... rosgraph_msgs_generate_messages_cpp"
 	@echo "... actionlib_generate_messages_eus"
 	@echo "... actionlib_msgs_generate_messages_cpp"
+	@echo "... centauro_home_node"
 	@echo "... actionlib_generate_messages_py"
 	@echo "... tf_generate_messages_py"
 	@echo "... std_msgs_generate_messages_eus"
@@ -1351,6 +1392,9 @@ help:
 	@echo "... gmock"
 	@echo "... gtest_main"
 	@echo "... gtest"
+	@echo "... src/centauro_home.o"
+	@echo "... src/centauro_home.i"
+	@echo "... src/centauro_home.s"
 	@echo "... src/centauro_leg.o"
 	@echo "... src/centauro_leg.i"
 	@echo "... src/centauro_leg.s"

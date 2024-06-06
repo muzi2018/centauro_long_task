@@ -32,12 +32,18 @@
   <!-- <node pkg="centauro_long_task" name="centauro_wheel" type="centauro_wheel_node" output="screen"/> -->
   <!-- <node pkg="centauro_long_task" name="centauro_turnaround" type="centauro_turnaround_node" output="screen"/> -->
   <!-- <node pkg="centauro_long_task" name="centauro_search" type="centauro_search_node" output="screen"/> -->
-  <!-- <node pkg="centauro_long_task" type="centauro_opendrawer.py" name="centauro_opendrawer" output="screen"/> -->
+  <node pkg="centauro_long_task" type="centauro_opendrawer.py" name="centauro_opendrawer" output="screen"/>
   <!-- <node pkg="centauro_long_task" type="centauro_opendoor.py" name="centauro_opendoor" output="screen"/> -->
   <!-- <node pkg="centauro_long_task" name="centauro_leg" type="centauro_leg_node" output="screen"/> -->
+
+
   <!-- <node pkg="centauro_long_task" name="centauro_lower" type="centauro_lower_node" output="screen" 
   launch-prefix="gnome-terminal  gdb -e run"/> -->
-  <node pkg="centauro_long_task" name="centauro_lower" type="centauro_lower_node" output="screen"/>
+  <!-- <node pkg="centauro_long_task" name="centauro_lower" type="centauro_lower_node" output="screen"/> -->
+
+
+  <!-- <node pkg="centauro_long_task" name="centauro_home" type="centauro_home_node" output="screen"/> -->
+
 
 </launch>
 
