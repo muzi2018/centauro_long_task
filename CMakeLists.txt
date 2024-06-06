@@ -132,6 +132,7 @@ ${cartesian_interface_INCLUDE_DIRS}
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(centauro_wheel_node src/centauro_wheel.cpp)
+add_executable(centauro_leg_node src/centauro_leg.cpp)
 add_executable(centauro_turnaround_node src/centauro_turnaround.cpp)
 add_executable(centauro_search_node src/centauro_search.cpp)
 
@@ -147,6 +148,9 @@ add_executable(centauro_search_node src/centauro_search.cpp)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(centauro_wheel_node 
+  ${catkin_LIBRARIES} ${cartesian_interface_LIBRARIES}
+)
+target_link_libraries(centauro_leg_node 
   ${catkin_LIBRARIES} ${cartesian_interface_LIBRARIES}
 )
 target_link_libraries(centauro_turnaround_node 
@@ -180,7 +184,7 @@ catkin_install_python(PROGRAMS
 ## Mark libraries for installation
 ## See http://docs.ros.org/melodic/api/catkin/html/howto/format1/building_libraries.html
  install(TARGETS centauro_wheel_node centauro_turnaround_node
-                 centauro_search_node
+                 centauro_search_node centauro_leg_node
    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
