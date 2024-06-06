@@ -24,7 +24,7 @@
 
 using namespace XBot::Cartesian;
 
-
+bool switch_leg = false;
 bool start_walking_bool = false;
 
 
@@ -233,52 +233,122 @@ int main(int argc, char **argv)
         if (!state_support) // leg 1
         {
             if (leg_index == 0)
-            {
                 leg_mid = ( leg2_pos + leg3_pos + leg4_pos)/3;
-            }
+            else if (leg_index == 1)
+                leg_mid = ( leg1_pos + leg3_pos + leg4_pos)/3;
+            // else if (leg_index == 2)
+            //     leg_mid = ( leg1_pos + leg2_pos + leg4_pos)/3;
+            // else if (leg_index == 3)
+            //     leg_mid = ( leg1_pos + leg2_pos + leg3_pos)/3;
+
             com_shift_x = (leg_mid[0] - com_pos[0]);
             com_shift_y = (leg_mid[1] - com_pos[1]);
+
             E[0] = 0.1 * com_shift_x; E[1] = 0.1 * com_shift_y; E[2] = 0;
             E[3] = 0 ; E[4] = 0 ; E[5] = 0 ;
             if (abs(com_shift_x) <= 0.08)
+            {
+                E[0] = 0;
+            }
+            std::cout << "com_shift_x" << com_shift_x << std::endl;
+            std::cout << "com_shift_y" << com_shift_y << std::endl;
+
+            // std::cout << "state_support" << state_support << std::endl;
+            if (abs(com_shift_x) <= 0.08 && abs(com_shift_y) <= 0.05) // reach end of foot position
             {
                 E.setZero();
                 state_support = true;
             }
             com_cartesian->setVelocityReference(E);
         }else{
-            std::cout << "current_state = " << current_state << std::endl;
+            // std::cout << "state_support" << state_support << std::endl;
+            // std::cout << "i" << i << std::endl;
             if (current_state == 0)
             {
+                std::cout << "leg_index = " << leg_index << std::endl;
+                std::cout << "current_state = " << current_state << std::endl;
+                std::cout << "i = " << i << std::endl;
+                std::cout << "seg_num = " << seg_num << std::endl;
+
                 double leg_x_e, leg_z_e;
-                if (i >= seg_num)
+                i++;
+                if (i >= seg_num) // reach end of foot position
                 {
-                    leg1_cartesian->getPoseReference(Leg1_T_ref);
-                    leg1_cartesian->setPoseTarget(Leg1_T_ref, seg_time); 
-                }else{
+                    i = 0; 
+                    switch_leg = !switch_leg;
+                    state_support = false;
+                    if (leg_index == 0)
+                    {
+                        leg1_cartesian->getPoseReference(Leg1_T_ref);
+                        leg1_cartesian->setPoseTarget(Leg1_T_ref, seg_time); 
+                    }else if(leg_index == 1){
+                        leg2_cartesian->getPoseReference(Leg2_T_ref);
+                        leg2_cartesian->setPoseTarget(Leg2_T_ref, seg_time); 
+                    }else if (leg_index == 2)
+                    {
+                        leg3_cartesian->getPoseReference(Leg3_T_ref);
+                        leg3_cartesian->setPoseTarget(Leg3_T_ref, seg_time); 
+                    }else if (leg_index == 3)
+                    {
+                        leg4_cartesian->getPoseReference(Leg4_T_ref);
+                        leg4_cartesian->setPoseTarget(Leg4_T_ref, seg_time); 
+                    }
+                    leg_index ++;
+                    if (leg_index >= 3)
+                    {
+                        leg_index = 0;
+                    }
+                    
+                }else{ // swing leg
+                    std::cout << "swing leg " << std::endl;
                     leg_x_e = seg_dis;
                     leg_z_e = leg_long * sin(3.14 * i / seg_num) - leg_heigh * sin(3.14 * (i-1) / seg_num);
-                    std::cout << "leg_z_e " << leg_z_e << std::endl;
-                    leg1_cartesian->getPoseReference(Leg1_T_ref);
-                    Leg1_T_ref.pretranslate(Eigen::Vector3d(leg_x_e,0,leg_z_e));
-                    leg1_cartesian->setPoseTarget(Leg1_T_ref, seg_time);
+                    if (leg_index == 0)
+                    {
+                        leg1_cartesian->getPoseReference(Leg1_T_ref);
+                        Leg1_T_ref.pretranslate(Eigen::Vector3d(leg_x_e,0,leg_z_e));
+                        leg1_cartesian->setPoseTarget(Leg1_T_ref, seg_time);
+                    }else if (leg_index == 1)
+                    {
+                        leg2_cartesian->getPoseReference(Leg2_T_ref);
+                        Leg2_T_ref.pretranslate(Eigen::Vector3d(leg_x_e,0,leg_z_e));
+                        leg2_cartesian->setPoseTarget(Leg2_T_ref, seg_time);
+                    }else if (leg_index == 2)
+                    {
+                        leg3_cartesian->getPoseReference(Leg3_T_ref);
+                        Leg3_T_ref.pretranslate(Eigen::Vector3d(leg_x_e,0,leg_z_e));
+                        leg3_cartesian->setPoseTarget(Leg3_T_ref, seg_time);
+                    }else if (leg_index == 3)
+                    {
+                        leg4_cartesian->getPoseReference(Leg4_T_ref);
+                        Leg4_T_ref.pretranslate(Eigen::Vector3d(leg_x_e,0,leg_z_e));
+                        leg4_cartesian->setPoseTarget(Leg4_T_ref, seg_time);
+                    }
                 }
-                i++;
+                
                 current_state++;
             }
             if(current_state == 1)
             {
-                if (leg1_cartesian->getTaskState() == State::Reaching)
+                if (leg1_cartesian->getTaskState() == State::Reaching ||
+                    leg2_cartesian->getTaskState() == State::Reaching ||
+                    leg3_cartesian->getTaskState() == State::Reaching ||
+                    leg4_cartesian->getTaskState() == State::Reaching)
                 {
-                        current_state++;
+                    std::cout << "Reaching" << std::endl;
+                    current_state++;
                 }
 
             }
             if(current_state == 2) // here we wait for it to be completed
             {
-                if(leg1_cartesian->getTaskState() == State::Online)
+                if(leg1_cartesian->getTaskState() == State::Online ||
+                    leg2_cartesian->getTaskState() == State::Online ||
+                    leg3_cartesian->getTaskState() == State::Online ||
+                    leg4_cartesian->getTaskState() == State::Online)
                 {
                     Eigen::Affine3d T;
+                    std::cout << "Completed" << std::endl;
                     leg1_cartesian->getCurrentPose(T);
                     current_state=0;
                 }
