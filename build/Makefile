@@ -168,6 +168,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named centauro_lower_node
+
+# Build rule for target.
+centauro_lower_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 centauro_lower_node
+.PHONY : centauro_lower_node
+
+# fast build rule for target.
+centauro_lower_node/fast:
+	$(MAKE) -f CMakeFiles/centauro_lower_node.dir/build.make CMakeFiles/centauro_lower_node.dir/build
+.PHONY : centauro_lower_node/fast
+
+#=============================================================================
 # Target rules for targets named centauro_search_node
 
 # Build rule for target.
@@ -1143,6 +1156,33 @@ src/centauro_leg.cpp.s:
 	$(MAKE) -f CMakeFiles/centauro_leg_node.dir/build.make CMakeFiles/centauro_leg_node.dir/src/centauro_leg.cpp.s
 .PHONY : src/centauro_leg.cpp.s
 
+src/centauro_lower.o: src/centauro_lower.cpp.o
+
+.PHONY : src/centauro_lower.o
+
+# target to build an object file
+src/centauro_lower.cpp.o:
+	$(MAKE) -f CMakeFiles/centauro_lower_node.dir/build.make CMakeFiles/centauro_lower_node.dir/src/centauro_lower.cpp.o
+.PHONY : src/centauro_lower.cpp.o
+
+src/centauro_lower.i: src/centauro_lower.cpp.i
+
+.PHONY : src/centauro_lower.i
+
+# target to preprocess a source file
+src/centauro_lower.cpp.i:
+	$(MAKE) -f CMakeFiles/centauro_lower_node.dir/build.make CMakeFiles/centauro_lower_node.dir/src/centauro_lower.cpp.i
+.PHONY : src/centauro_lower.cpp.i
+
+src/centauro_lower.s: src/centauro_lower.cpp.s
+
+.PHONY : src/centauro_lower.s
+
+# target to generate assembly for a file
+src/centauro_lower.cpp.s:
+	$(MAKE) -f CMakeFiles/centauro_lower_node.dir/build.make CMakeFiles/centauro_lower_node.dir/src/centauro_lower.cpp.s
+.PHONY : src/centauro_lower.cpp.s
+
 src/centauro_search.o: src/centauro_search.cpp.o
 
 .PHONY : src/centauro_search.o
@@ -1234,6 +1274,7 @@ help:
 	@echo "... install/local"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
+	@echo "... centauro_lower_node"
 	@echo "... test"
 	@echo "... centauro_search_node"
 	@echo "... centauro_leg_node"
@@ -1313,6 +1354,9 @@ help:
 	@echo "... src/centauro_leg.o"
 	@echo "... src/centauro_leg.i"
 	@echo "... src/centauro_leg.s"
+	@echo "... src/centauro_lower.o"
+	@echo "... src/centauro_lower.i"
+	@echo "... src/centauro_lower.s"
 	@echo "... src/centauro_search.o"
 	@echo "... src/centauro_search.i"
 	@echo "... src/centauro_search.s"
