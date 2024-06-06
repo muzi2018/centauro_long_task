@@ -196,7 +196,7 @@ int main(int argc, char **argv)
     bool state4_support = false;
 
     int i=1; // mpc step index 
-    double long_x = 0.2; // step long distance
+    double long_x = 0.1; // step long distance
     double leg_height = 0.1; // step height
     double seg_num = 100; // mpc segment number
     double seg_time = phase_time / seg_num; // mpc segment duration
@@ -218,27 +218,6 @@ int main(int argc, char **argv)
         //     ros::spinOnce();
         //     r.sleep();
         // }
-
-
-
-        // // Define the parent and child frame names
-        // std::string parent_frame = "D435_head_camera_color_optical_frame";
-        // std::string child_frame = "tag_0";
-        // // Query the transformation
-        // try {
-        //     geometry_msgs::TransformStamped transformStamped = tfBuffer.lookupTransform(parent_frame, child_frame, ros::Time(0));
-        //     ROS_INFO("Transformation from %s to %s: ", parent_frame.c_str(), child_frame.c_str());
-        //     ROS_INFO("Translation: x=%f, y=%f, z=%f", transformStamped.transform.translation.x, transformStamped.transform.translation.y, transformStamped.transform.translation.z);
-        //     ROS_INFO("Rotation: w=%f, x=%f, y=%f, z=%f", transformStamped.transform.rotation.w, transformStamped.transform.rotation.x, transformStamped.transform.rotation.y, transformStamped.transform.rotation.z);
-        // } catch (tf2::TransformException &ex) {
-        //     ROS_ERROR("TF Exception: %s", ex.what());
-        // }
-
-
-
-
-
-
 
         if (leg_state == 1) // leg 1
         {
@@ -327,8 +306,7 @@ int main(int argc, char **argv)
 
                         }else if (i == seg_num+1){
                             i = 1;
-                            // leg_state++;
-                            leg_state = 4;
+                            leg_state++;
                         }
                     }
                 }
@@ -425,8 +403,7 @@ int main(int argc, char **argv)
                         }else if (i == seg_num+1)
                         {
                             i=1;
-                            // leg_state++;
-                            leg_state = 3;
+                            leg_state++;
                         }
                     }
                 }
@@ -529,8 +506,7 @@ int main(int argc, char **argv)
                         }else if (i == seg_num+1)
                         {
                             i=1;
-                            // leg_state++;
-                            leg_state = 1;
+                            leg_state++;
                         }
                     }
                 }
@@ -631,7 +607,7 @@ int main(int argc, char **argv)
                         }else if (i == seg_num+1)
                         {
                             i=1;
-                            leg_state=2;
+                            leg_state=1;
                             current_state1 = 0;
                             current_state2 = 0;
                             current_state3 = 0;
@@ -646,6 +622,9 @@ int main(int argc, char **argv)
    
             }
         }
+
+            std::cout << "com_shift_x = " << com_shift_x * seg_num << std::endl;
+            std::cout << "com_shift_y = " << com_shift_y * seg_num << std::endl;
 
             // std::cout << "Motion started!" << std::endl;
             solver->update(time, dt);
