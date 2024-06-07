@@ -6,6 +6,8 @@ from horizon.ros import replay_trajectory
 from horizon.utils import utils
 import phase_manager.pymanager as pymanager
 import phase_manager.pyphase as pyphase
+import phase_manager.pytimeline as pytimeline
+
 import std_msgs.msg
 from xbot_interface import config_options as co
 from xbot_interface import xbot_interface as xbot
@@ -212,24 +214,23 @@ ti.setTaskFromYaml(rospkg.RosPack().get_path('centauro_long_task') + '/config/ce
 
 pm = pymanager.PhaseManager(ns+1)
 
-c_phases = dict()
+c_timelines = dict()
 for c in model.getContactMap():
-    c_phases[c] = pm.addTimeline(f'{c}_timeline')
+    c_timelines[c] = pm.createTimeline(f'{c}_timeline')
     print("c = ", c)
 stance_duration = 10
 for c in model.getContactMap():
-    stance_phase = pyphase.Phase(stance_duration, f'stance_{c}')
+    stance_phase = c_timelines[c].createPhase(stance_duration, f'stance_{c}')
     if ti.getTask(f'{c}') is not None:
         stance_phase.addItem(ti.getTask(f'{c}'))
     else:
         raise Exception(f'Task {c} not found')
     
-    c_phases[c].registerPhase(stance_phase)
 
 for c in model.getContactMap():
-    stance = c_phases[c].getRegisteredPhase(f'stance_{c}')
-    while c_phases[c].getEmptyNodes() > 0:
-        c_phases[c].addPhase(stance)
+    stance = c_timelines[c].getRegisteredPhase(f'stance_{c}')
+    while c_timelines[c].getEmptyNodes() > 0:
+        c_timelines[c].addPhase(stance)
 
 matrix_np = np.array(matrix)
 matrix_np_ = matrix_np

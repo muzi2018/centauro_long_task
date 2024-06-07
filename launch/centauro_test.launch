@@ -32,11 +32,11 @@
   <!-- <node pkg="centauro_long_task" name="centauro_wheel" type="centauro_wheel_node" output="screen"/> -->
   <!-- <node pkg="centauro_long_task" name="centauro_turnaround" type="centauro_turnaround_node" output="screen"/> -->
   <!-- <node pkg="centauro_long_task" name="centauro_search" type="centauro_search_node" output="screen"/> -->
-  <!-- <node pkg="centauro_long_task" type="centauro_opendrawer.py" name="centauro_opendrawer" output="screen"/> -->
+  <node pkg="centauro_long_task" type="centauro_opendrawer.py" name="centauro_opendrawer" output="screen"/>
   <!-- <node pkg="centauro_long_task" type="centauro_opendoor.py" name="centauro_opendoor" output="screen"/> -->
   <!-- <node pkg="centauro_long_task" name="centauro_leg" type="centauro_leg_node" output="screen"/> -->
   <!-- <node pkg="centauro_long_task" type="centauro_pick.py" name="centauro_pick" output="screen"/> -->
-  <node pkg="centauro_long_task" type="centauro_dual_arm.py" name="centauro_dual_arm" output="screen"/>
+  <!-- <node pkg="centauro_long_task" type="centauro_dual_arm.py" name="centauro_dual_arm" output="screen"/> -->
 
 
   <!-- <node pkg="centauro_long_task" name="centauro_lower" type="centauro_lower_node" output="screen" 
