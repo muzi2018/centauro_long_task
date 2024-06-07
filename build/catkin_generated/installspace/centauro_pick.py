@@ -343,7 +343,7 @@ num_T = T // dt
 print("num_T = ", num_T+1)
 data = np.zeros((3, int(num_T+1)))
 print("solution['a'].shape = ", solution['a'].shape)
-
+openDagana(pub_dagana)
 while time <= T:
     solution['q'][44,i] = 0.0
     solution['v'][43,i] = 0.0

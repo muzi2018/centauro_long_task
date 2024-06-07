@@ -71,7 +71,14 @@ int main(int argc, char **argv)
     model->setJointPosition(qhome);
     model->update();
     XBot::Cartesian::Utils::RobotStatePublisher rspub (model);
-
+    robot->setControlMode(
+        {
+            {"j_wheel_1", XBot::ControlMode::Velocity()},
+            {"j_wheel_2", XBot::ControlMode::Velocity()},
+            {"j_wheel_3", XBot::ControlMode::Velocity()},
+            {"j_wheel_4", XBot::ControlMode::Velocity()}
+        }
+    );
 
     // before constructing the problem description, let us build a
     // context object which stores some information, such as
@@ -85,7 +92,7 @@ int main(int argc, char **argv)
 
     // load the ik problem given a yaml file
     std::string problem_description_string;
-    nodeHandle.getParam("problem_description", problem_description_string);
+    nodeHandle.getParam("problem_description_leg", problem_description_string);
 
     auto ik_pb_yaml = YAML::Load(problem_description_string);
     XBot::Cartesian::ProblemDescription ik_pb(ik_pb_yaml, ctx);

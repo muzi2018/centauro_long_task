@@ -122,7 +122,7 @@ int main(int argc, char **argv)
 
     // load the ik problem given a yaml file
     std::string problem_description_string;
-    nodeHandle.getParam("problem_description", problem_description_string);
+    nodeHandle.getParam("problem_description_wheel", problem_description_string);
     auto ik_pb_yaml = YAML::Load(problem_description_string);
     XBot::Cartesian::ProblemDescription ik_pb(ik_pb_yaml, ctx);
 
@@ -171,6 +171,7 @@ int main(int argc, char **argv)
         }
         
         TurnAround(car_cartesian.get());
+        std::cout << "yaw: " << yaw_e << std::endl;
 
         solver->update(time, dt);
         model->getJointPosition(q);

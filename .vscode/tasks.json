@@ -1,0 +1,36 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "build",
+        "type": "shell",
+        "command": "/usr/bin/g++",
+        "args": [
+          "-g",
+          "/home/wang/forest_ws/src/centauro_long_task/src/centauro_turnaround.cpp",
+          "-o",
+          "/home/wang/forest_ws/src/centauro_long_task/centauro_turnaround",
+          "-I", "/opt/ros/noetic/include", 
+          "-I", "/opt/xbot/include",
+          "-I", "/usr/include/eigen3",
+          "-I", "~/forest_ws/install/include"
+          
+        ],
+        "options": {
+          "cwd": "/usr/bin"
+        },
+        "problemMatcher": [
+          "$gcc"
+        ],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "presentation": {
+          "reveal": "always"
+        },
+        "detail": "Compiling with -g flag for debugging."
+      }
+    ]
+  }
+  

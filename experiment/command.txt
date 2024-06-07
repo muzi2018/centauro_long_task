@@ -1,0 +1,28 @@
+1. open simulation
+clear && roslaunch kyon_controller centauro_simulator_noxbot.launch
+xbot2-core -S
+xbot2-gui
+
+2. open detection
+clear && roslaunch apriltag_ros continuous_detection.launch
+
+
+3. launch rviz and parameters
+clear && roslaunch centauro_long_task centauro_long_task.launch
+
+Task
+I. turn around
+clear && rosrun centauro_long_task centauro_turnaround_node
+
+II. wheel 
+clear && rosrun centauro_long_task centauro_wheel_node
+
+III. open the drawer
+clear && rosrun centauro_long_task centauro_opendrawer.py
+
+IV. homing
+clear && rosrun centauro_long_task centauro_home_node
+
+V. pick
+clear && rosrun centauro_long_task centauro_pick.py
+
