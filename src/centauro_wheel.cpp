@@ -93,82 +93,44 @@ int main(int argc, char **argv)
     ros::ServiceServer service = nodeHandle.advertiseService("start_searching", start_searching);
     ros::Rate r(10);
 
-
-
     double roll_e, pitch_e, yaw_e;
     double K_x = 0.1, K_y = 0.2, K_yaw = 0.1;
-    
-    //frame name
-    std::string parent_frame = "base_link";
-    std::string child_frame = "tag_0";
-
     Eigen::VectorXd q, qdot, qddot;
-    // tag to base translation
-    geometry_msgs::TransformStamped tag_base_T; 
+
+
     auto car_task = solver->getTask("base_link");
     auto car_cartesian = std::dynamic_pointer_cast<XBot::Cartesian::CartesianTask>(car_task);
 
     while (ros::ok())
     {
-       
-        if (tagDetected)
-        {
-            // std::cout << "tagDetected = " << tagDetected << std::endl;
-            tag_base_T = tfBuffer.lookupTransform(parent_frame, child_frame, ros::Time(0));
-            /**
-             * Error Calculate
-            */
-            double x_e = tag_base_T.transform.translation.x;
-            double y_e = tag_base_T.transform.translation.y ;
-            tf2::Quaternion q_;
-            q_.setW(tag_base_T.transform.rotation.w);
-            q_.setX(tag_base_T.transform.rotation.x);
-            q_.setY(tag_base_T.transform.rotation.y);
-            q_.setZ(tag_base_T.transform.rotation.z);
-            tf2::Matrix3x3 m(q_);
-            m.getRPY(roll_e, pitch_e, yaw_e);
-            yaw_e = yaw_e + 1.6;
-            /**
-             * Velocity Controller
-            */
-            E[0] = K_x * x_e;
-            E[1] = K_y * y_e;
-            E[2] = 0;
-            E[3] = 0;
-            E[4] = 0;
-            E[5] = K_yaw * 0;
-            /**
-             * 2.1 large error need to move it to tag
-            */
-            if ((abs(x_e) > 1 || abs(y_e) > 0.4 ))
-            {                
-                // std::cout << "x_e = " << x_e << std::endl;
-                // std::cout << "y_e = " << y_e << std::endl;
-                car_cartesian->setVelocityReference(E);
-            } else {
-                E.setZero();
-                car_cartesian->setVelocityReference(E);
-            }
+        double x_e = 2;
+        E[0] = K_x * x_e;
+        E[1] = 0;
+        E[2] = 0;
+        E[3] = 0;
+        E[4] = 0;
+        E[5] = 0;
+       std::cout << "Running" << E[0] << std::endl;
 
-            solver->update(time_, dt);
-            model->getJointPosition(q);
-            model->getJointVelocity(qdot);
-            model->getJointAcceleration(qddot);
-            q += dt * qdot + 0.5 * std::pow(dt, 2) * qddot;
-            qdot += dt * qddot;
-            model->setJointPosition(q);
-            model->setJointVelocity(qdot);
-            model->update();
-            robot->setPositionReference(q.tail(robot->getJointNum()));
-            robot->setVelocityReference(qdot.tail(robot->getJointNum()));
-            robot->move();
-            time_ += dt;
-            rspub.publishTransforms(ros::Time::now(), "");
-            /**
-             * Move Robot
-            */
+        car_cartesian->setVelocityReference(E);
+        solver->update(time_, dt);
+        model->getJointPosition(q);
+        model->getJointVelocity(qdot);
+        model->getJointAcceleration(qddot);
+        q += dt * qdot + 0.5 * std::pow(dt, 2) * qddot;
+        qdot += dt * qddot;
+        model->setJointPosition(q);
+        model->setJointVelocity(qdot);
+        model->update();
+        robot->setPositionReference(q.tail(robot->getJointNum()));
+        robot->setVelocityReference(qdot.tail(robot->getJointNum()));
+        robot->move();
+        time_ += dt;
+        rspub.publishTransforms(ros::Time::now(), "");
+        /**
+         * Move Robot
+        */
 
-         }
         
 
             ros::spinOnce();

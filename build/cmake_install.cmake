@@ -168,21 +168,21 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_wheel_node" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_wheel_node")
+  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_nav_wheel_node" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_nav_wheel_node")
     file(RPATH_CHECK
-         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_wheel_node"
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_nav_wheel_node"
          RPATH "")
   endif()
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task" TYPE EXECUTABLE FILES "/home/wang/forest_ws/src/centauro_long_task/build/devel/lib/centauro_long_task/centauro_wheel_node")
-  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_wheel_node" AND
-     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_wheel_node")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task" TYPE EXECUTABLE FILES "/home/wang/forest_ws/src/centauro_long_task/build/devel/lib/centauro_long_task/centauro_nav_wheel_node")
+  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_nav_wheel_node" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_nav_wheel_node")
     file(RPATH_CHANGE
-         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_wheel_node"
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_nav_wheel_node"
          OLD_RPATH "/usr/usr/lib/x86_64-linux-gnu:/home/wang/forest_ws/install/lib:/opt/ros/noetic/lib:/opt/xbot/lib:"
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
-      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_wheel_node")
+      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_nav_wheel_node")
     endif()
   endif()
 endif()
@@ -283,6 +283,26 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
          NEW_RPATH "")
     if(CMAKE_INSTALL_DO_STRIP)
       execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_home_node")
+    endif()
+  endif()
+endif()
+
+if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
+  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_wheel_node" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_wheel_node")
+    file(RPATH_CHECK
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_wheel_node"
+         RPATH "")
+  endif()
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task" TYPE EXECUTABLE FILES "/home/wang/forest_ws/src/centauro_long_task/build/devel/lib/centauro_long_task/centauro_wheel_node")
+  if(EXISTS "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_wheel_node" AND
+     NOT IS_SYMLINK "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_wheel_node")
+    file(RPATH_CHANGE
+         FILE "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_wheel_node"
+         OLD_RPATH "/usr/usr/lib/x86_64-linux-gnu:/home/wang/forest_ws/install/lib:/opt/ros/noetic/lib:/opt/xbot/lib:"
+         NEW_RPATH "")
+    if(CMAKE_INSTALL_DO_STRIP)
+      execute_process(COMMAND "/usr/bin/strip" "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/centauro_long_task/centauro_wheel_node")
     endif()
   endif()
 endif()
