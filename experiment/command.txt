@@ -12,7 +12,7 @@ clear && roslaunch centauro_long_task centauro_long_task.launch
 
 Task
 I. turn around
-clear && rosrun centauro_long_task centauro_turnaround_node
+clear && rosrun centauro_long_task centauro_turnaround_node 1
 
 II. wheel 
 clear && rosrun centauro_long_task centauro_wheel_node
@@ -29,6 +29,25 @@ clear && rosrun centauro_long_task centauro_pick.py
 VI. homing
 clear && rosrun centauro_long_task centauro_home_node
 
+VII. turn around
+clear && rosrun centauro_long_task centauro_turnaround_node -1
+clear && rosrun centauro_long_task centauro_turnaround_node 1
+
+VIII. put && homing
+clear && rosrun centauro_long_task centauro_dual_arm.py
 
 
+IX. takeup 
+clear && rosrun centauro_long_task centauro_dual_arm.py
+clear && rosrun centauro_long_task centauro_home_node
 
+X. turnaround
+clear && rosrun centauro_long_task centauro_turnaround_node -1
+
+XI. wheel
+clear && rosrun centauro_long_task centauro_wheel_node
+
+XII. leg
+roslaunch kyon_controller centauro_controller.launch
+
+XII. putdown

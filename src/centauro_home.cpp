@@ -231,7 +231,7 @@ int main(int argc, char **argv)
         //     q_ref = q_cur + 0.5*(1-std::cos(3.1415*(time - _first_loop_time)/_homing_time))* (qhome.tail(robot->getJointNum()) - q_cur);
         // }
         q_ref = q_cur + alpha * (qhome.tail(robot->getJointNum()) - q_cur);
-        std::cout << "alpha = " << alpha << std::endl;
+        // std::cout << "alpha = " << alpha << std::endl;
 
         robot->setPositionReference(q_ref.tail(robot->getJointNum()));
         robot->move();
