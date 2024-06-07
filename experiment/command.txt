@@ -20,9 +20,15 @@ clear && rosrun centauro_long_task centauro_wheel_node
 III. open the drawer
 clear && rosrun centauro_long_task centauro_opendrawer.py
 
-IV. homing
+IV. homing && open dagana
 clear && rosrun centauro_long_task centauro_home_node
 
 V. pick
 clear && rosrun centauro_long_task centauro_pick.py
+
+VI. homing
+clear && rosrun centauro_long_task centauro_home_node
+
+
+
 
