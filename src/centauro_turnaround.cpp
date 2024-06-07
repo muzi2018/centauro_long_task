@@ -86,6 +86,7 @@ void TurnAround(XBot::Cartesian::CartesianTask* car_cartesian){
 
 int main(int argc, char **argv)
 {
+    direction = atoi(argv[1]);
     const std::string robotName = "centauro";
     // Initialize ros node
     ros::init(argc, argv, robotName);
