@@ -20,7 +20,7 @@
 #include <Eigen/Dense>
 #include <std_srvs/Empty.h>
 #include <xbot_msgs/JointCommand.h>
-# define Offset_yaw 3.14/2
+# define Offset_yaw 3.14/4
 using namespace XBot::Cartesian;
 bool start_searching_bool = false;
 bool tagDetected = false;
@@ -47,9 +47,9 @@ void tagDetectionsCallback(const apriltag_ros::AprilTagDetectionArray::ConstPtr&
 void TurnAround(XBot::Cartesian::CartesianTask* car_cartesian ,
                 int directions){
     Eigen::Vector6d E;
-    if (directions == -1)
+
+    if (!tagDetected)
     {
-        // std::cout << "directions = " << directions << std::endl;
         double yaw_e_ = direction * 1 * 3.14 * 1/5;
         E[0] = 0;
         E[1] = 0;
@@ -58,39 +58,22 @@ void TurnAround(XBot::Cartesian::CartesianTask* car_cartesian ,
         E[4] = 0;
         E[5] = 0.2 * yaw_e_;
         car_cartesian->setVelocityReference(E); 
-        offset_yaw = Offset_yaw;
+        offset_yaw = directions * Offset_yaw;
     }else{
-            if (!tagDetected)
-            {
-                double yaw_e_ = direction * 1 * 3.14 * 1/5;
-                E[0] = 0;
-                E[1] = 0;
-                E[2] = 0;
-                E[3] = 0;
-                E[4] = 0;
-                E[5] = 0.2 * yaw_e_;
-                car_cartesian->setVelocityReference(E); 
-                offset_yaw = Offset_yaw;
-            }else{
-
-                E[0] = 0;
-                E[1] = 0;
-                E[2] = 0;
-                E[3] = 0;
-                E[4] = 0;
-                E[5] = 0.2 * (offset_yaw);
-                offset_yaw -= 0.02 ;
-                if (abs(offset_yaw) < 1.3)
-                {
-                    offset_yaw = 0;
-                    E.setZero();
-                }
-                car_cartesian->setVelocityReference(E);
-                // std::cout << "offset_yaw " << offset_yaw << std::endl;
-                // std::cout << "1 * offset_yaw = " << 1 * offset_yaw << std::endl;
-                // std::cout << "E[5]" << E[5] << std::endl;
-            }
-
+        E[0] = 0;
+        E[1] = 0;
+        E[2] = 0;
+        E[3] = 0;
+        E[4] = 0;
+        E[5] = 0.2 * (offset_yaw);
+        offset_yaw = offset_yaw - directions * 0.006 ;
+        std::cout << "offset_yaw " << offset_yaw << std::endl;
+        if (abs(offset_yaw) < 0.5)
+        {
+            offset_yaw = 0;
+            E.setZero();
+        }
+        car_cartesian->setVelocityReference(E);
     }
 }
 
@@ -170,7 +153,7 @@ int main(int argc, char **argv)
         //     ros::spinOnce();
         //     r.sleep();
         // }
-        if (tagDetected && direction == 1)
+        if (tagDetected)
         {
             tag_base_T = tfBuffer.lookupTransform(parent_frame, child_frame, ros::Time(0));
 
