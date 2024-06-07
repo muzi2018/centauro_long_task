@@ -183,6 +183,7 @@ target_link_libraries(centauro_home_node
 catkin_install_python(PROGRAMS
   scripts/centauro_opendrawer.py
   scripts/centauro_opendoor.py
+  scripts/centauro_pick.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 ## Mark executables for installation
