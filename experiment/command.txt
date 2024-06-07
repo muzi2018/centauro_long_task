@@ -1,0 +1,69 @@
+1. open simulation
+clear && roslaunch kyon_controller centauro_simulator_noxbot.launch
+
+clear && xbot2-core -S
+
+clear && xbot2-gui
+
+2. open detection
+clear && roslaunch apriltag_ros continuous_detection.launch
+
+
+3. launch rviz and parameters
+clear && roslaunch centauro_long_task centauro_long_task.launch
+
+Task
+I. search for tag
+clear && rosrun centauro_long_task centauro_search_node
+
+II. wheel 
+clear && rosrun centauro_long_task centauro_nav_wheel_node
+
+III. open the drawer
+clear && rosrun centauro_long_task centauro_opendrawer.py
+
+IV. open dagana && homing 
+open dagana
+clear && rosrun centauro_long_task centauro_home_node
+
+V. pick
+clear && rosrun centauro_long_task centauro_pick.py
+clear && rosrun centauro_long_task centauro_home_node
+
+VII. turn right around && wheel && turn left around
+clear && rosrun centauro_long_task centauro_turnaround_node -1
+clear && rosrun centauro_long_task centauro_wheel_node
+clear && rosrun centauro_long_task centauro_turnaround_node 1
+
+VIII. put && homing
+clear && rosrun centauro_long_task centauro_pick.py
+open_dagana
+clear && rosrun centauro_long_task centauro_home_node
+
+
+IX. takeup 
+clear && rosrun centauro_long_task centauro_dual_arm.py
+clear && rosrun centauro_long_task centauro_home_node
+
+X. turnaround
+clear && rosrun centauro_long_task centauro_turnaround_node -1
+
+XI. wheel
+clear && rosrun centauro_long_task centauro_wheel_node
+
+XII. leg
+roslaunch kyon_controller centauro_controller.launch
+rosservice call /horizon/crawl/switch 1
+
+rostopic pub /horizon/base_velocity/reference geometry_msgs/Twist "linear:
+  x: 0.05
+  y: 0.0
+  z: 0.0
+angular:
+  x: 0.0
+  y: 0.0
+  z: 0.0" 
+
+XII. stop
+rosservice call /horizon/crawl/switch 0
+

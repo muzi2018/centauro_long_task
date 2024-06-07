@@ -44,11 +44,10 @@ void tagDetectionsCallback(const apriltag_ros::AprilTagDetectionArray::ConstPtr&
     }
 }
 
-void TurnAround(XBot::Cartesian::CartesianTask* car_cartesian){
-    Eigen::Vector6d E;
-    if (!tagDetected)
-    {
+void TurnAround(XBot::Cartesian::CartesianTask* car_cartesian ,
+                int directions){
         double yaw_e_ = direction * 1 * 3.14 * 1/5;
+        Eigen::VectorXd E(6);
         E[0] = 0;
         E[1] = 0;
         E[2] = 0;
@@ -57,35 +56,15 @@ void TurnAround(XBot::Cartesian::CartesianTask* car_cartesian){
         E[5] = 0.2 * yaw_e_;
         car_cartesian->setVelocityReference(E); 
         offset_yaw = Offset_yaw;
-    }else{
-
-        E[0] = 0;
-        E[1] = 0;
-        E[2] = 0;
-        E[3] = 0;
-        E[4] = 0;
-        E[5] = 0.2 * (offset_yaw);
-        offset_yaw -= 0.02 ;
-        if (abs(offset_yaw) < 1.3)
-        {
-            offset_yaw = 0;
-            E.setZero();
-        }
-        car_cartesian->setVelocityReference(E);
-        // std::cout << "offset_yaw " << offset_yaw << std::endl;
-        // std::cout << "1 * offset_yaw = " << 1 * offset_yaw << std::endl;
-        // std::cout << "E[5]" << E[5] << std::endl;
-    }
-    
-
 }
-
-
-
-
 
 int main(int argc, char **argv)
 {
+    if (argc > 1)
+    {
+        direction = atoi(argv[1]);
+    }
+    
     const std::string robotName = "centauro";
     // Initialize ros node
     ros::init(argc, argv, robotName);
@@ -122,7 +101,7 @@ int main(int argc, char **argv)
 
     // load the ik problem given a yaml file
     std::string problem_description_string;
-    nodeHandle.getParam("problem_description", problem_description_string);
+    nodeHandle.getParam("problem_description_wheel", problem_description_string);
     auto ik_pb_yaml = YAML::Load(problem_description_string);
     XBot::Cartesian::ProblemDescription ik_pb(ik_pb_yaml, ctx);
 
@@ -133,44 +112,16 @@ int main(int argc, char **argv)
     ros::Subscriber sub = nodeHandle.subscribe("/tag_detections", 1000, tagDetectionsCallback);
     ros::ServiceServer service = nodeHandle.advertiseService("start_searching", start_searching);
     ros::Rate r(10);
-
-    // time
-    
     double time = 0 ;
-    //frame name
-    std::string parent_frame = "base_link";
-    std::string child_frame = "tag_0";
 
     Eigen::VectorXd q, qdot, qddot;
-    // tag to base translation
-    geometry_msgs::TransformStamped tag_base_T; 
     auto car_task = solver->getTask("base_link");
     auto car_cartesian = std::dynamic_pointer_cast<XBot::Cartesian::CartesianTask>(car_task);
 
     while (ros::ok())
-    {
-        // while (!start_searching_bool)
-        // {
-        //     // std::cout << "start_searching_bool: " << start_searching_bool << std::endl;
-        //     ros::spinOnce();
-        //     r.sleep();
-        // }
-        if (tagDetected)
-        {
-            tag_base_T = tfBuffer.lookupTransform(parent_frame, child_frame, ros::Time(0));
-
-            tf2::Quaternion q_;
-            q_.setW(tag_base_T.transform.rotation.w);
-            q_.setX(tag_base_T.transform.rotation.x);
-            q_.setY(tag_base_T.transform.rotation.y);
-            q_.setZ(tag_base_T.transform.rotation.z);
-            tf2::Matrix3x3 m(q_);
-            m.getRPY(roll_e, pitch_e, yaw_e);
-            yaw_e = yaw_e + 1.6;
-            // std::cout << "yaw: " << yaw_e << std::endl;
-        }
-        
-        TurnAround(car_cartesian.get());
+    {    
+        TurnAround(car_cartesian.get(), direction);
+        // std::cout << "yaw: " << yaw_e << std::endl;
 
         solver->update(time, dt);
         model->getJointPosition(q);

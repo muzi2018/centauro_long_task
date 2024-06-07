@@ -20,15 +20,12 @@
 #include <Eigen/Dense>
 #include <std_srvs/Empty.h>
 #include <xbot_msgs/JointCommand.h>
-# define Offset_yaw 3.14/2
-using namespace XBot::Cartesian;
-bool start_searching_bool = false;
-bool tagDetected = false;
-int direction = 1; // -1: right, 1: left
-double offset_yaw = Offset_yaw;
-double roll_e, pitch_e, yaw_e;
 
+using namespace XBot::Cartesian;
+bool start_searching_bool = false, tagDetected = false;
 const double dt = 0.01;
+double time_ = 0.0 ;
+Eigen::Vector6d E;
 bool start_searching(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
 {
     start_searching_bool = !start_searching_bool;
@@ -44,63 +41,10 @@ void tagDetectionsCallback(const apriltag_ros::AprilTagDetectionArray::ConstPtr&
     }
 }
 
-void TurnAround(XBot::Cartesian::CartesianTask* car_cartesian ,
-                int directions){
-    Eigen::Vector6d E;
-    if (directions == -1)
-    {
-        // std::cout << "directions = " << directions << std::endl;
-        double yaw_e_ = direction * 1 * 3.14 * 1/5;
-        E[0] = 0;
-        E[1] = 0;
-        E[2] = 0;
-        E[3] = 0;
-        E[4] = 0;
-        E[5] = 0.2 * yaw_e_;
-        car_cartesian->setVelocityReference(E); 
-        offset_yaw = Offset_yaw;
-    }else{
-            if (!tagDetected)
-            {
-                double yaw_e_ = direction * 1 * 3.14 * 1/5;
-                E[0] = 0;
-                E[1] = 0;
-                E[2] = 0;
-                E[3] = 0;
-                E[4] = 0;
-                E[5] = 0.2 * yaw_e_;
-                car_cartesian->setVelocityReference(E); 
-                offset_yaw = Offset_yaw;
-            }else{
 
-                E[0] = 0;
-                E[1] = 0;
-                E[2] = 0;
-                E[3] = 0;
-                E[4] = 0;
-                E[5] = 0.2 * (offset_yaw);
-                offset_yaw -= 0.02 ;
-                if (abs(offset_yaw) < 1.3)
-                {
-                    offset_yaw = 0;
-                    E.setZero();
-                }
-                car_cartesian->setVelocityReference(E);
-                // std::cout << "offset_yaw " << offset_yaw << std::endl;
-                // std::cout << "1 * offset_yaw = " << 1 * offset_yaw << std::endl;
-                // std::cout << "E[5]" << E[5] << std::endl;
-            }
-
-    }
-}
 
 int main(int argc, char **argv)
 {
-    if (argc > 1)
-    {
-        direction = atoi(argv[1]);
-    }
-    
     const std::string robotName = "centauro";
     // Initialize ros node
     ros::init(argc, argv, robotName);
@@ -149,9 +93,11 @@ int main(int argc, char **argv)
     ros::ServiceServer service = nodeHandle.advertiseService("start_searching", start_searching);
     ros::Rate r(10);
 
-    // time
+
+
+    double roll_e, pitch_e, yaw_e;
+    double K_x = 0.1, K_y = 0.2, K_yaw = 0.1;
     
-    double time = 0 ;
     //frame name
     std::string parent_frame = "base_link";
     std::string child_frame = "tag_0";
@@ -164,16 +110,16 @@ int main(int argc, char **argv)
 
     while (ros::ok())
     {
-        // while (!start_searching_bool)
-        // {
-        //     // std::cout << "start_searching_bool: " << start_searching_bool << std::endl;
-        //     ros::spinOnce();
-        //     r.sleep();
-        // }
-        if (tagDetected && direction == 1)
+       
+        if (tagDetected)
         {
+            // std::cout << "tagDetected = " << tagDetected << std::endl;
             tag_base_T = tfBuffer.lookupTransform(parent_frame, child_frame, ros::Time(0));
-
+            /**
+             * Error Calculate
+            */
+            double x_e = tag_base_T.transform.translation.x;
+            double y_e = tag_base_T.transform.translation.y ;
             tf2::Quaternion q_;
             q_.setW(tag_base_T.transform.rotation.w);
             q_.setX(tag_base_T.transform.rotation.x);
@@ -182,32 +128,52 @@ int main(int argc, char **argv)
             tf2::Matrix3x3 m(q_);
             m.getRPY(roll_e, pitch_e, yaw_e);
             yaw_e = yaw_e + 1.6;
-            // std::cout << "yaw: " << yaw_e << std::endl;
-        }
-        
-        TurnAround(car_cartesian.get(), direction);
-        // std::cout << "yaw: " << yaw_e << std::endl;
+            /**
+             * Velocity Controller
+            */
+            E[0] = K_x * x_e;
+            E[1] = K_y * y_e;
+            E[2] = 0;
+            E[3] = 0;
+            E[4] = 0;
+            E[5] = K_yaw * 0;
+            /**
+             * 2.1 large error need to move it to tag
+            */
+            if ((abs(x_e) > 1 || abs(y_e) > 0.4 ))
+            {                
+                // std::cout << "x_e = " << x_e << std::endl;
+                // std::cout << "y_e = " << y_e << std::endl;
+                car_cartesian->setVelocityReference(E);
+            } else {
+                E.setZero();
+                car_cartesian->setVelocityReference(E);
+            }
 
-        solver->update(time, dt);
-        model->getJointPosition(q);
-        model->getJointVelocity(qdot);
-        model->getJointAcceleration(qddot);
-        q += dt * qdot + 0.5 * std::pow(dt, 2) * qddot;
-        qdot += dt * qddot;
-        model->setJointPosition(q);
-        model->setJointVelocity(qdot);
-        model->update();
-        robot->setPositionReference(q.tail(robot->getJointNum()));
-        robot->setVelocityReference(qdot.tail(robot->getJointNum()));
-        robot->move();
-        time += dt;
-        rspub.publishTransforms(ros::Time::now(), "");
-        /**
-         * Move Robot
-        */
-        ros::spinOnce();
-        r.sleep();
-    }        
+            solver->update(time_, dt);
+            model->getJointPosition(q);
+            model->getJointVelocity(qdot);
+            model->getJointAcceleration(qddot);
+            q += dt * qdot + 0.5 * std::pow(dt, 2) * qddot;
+            qdot += dt * qddot;
+            model->setJointPosition(q);
+            model->setJointVelocity(qdot);
+            model->update();
+            robot->setPositionReference(q.tail(robot->getJointNum()));
+            robot->setVelocityReference(qdot.tail(robot->getJointNum()));
+            robot->move();
+            time_ += dt;
+            rspub.publishTransforms(ros::Time::now(), "");
+            /**
+             * Move Robot
+            */
+
+         }
+        
+
+            ros::spinOnce();
+            r.sleep();
+        }        
 }
 
 

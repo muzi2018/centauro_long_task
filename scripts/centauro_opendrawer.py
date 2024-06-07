@@ -97,8 +97,8 @@ for line in lines:
         ns = ns + 1
     index_ = index_ + 1
 
-for i in range(15):
-    value[0] -= i * 0.002
+for i in range(10):
+    value[0] -= i * 0.03
     matrix.append(value)
     ns = ns + 1
 

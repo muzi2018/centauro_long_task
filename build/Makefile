@@ -207,6 +207,19 @@ centauro_leg_node/fast:
 .PHONY : centauro_leg_node/fast
 
 #=============================================================================
+# Target rules for targets named centauro_nav_wheel_node
+
+# Build rule for target.
+centauro_nav_wheel_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 centauro_nav_wheel_node
+.PHONY : centauro_nav_wheel_node
+
+# fast build rule for target.
+centauro_nav_wheel_node/fast:
+	$(MAKE) -f CMakeFiles/centauro_nav_wheel_node.dir/build.make CMakeFiles/centauro_nav_wheel_node.dir/build
+.PHONY : centauro_nav_wheel_node/fast
+
+#=============================================================================
 # Target rules for targets named tf2_msgs_generate_messages_nodejs
 
 # Build rule for target.
@@ -1223,6 +1236,33 @@ src/centauro_lower.cpp.s:
 	$(MAKE) -f CMakeFiles/centauro_lower_node.dir/build.make CMakeFiles/centauro_lower_node.dir/src/centauro_lower.cpp.s
 .PHONY : src/centauro_lower.cpp.s
 
+src/centauro_nav_wheel.o: src/centauro_nav_wheel.cpp.o
+
+.PHONY : src/centauro_nav_wheel.o
+
+# target to build an object file
+src/centauro_nav_wheel.cpp.o:
+	$(MAKE) -f CMakeFiles/centauro_nav_wheel_node.dir/build.make CMakeFiles/centauro_nav_wheel_node.dir/src/centauro_nav_wheel.cpp.o
+.PHONY : src/centauro_nav_wheel.cpp.o
+
+src/centauro_nav_wheel.i: src/centauro_nav_wheel.cpp.i
+
+.PHONY : src/centauro_nav_wheel.i
+
+# target to preprocess a source file
+src/centauro_nav_wheel.cpp.i:
+	$(MAKE) -f CMakeFiles/centauro_nav_wheel_node.dir/build.make CMakeFiles/centauro_nav_wheel_node.dir/src/centauro_nav_wheel.cpp.i
+.PHONY : src/centauro_nav_wheel.cpp.i
+
+src/centauro_nav_wheel.s: src/centauro_nav_wheel.cpp.s
+
+.PHONY : src/centauro_nav_wheel.s
+
+# target to generate assembly for a file
+src/centauro_nav_wheel.cpp.s:
+	$(MAKE) -f CMakeFiles/centauro_nav_wheel_node.dir/build.make CMakeFiles/centauro_nav_wheel_node.dir/src/centauro_nav_wheel.cpp.s
+.PHONY : src/centauro_nav_wheel.cpp.s
+
 src/centauro_search.o: src/centauro_search.cpp.o
 
 .PHONY : src/centauro_search.o
@@ -1318,6 +1358,7 @@ help:
 	@echo "... test"
 	@echo "... centauro_search_node"
 	@echo "... centauro_leg_node"
+	@echo "... centauro_nav_wheel_node"
 	@echo "... tf2_msgs_generate_messages_nodejs"
 	@echo "... tf2_msgs_generate_messages_lisp"
 	@echo "... tf2_msgs_generate_messages_cpp"
@@ -1401,6 +1442,9 @@ help:
 	@echo "... src/centauro_lower.o"
 	@echo "... src/centauro_lower.i"
 	@echo "... src/centauro_lower.s"
+	@echo "... src/centauro_nav_wheel.o"
+	@echo "... src/centauro_nav_wheel.i"
+	@echo "... src/centauro_nav_wheel.s"
 	@echo "... src/centauro_search.o"
 	@echo "... src/centauro_search.i"
 	@echo "... src/centauro_search.s"
