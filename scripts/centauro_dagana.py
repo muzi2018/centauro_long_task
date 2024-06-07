@@ -34,25 +34,25 @@ from cartesian_interface.pyci_all import *
 from std_msgs.msg import Int32MultiArray, Float64MultiArray
 import pkgutil
 import scipy.io
-
+import sys
 
 def openDagana(publisher):
     daganaRefRate = rospy.Rate(1000.0)
-    posTrajectory = np.linspace(1, 0.2, 1000).tolist()
+    posTrajectory = np.linspace(0.9, 0.1, 1000).tolist()
     for posPointNum in range(len(posTrajectory)):
-        # print("posPointNum = ", posPointNum)
+        print("posTrajectory[", posPointNum,"] = ", posTrajectory[posPointNum])
         daganaMsg = JointState()
         daganaMsg.position.append(posTrajectory[posPointNum])
         publisher.publish(daganaMsg)
         daganaRefRate.sleep()
-    print("Gripper should be open! Continuing..")
 
 
 
 def closeDagana(publisher):
-    daganaRefRate = rospy.Rate(10.0)
-    posTrajectory = np.linspace(0.2, 0.9, 1000).tolist()
+    daganaRefRate = rospy.Rate(100.0)
+    posTrajectory = np.linspace(0.1, 0.9, 100).tolist()
     for posPointNum in range(len(posTrajectory)):
+        print( "posTrajectory[posPointNum] = ", posTrajectory[posPointNum] )
         daganaMsg = JointState()
         daganaMsg.position.append(posTrajectory[posPointNum])
         publisher.publish(daganaMsg)
@@ -62,5 +62,33 @@ rospy.init_node('horizon_wbc_node')
 
 pub_dagana = rospy.Publisher('/xbotcore/gripper/dagana_2/command', JointState, queue_size=1)
 
-openDagana(pub_dagana)
+# # print("sys.argv.count = ", sys.argv.count)
+# # exit()
+# if len(sys.argv) > 1:
+#     switch = sys.argv[1]
 
+# print("switch: ", switch)
+# if switch == 1:
+#     daganaRefRate = rospy.Rate(100.0)
+#     posTrajectory = np.linspace(1, 0.2, 100).tolist()
+#     for posPointNum in range(len(posTrajectory)):
+#         print("posPointNum = ", posPointNum)
+#         daganaMsg = JointState()
+#         daganaMsg.position.append(posTrajectory[posPointNum])
+#         publisher.publish(daganaMsg)
+#         daganaRefRate.sleep()
+#     print("Gripper should be open! Continuing..")
+# elif switch == 0:
+#     closeDagana(pub_dagana)
+# rospy.spin() 
+
+
+switch = 0
+# openDagana(pub_dagana)
+if len(sys.argv) > 1:
+    switch = int(sys.argv[1])
+print("switch: ", switch)
+if switch == 1:
+    openDagana(pub_dagana)
+elif switch == 0:
+    closeDagana(pub_dagana)
