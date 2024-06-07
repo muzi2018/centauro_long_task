@@ -44,10 +44,12 @@ void tagDetectionsCallback(const apriltag_ros::AprilTagDetectionArray::ConstPtr&
     }
 }
 
-void TurnAround(XBot::Cartesian::CartesianTask* car_cartesian){
+void TurnAround(XBot::Cartesian::CartesianTask* car_cartesian ,
+                int directions){
     Eigen::Vector6d E;
-    if (!tagDetected)
+    if (directions == -1)
     {
+        // std::cout << "directions = " << directions << std::endl;
         double yaw_e_ = direction * 1 * 3.14 * 1/5;
         E[0] = 0;
         E[1] = 0;
@@ -58,26 +60,38 @@ void TurnAround(XBot::Cartesian::CartesianTask* car_cartesian){
         car_cartesian->setVelocityReference(E); 
         offset_yaw = Offset_yaw;
     }else{
+            if (!tagDetected)
+            {
+                double yaw_e_ = direction * 1 * 3.14 * 1/5;
+                E[0] = 0;
+                E[1] = 0;
+                E[2] = 0;
+                E[3] = 0;
+                E[4] = 0;
+                E[5] = 0.2 * yaw_e_;
+                car_cartesian->setVelocityReference(E); 
+                offset_yaw = Offset_yaw;
+            }else{
 
-        E[0] = 0;
-        E[1] = 0;
-        E[2] = 0;
-        E[3] = 0;
-        E[4] = 0;
-        E[5] = 0.2 * (offset_yaw);
-        offset_yaw -= 0.02 ;
-        if (abs(offset_yaw) < 1.3)
-        {
-            offset_yaw = 0;
-            E.setZero();
-        }
-        car_cartesian->setVelocityReference(E);
-        // std::cout << "offset_yaw " << offset_yaw << std::endl;
-        // std::cout << "1 * offset_yaw = " << 1 * offset_yaw << std::endl;
-        // std::cout << "E[5]" << E[5] << std::endl;
+                E[0] = 0;
+                E[1] = 0;
+                E[2] = 0;
+                E[3] = 0;
+                E[4] = 0;
+                E[5] = 0.2 * (offset_yaw);
+                offset_yaw -= 0.02 ;
+                if (abs(offset_yaw) < 1.3)
+                {
+                    offset_yaw = 0;
+                    E.setZero();
+                }
+                car_cartesian->setVelocityReference(E);
+                // std::cout << "offset_yaw " << offset_yaw << std::endl;
+                // std::cout << "1 * offset_yaw = " << 1 * offset_yaw << std::endl;
+                // std::cout << "E[5]" << E[5] << std::endl;
+            }
+
     }
-    
-
 }
 
 int main(int argc, char **argv)
@@ -156,7 +170,7 @@ int main(int argc, char **argv)
         //     ros::spinOnce();
         //     r.sleep();
         // }
-        if (tagDetected)
+        if (tagDetected && direction == 1)
         {
             tag_base_T = tfBuffer.lookupTransform(parent_frame, child_frame, ros::Time(0));
 
@@ -171,8 +185,8 @@ int main(int argc, char **argv)
             // std::cout << "yaw: " << yaw_e << std::endl;
         }
         
-        TurnAround(car_cartesian.get());
-        std::cout << "yaw: " << yaw_e << std::endl;
+        TurnAround(car_cartesian.get(), direction);
+        // std::cout << "yaw: " << yaw_e << std::endl;
 
         solver->update(time, dt);
         model->getJointPosition(q);

@@ -1,7 +1,9 @@
 1. open simulation
 clear && roslaunch kyon_controller centauro_simulator_noxbot.launch
-xbot2-core -S
-xbot2-gui
+
+clear && xbot2-core -S
+
+clear && xbot2-gui
 
 2. open detection
 clear && roslaunch apriltag_ros continuous_detection.launch
@@ -23,18 +25,26 @@ clear && rosrun centauro_long_task centauro_opendrawer.py
 IV. homing && open dagana
 clear && rosrun centauro_long_task centauro_home_node
 
+open dagana
+
 V. pick
 clear && rosrun centauro_long_task centauro_pick.py
 
 VI. homing
 clear && rosrun centauro_long_task centauro_home_node
 
-VII. turn around
+VII. turn right around && wheel && turn left around
 clear && rosrun centauro_long_task centauro_turnaround_node -1
+
+clear && rosrun centauro_long_task centauro_wheel_node
+
 clear && rosrun centauro_long_task centauro_turnaround_node 1
 
 VIII. put && homing
-clear && rosrun centauro_long_task centauro_dual_arm.py
+clear && rosrun centauro_long_task centauro_pick.py
+
+clear && rosrun centauro_long_task centauro_home_node
+
 
 
 IX. takeup 
@@ -50,4 +60,10 @@ clear && rosrun centauro_long_task centauro_wheel_node
 XII. leg
 roslaunch kyon_controller centauro_controller.launch
 
-XII. putdown
+rosservice call /horizon/crawl/switch 1
+
+
+
+XII. stop
+rosservice call /horizon/crawl/switch 0
+

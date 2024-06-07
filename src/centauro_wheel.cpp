@@ -113,7 +113,7 @@ int main(int argc, char **argv)
        
         if (tagDetected)
         {
-            std::cout << "tagDetected = " << tagDetected << std::endl;
+            // std::cout << "tagDetected = " << tagDetected << std::endl;
             tag_base_T = tfBuffer.lookupTransform(parent_frame, child_frame, ros::Time(0));
             /**
              * Error Calculate
@@ -142,8 +142,8 @@ int main(int argc, char **argv)
             */
             if ((abs(x_e) > 1 || abs(y_e) > 0.4 ))
             {                
-                std::cout << "x_e = " << x_e << std::endl;
-                std::cout << "y_e = " << y_e << std::endl;
+                // std::cout << "x_e = " << x_e << std::endl;
+                // std::cout << "y_e = " << y_e << std::endl;
                 car_cartesian->setVelocityReference(E);
             } else {
                 E.setZero();
