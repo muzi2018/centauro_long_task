@@ -1344,6 +1344,13 @@
 			"path" : "/opt/ros/noetic/share/catkin/cmake/templates/script.py.in"
 		},
 		{
+			"path" : "scripts/centauro_dual_arm.py"
+		},
+		{
+			"isExternal" : true,
+			"path" : "/opt/ros/noetic/share/catkin/cmake/templates/script.py.in"
+		},
+		{
 			"isExternal" : true,
 			"path" : "/usr/src/googletest/CMakeLists.txt"
 		},
