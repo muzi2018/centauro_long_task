@@ -29,7 +29,6 @@ clear && rosrun centauro_long_task centauro_opendrawer.py
 
 IV. open dagana && homing 
 clear && rosrun centauro_long_task centauro_dagana.py 1
-clear && rosrun centauro_long_task centauro_home_node
 
 V. pick
 clear && rosrun centauro_long_task centauro_pick.py
@@ -39,8 +38,9 @@ VII. turn right around && wheel && turn left around
 clear && rosrun centauro_long_task centauro_turnaround_node -1
 clear && rosrun centauro_long_task centauro_wheel_node
 clear && rosrun centauro_long_task centauro_turnaround_node 1
+clear && rosrun centauro_long_task centauro_wheel_node
 
-VIII. put && homing
+VIII. dual_arm && homing
 clear && rosrun centauro_long_task centauro_pick.py
 open_dagana
 clear && rosrun centauro_long_task centauro_home_node
