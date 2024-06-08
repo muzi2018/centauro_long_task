@@ -178,7 +178,7 @@ int main(int argc, char **argv)
     ros::Subscriber lower_sub = nodeHandle.subscribe("/adjust_com", 1000, lowerCallback);
     while (ros::ok())
     {
-        if(lower_bool){
+        if(1){
             if (tagDetected)
             {
                 tag_base_T = tfBuffer.lookupTransform(parent_frame, child_frame, ros::Time(0));

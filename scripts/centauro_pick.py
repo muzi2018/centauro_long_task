@@ -345,7 +345,7 @@ data = np.zeros((3, int(num_T+1)))
 print("solution['a'].shape = ", solution['a'].shape)
 # openDagana(pub_dagana)
 while time <= T:
-    solution['q'][44,i] = 0.0
+    solution['q'][44,i] = 0.9
     solution['v'][43,i] = 0.0
 
     if i >= solution['a'].shape[1]:
@@ -379,7 +379,7 @@ while time <= T:
     robot.setVelocityReference(solution['v'][6:,i])
     robot.move() 
     i += 1
-    if time == T:
-        closeDagana(pub_dagana)
+    # if time == T:
+    #     closeDagana(pub_dagana)
     time += dt
     rate.sleep()
