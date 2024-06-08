@@ -13,6 +13,9 @@ clear && roslaunch apriltag_ros continuous_detection.launch
 clear && roslaunch centauro_long_task centauro_long_task.launch
 
 Task
+0. lower
+
+
 I. search for tag
 clear && rosrun centauro_long_task centauro_search_node -1
 

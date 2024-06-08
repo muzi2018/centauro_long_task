@@ -50,6 +50,18 @@ void tagDetectionsCallback(const apriltag_ros::AprilTagDetectionArray::ConstPtr&
     }
 }
 
+bool lower_bool = false;
+void lowerCallback(const std_msgs::Bool::ConstPtr& msg)
+{
+    lower_bool = msg->data;
+
+    if (lower_bool) {
+        std::cout << "search started" << std::endl;
+    } else {
+        std::cout << "search stopped" << std::endl;
+    }
+}
+
 void TurnAround(XBot::Cartesian::CartesianTask* car_cartesian ,ros::Publisher * publisher,
                 int directions){
     Eigen::Vector6d E;
@@ -163,60 +175,55 @@ int main(int argc, char **argv)
     auto car_task = solver->getTask("base_link");
     auto car_cartesian = std::dynamic_pointer_cast<XBot::Cartesian::CartesianTask>(car_task);
     ros::Publisher search_pub = nodeHandle.advertise<std_msgs::Bool>("search", 100);
-
+    ros::Subscriber lower_sub = nodeHandle.subscribe("/adjust_com", 1000, lowerCallback);
     while (ros::ok())
     {
-        // while (!start_searching_bool)
-        // {
-        //     // std::cout << "start_searching_bool: " << start_searching_bool << std::endl;
-        //     ros::spinOnce();
-        //     r.sleep();
-        // }
-        if (tagDetected)
-        {
-            tag_base_T = tfBuffer.lookupTransform(parent_frame, child_frame, ros::Time(0));
+        if(lower_bool){
+            if (tagDetected)
+            {
+                tag_base_T = tfBuffer.lookupTransform(parent_frame, child_frame, ros::Time(0));
 
-            tf2::Quaternion q_;
-            q_.setW(tag_base_T.transform.rotation.w);
-            q_.setX(tag_base_T.transform.rotation.x);
-            q_.setY(tag_base_T.transform.rotation.y);
-            q_.setZ(tag_base_T.transform.rotation.z);
-            tf2::Matrix3x3 m(q_);
-            m.getRPY(roll_e, pitch_e, yaw_e);
-            yaw_e = yaw_e + 1.7;
+                tf2::Quaternion q_;
+                q_.setW(tag_base_T.transform.rotation.w);
+                q_.setX(tag_base_T.transform.rotation.x);
+                q_.setY(tag_base_T.transform.rotation.y);
+                q_.setZ(tag_base_T.transform.rotation.z);
+                tf2::Matrix3x3 m(q_);
+                m.getRPY(roll_e, pitch_e, yaw_e);
+                yaw_e = yaw_e + 1.7;
+                // std::cout << "yaw: " << yaw_e << std::endl;
+            }
+            
+            TurnAround(car_cartesian.get(), &search_pub,direction);
             // std::cout << "yaw: " << yaw_e << std::endl;
-        }
+
+            solver->update(time, dt);
+            model->getJointPosition(q);
+            model->getJointVelocity(qdot);
+            model->getJointAcceleration(qddot);
+            q += dt * qdot + 0.5 * std::pow(dt, 2) * qddot;
+            qdot += dt * qddot;
+            model->setJointPosition(q);
+            model->setJointVelocity(qdot);
+            model->update();
+            robot->setPositionReference(q.tail(robot->getJointNum()));
+            robot->setVelocityReference(qdot.tail(robot->getJointNum()));
+            robot->move();
+            time += dt;
+            rspub.publishTransforms(ros::Time::now(), "");
+            /**
+             * Move Robot
+            */
+            ros::spinOnce();
+            r.sleep();
+
+            if (shut_down)
+            {
+                ros::shutdown();
+                return 0;
+            }
         
-        TurnAround(car_cartesian.get(), &search_pub,direction);
-        // std::cout << "yaw: " << yaw_e << std::endl;
-
-        solver->update(time, dt);
-        model->getJointPosition(q);
-        model->getJointVelocity(qdot);
-        model->getJointAcceleration(qddot);
-        q += dt * qdot + 0.5 * std::pow(dt, 2) * qddot;
-        qdot += dt * qddot;
-        model->setJointPosition(q);
-        model->setJointVelocity(qdot);
-        model->update();
-        robot->setPositionReference(q.tail(robot->getJointNum()));
-        robot->setVelocityReference(qdot.tail(robot->getJointNum()));
-        robot->move();
-        time += dt;
-        rspub.publishTransforms(ros::Time::now(), "");
-        /**
-         * Move Robot
-        */
-        ros::spinOnce();
-        r.sleep();
-
-        if (shut_down)
-        {
-            ros::shutdown();
-            return 0;
         }
-        
-
     }        
 }
 

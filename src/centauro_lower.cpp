@@ -17,7 +17,7 @@
 
 
 #include <Eigen/Dense>
-
+#include <std_msgs/Bool.h>
 #include <std_srvs/Empty.h>
 
 using namespace XBot::Cartesian;
@@ -85,7 +85,7 @@ int main(int argc, char **argv)
 
     // load the ik problem given a yaml file
     std::string problem_description_string;
-    nodeHandle.getParam("problem_description", problem_description_string);
+    nodeHandle.getParam("problem_description_leg", problem_description_string);
 
     auto ik_pb_yaml = YAML::Load(problem_description_string);
     XBot::Cartesian::ProblemDescription ik_pb(ik_pb_yaml, ctx);
@@ -207,7 +207,8 @@ int main(int argc, char **argv)
 
     ros::Rate r(100);
     ros::ServiceServer service = nodeHandle.advertiseService("start_walking", start_walking);
-    
+    ros::Publisher publisher = nodeHandle.advertise<std_msgs::Bool>("adjust_com", 100);
+
     while (ros::ok())
     {
         model->getCOM(com_pos);
@@ -220,12 +221,19 @@ int main(int argc, char **argv)
         const std::string base_link_frame = "base_link";
         model->getPointPosition(base_link_frame, Eigen::Vector3d::Zero(),base_pose);
         double robot_heigh = base_pose[2] - leg_mid[2];
+        std::cout << "robot_heigh = " << robot_heigh <<std::endl;
 
-
+        ROS_INFO("current_state4 = %d", current_state4);
         // std::cout << "robot_z = " << robot_heigh << std::endl;
         if (robot_heigh < 0.55)
         {
+            std_msgs::Bool msg;
+            msg.data = true;
+            publisher.publish(msg);
             current_state4 = 1000;
+            
+            ros::shutdown();
+            return 0;
         }
         
         if (current_state4 == 0 )
