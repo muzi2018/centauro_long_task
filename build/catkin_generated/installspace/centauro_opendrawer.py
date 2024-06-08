@@ -37,7 +37,7 @@ import scipy.io
 
 
 def openDagana(publisher):
-    daganaRefRate = rospy.Rate(100.0)
+    daganaRefRate = rospy.Rate(1000.0)
     posTrajectory = np.linspace(1, 0.2, 1000).tolist()
     for posPointNum in range(len(posTrajectory)):
         # print("posPointNum = ", posPointNum)
@@ -50,13 +50,13 @@ def openDagana(publisher):
 
 
 def closeDagana(publisher):
-    daganaRefRate = rospy.Rate(100.0)
+    
+    daganaRefRate = rospy.Rate(1000.0)
     posTrajectory = np.linspace(0.2, 0.9, 1000).tolist()
     for posPointNum in range(len(posTrajectory)):
         daganaMsg = JointState()
         daganaMsg.position.append(posTrajectory[posPointNum])
         publisher.publish(daganaMsg)
-
         daganaRefRate.sleep()
 
 
@@ -380,7 +380,8 @@ while time <= T:
     robot.move() 
     i += 1
     if i == 50:
-        closeDagana(pub_dagana)
+        print("openDagana")
+        openDagana(pub_dagana)
     time += dt
     rate.sleep()
 # now = datetime.now()

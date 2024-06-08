@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Site BuildName="(empty)"
-	BuildStamp="20240607-0938-Experimental"
+	BuildStamp="20240608-1156-Experimental"
 	Name="oxo"
 	Generator="ctest-3.16.3"
 	CompilerName="/usr/bin/c++"
@@ -21,14 +21,14 @@
 	TotalVirtualMemory="2047"
 	TotalPhysicalMemory="64100"
 	LogicalProcessorsPerPhysical="1"
-	ProcessorClockFrequency="4358.22"
+	ProcessorClockFrequency="1596.99"
 	>
 	<Testing>
-		<StartDateTime>Jun 07 22:05 CEST</StartDateTime>
-		<StartTestTime>1717790727</StartTestTime>
+		<StartDateTime>Jun 08 13:56 CEST</StartDateTime>
+		<StartTestTime>1717847773</StartTestTime>
 		<TestList/>
-		<EndDateTime>Jun 07 22:05 CEST</EndDateTime>
-		<EndTestTime>1717790727</EndTestTime>
+		<EndDateTime>Jun 08 13:56 CEST</EndDateTime>
+		<EndTestTime>1717847773</EndTestTime>
 		<ElapsedMinutes>0</ElapsedMinutes>
 	</Testing>
 </Site>

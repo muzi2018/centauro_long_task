@@ -20,15 +20,20 @@
 #include <Eigen/Dense>
 #include <std_srvs/Empty.h>
 #include <xbot_msgs/JointCommand.h>
-# define Offset_yaw 3.14/4
+#include <std_msgs/Bool.h>
+
+
+# define Offset_yaw 3.14/2
 using namespace XBot::Cartesian;
 bool start_searching_bool = false;
 bool tagDetected = false;
 int direction = 1; // -1: right, 1: left
 double offset_yaw = Offset_yaw;
 double roll_e, pitch_e, yaw_e;
-
+int N ;
+Eigen::VectorXd q, qdot, qddot;
 const double dt = 0.01;
+
 bool start_searching(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
 {
     start_searching_bool = !start_searching_bool;
@@ -44,7 +49,7 @@ void tagDetectionsCallback(const apriltag_ros::AprilTagDetectionArray::ConstPtr&
     }
 }
 
-void TurnAround(XBot::Cartesian::CartesianTask* car_cartesian ,
+void TurnAround(XBot::Cartesian::CartesianTask* car_cartesian ,ros::Publisher * publisher,
                 int directions){
     Eigen::Vector6d E;
 
@@ -59,23 +64,34 @@ void TurnAround(XBot::Cartesian::CartesianTask* car_cartesian ,
         E[5] = 0.2 * yaw_e_;
         car_cartesian->setVelocityReference(E); 
         offset_yaw = directions * Offset_yaw;
+        
     }else{
+        // double yaw_v = qdot[5];
+        // N = abs((Offset_yaw / qdot[5]) / dt);
+
+
+        double dec_ = Offset_yaw / 500;
         E[0] = 0;
         E[1] = 0;
         E[2] = 0;
         E[3] = 0;
         E[4] = 0;
         E[5] = 0.2 * (offset_yaw);
-        offset_yaw = offset_yaw - directions * 0.006 ;
-        std::cout << "offset_yaw " << offset_yaw << std::endl;
+        offset_yaw = offset_yaw - directions * dec_ * 2 ;
         if (abs(offset_yaw) < 0.5)
         {
+            std_msgs::Bool msg;
+            msg.data = true;
+            publisher->publish(msg);
             offset_yaw = 0;
             E.setZero();
         }
         car_cartesian->setVelocityReference(E);
+        
     }
 }
+
+
 
 int main(int argc, char **argv)
 {
@@ -84,7 +100,7 @@ int main(int argc, char **argv)
         direction = atoi(argv[1]);
     }
     
-    const std::string robotName = "centauro";
+    const std::string robotName = "centauro_search";
     // Initialize ros node
     ros::init(argc, argv, robotName);
     ros::NodeHandle nodeHandle("");
@@ -130,7 +146,7 @@ int main(int argc, char **argv)
                                                        );
     ros::Subscriber sub = nodeHandle.subscribe("/tag_detections", 1000, tagDetectionsCallback);
     ros::ServiceServer service = nodeHandle.advertiseService("start_searching", start_searching);
-    ros::Rate r(10);
+    ros::Rate r(100);
 
     // time
     
@@ -139,11 +155,11 @@ int main(int argc, char **argv)
     std::string parent_frame = "base_link";
     std::string child_frame = "tag_0";
 
-    Eigen::VectorXd q, qdot, qddot;
     // tag to base translation
     geometry_msgs::TransformStamped tag_base_T; 
     auto car_task = solver->getTask("base_link");
     auto car_cartesian = std::dynamic_pointer_cast<XBot::Cartesian::CartesianTask>(car_task);
+    ros::Publisher search_pub = nodeHandle.advertise<std_msgs::Bool>("search", 100);
 
     while (ros::ok())
     {
@@ -164,11 +180,11 @@ int main(int argc, char **argv)
             q_.setZ(tag_base_T.transform.rotation.z);
             tf2::Matrix3x3 m(q_);
             m.getRPY(roll_e, pitch_e, yaw_e);
-            yaw_e = yaw_e + 1.6;
+            yaw_e = yaw_e + 1.7;
             // std::cout << "yaw: " << yaw_e << std::endl;
         }
         
-        TurnAround(car_cartesian.get(), direction);
+        TurnAround(car_cartesian.get(), &search_pub,direction);
         // std::cout << "yaw: " << yaw_e << std::endl;
 
         solver->update(time, dt);
