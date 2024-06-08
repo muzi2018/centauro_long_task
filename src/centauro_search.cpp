@@ -24,6 +24,7 @@
 
 
 # define Offset_yaw 3.14/2
+bool shut_down = false;
 using namespace XBot::Cartesian;
 bool start_searching_bool = false;
 bool tagDetected = false;
@@ -85,6 +86,8 @@ void TurnAround(XBot::Cartesian::CartesianTask* car_cartesian ,ros::Publisher * 
             publisher->publish(msg);
             offset_yaw = 0;
             E.setZero();
+            shut_down = true;
+            car_cartesian->setVelocityReference(E);
         }
         car_cartesian->setVelocityReference(E);
         
@@ -206,6 +209,14 @@ int main(int argc, char **argv)
         */
         ros::spinOnce();
         r.sleep();
+
+        if (shut_down)
+        {
+            ros::shutdown();
+            return 0;
+        }
+        
+
     }        
 }
 

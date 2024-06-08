@@ -20,6 +20,7 @@
 #include <Eigen/Dense>
 #include <std_srvs/Empty.h>
 #include <xbot_msgs/JointCommand.h>
+#include <std_msgs/Bool.h>
 
 using namespace XBot::Cartesian;
 bool start_searching_bool = false, tagDetected = false;
@@ -40,7 +41,17 @@ void tagDetectionsCallback(const apriltag_ros::AprilTagDetectionArray::ConstPtr&
         tagDetected = false;
     }
 }
+bool search_bool = false;
+void searchCallback(const std_msgs::Bool::ConstPtr& msg)
+{
+    search_bool = msg->data;
 
+    if (search_bool) {
+        std::cout << "Nav started" << std::endl;
+    } else {
+        std::cout << "Nav stopped" << std::endl;
+    }
+}
 
 
 int main(int argc, char **argv)
@@ -107,11 +118,12 @@ int main(int argc, char **argv)
     geometry_msgs::TransformStamped tag_base_T; 
     auto car_task = solver->getTask("base_link");
     auto car_cartesian = std::dynamic_pointer_cast<XBot::Cartesian::CartesianTask>(car_task);
+    ros::Subscriber search_sub = nodeHandle.subscribe("/search", 1000, searchCallback);
 
     while (ros::ok())
     {
        
-        if (tagDetected)
+        if (tagDetected && search_bool)
         {
             // std::cout << "tagDetected = " << tagDetected << std::endl;
             tag_base_T = tfBuffer.lookupTransform(parent_frame, child_frame, ros::Time(0));
