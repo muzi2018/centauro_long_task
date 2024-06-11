@@ -100,6 +100,14 @@ int main(int argc, char **argv)
             // 0.211833
             // 0.244283
 
+        // Current R_Arm_ref: 
+        //  0.524846
+        // -0.224064
+        //  0.274411
+
+
+    rarm_cartesian->getPoseReference(R_Arm_ref);
+    // std::cout << "Current R_Arm_ref: " << std::endl <<R_Arm_ref.translation() << std::endl;
 
     if (argc > 1)
     {

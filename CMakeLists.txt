@@ -191,6 +191,7 @@ catkin_install_python(PROGRAMS
   scripts/centauro_pick.py
   scripts/centauro_dual_arm.py
   scripts/centauro_dagana.py
+  scripts/centauro_dual_arm_cartesian.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 ## Mark executables for installation
