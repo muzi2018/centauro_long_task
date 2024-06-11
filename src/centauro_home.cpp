@@ -67,6 +67,7 @@ int main(int argc, char **argv)
     // initialize to a homing configuration
     Eigen::VectorXd qhome;
     model->getRobotState("home", qhome);
+    std::cout << "qhome: " << qhome << std::endl;
     // qhome.setZero(); 
     model->setJointPosition(qhome);
     model->update();
@@ -223,6 +224,20 @@ int main(int argc, char **argv)
     double _homing_time = 5;
     while (ros::ok())
     {
+
+        model->getCOM(com_pos);
+        model->getPointPosition(leg1_frame, Eigen::Vector3d::Zero(),leg1_pos);
+        model->getPointPosition(leg2_frame, Eigen::Vector3d::Zero(),leg2_pos);
+        model->getPointPosition(leg3_frame, Eigen::Vector3d::Zero(),leg3_pos);
+        model->getPointPosition(leg4_frame, Eigen::Vector3d::Zero(),leg4_pos); 
+        leg_mid = ( leg1_pos + leg2_pos + leg3_pos + leg4_pos)/4;
+        Eigen::Vector3d base_pose;
+        const std::string base_link_frame = "base_link";
+        model->getPointPosition(base_link_frame, Eigen::Vector3d::Zero(),base_pose);
+        double robot_heigh = base_pose[2] - leg_mid[2];
+        std::cout << "robot_heigh = " << robot_heigh << std::endl;
+
+
         XBot::Hand::Ptr handle;
         // robot->setPositionReference(q.tail(robot->getJointNum()));
         // robot->move();
@@ -230,6 +245,7 @@ int main(int argc, char **argv)
         // {
         //     q_ref = q_cur + 0.5*(1-std::cos(3.1415*(time - _first_loop_time)/_homing_time))* (qhome.tail(robot->getJointNum()) - q_cur);
         // }
+        // qhome[5] = 0.06;
         q_ref = q_cur + alpha * (qhome.tail(robot->getJointNum()) - q_cur);
         // std::cout << "alpha = " << alpha << std::endl;
 

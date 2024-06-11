@@ -2,6 +2,7 @@
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/install/local.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/list_install_components.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/rebuild_cache.dir
+/home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_dual_arm_node.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_lower_node.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/test.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_search_node.dir

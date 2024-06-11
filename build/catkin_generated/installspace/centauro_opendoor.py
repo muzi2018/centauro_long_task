@@ -379,8 +379,8 @@ while time <= T:
     robot.setVelocityReference(solution['v'][6:,i])
     robot.move() 
     i += 1
-    if i == 50:
-        closeDagana(pub_dagana)
+    # if i == 50:
+    #     closeDagana(pub_dagana)
     time += dt
     rate.sleep()
 # now = datetime.now()

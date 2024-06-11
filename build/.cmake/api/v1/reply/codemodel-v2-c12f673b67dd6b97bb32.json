@@ -54,7 +54,7 @@
 						32,
 						33,
 						34,
-						39,
+						35,
 						40,
 						41,
 						42,
@@ -90,7 +90,8 @@
 						72,
 						73,
 						74,
-						75
+						75,
+						76
 					]
 				},
 				{
@@ -122,8 +123,8 @@
 					"source" : "/usr/src/googletest/googlemock",
 					"targetIndexes" : 
 					[
-						35,
-						36
+						36,
+						37
 					]
 				},
 				{
@@ -137,8 +138,8 @@
 					"source" : "/usr/src/googletest/googletest",
 					"targetIndexes" : 
 					[
-						37,
-						38
+						38,
+						39
 					]
 				}
 			],
@@ -192,7 +193,7 @@
 						32,
 						33,
 						34,
-						39,
+						35,
 						40,
 						41,
 						42,
@@ -228,7 +229,8 @@
 						72,
 						73,
 						74,
-						75
+						75,
+						76
 					]
 				},
 				{
@@ -256,8 +258,8 @@
 					"parentIndex" : 1,
 					"targetIndexes" : 
 					[
-						35,
-						36
+						36,
+						37
 					]
 				},
 				{
@@ -269,8 +271,8 @@
 					"parentIndex" : 2,
 					"targetIndexes" : 
 					[
-						37,
-						38
+						38,
+						39
 					]
 				}
 			],
@@ -418,50 +420,57 @@
 				},
 				{
 					"directoryIndex" : 0,
+					"id" : "centauro_dual_arm_node::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-centauro_dual_arm_node-Debug-c80d13a45302d16e377f.json",
+					"name" : "centauro_dual_arm_node",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
 					"id" : "centauro_home_node::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-centauro_home_node-Debug-7f58d39987261b9a3cd5.json",
+					"jsonFile" : "target-centauro_home_node-Debug-ff706f27fa1d8c16c77c.json",
 					"name" : "centauro_home_node",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "centauro_leg_node::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-centauro_leg_node-Debug-049da5a4dc994aea6cbc.json",
+					"jsonFile" : "target-centauro_leg_node-Debug-72556bdfd093b8c85632.json",
 					"name" : "centauro_leg_node",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "centauro_lower_node::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-centauro_lower_node-Debug-fded3f6584a90435e745.json",
+					"jsonFile" : "target-centauro_lower_node-Debug-58e653aaa9493d21eb84.json",
 					"name" : "centauro_lower_node",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "centauro_nav_wheel_node::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-centauro_nav_wheel_node-Debug-7fcf74710f70822e514e.json",
+					"jsonFile" : "target-centauro_nav_wheel_node-Debug-30289a477361ec9b8733.json",
 					"name" : "centauro_nav_wheel_node",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "centauro_search_node::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-centauro_search_node-Debug-fd942db33d500ff2fc30.json",
+					"jsonFile" : "target-centauro_search_node-Debug-a6ed217ef48d21719e40.json",
 					"name" : "centauro_search_node",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "centauro_turnaround_node::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-centauro_turnaround_node-Debug-d4b6f2c2750741c8a4e6.json",
+					"jsonFile" : "target-centauro_turnaround_node-Debug-10b69b7286bbb6fafea6.json",
 					"name" : "centauro_turnaround_node",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "centauro_wheel_node::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-centauro_wheel_node-Debug-98ae9e7ec84cec51da27.json",
+					"jsonFile" : "target-centauro_wheel_node-Debug-16e7ca5e4e40f0a3a2a5.json",
 					"name" : "centauro_wheel_node",
 					"projectIndex" : 0
 				},
