@@ -857,6 +857,19 @@ geometry_msgs_generate_messages_lisp/fast:
 .PHONY : geometry_msgs_generate_messages_lisp/fast
 
 #=============================================================================
+# Target rules for targets named centauro_wheel_for_drawer_node
+
+# Build rule for target.
+centauro_wheel_for_drawer_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 centauro_wheel_for_drawer_node
+.PHONY : centauro_wheel_for_drawer_node
+
+# fast build rule for target.
+centauro_wheel_for_drawer_node/fast:
+	$(MAKE) -f CMakeFiles/centauro_wheel_for_drawer_node.dir/build.make CMakeFiles/centauro_wheel_for_drawer_node.dir/build
+.PHONY : centauro_wheel_for_drawer_node/fast
+
+#=============================================================================
 # Target rules for targets named apriltag_ros_generate_messages_lisp
 
 # Build rule for target.
@@ -1384,6 +1397,33 @@ src/centauro_wheel.cpp.s:
 	$(MAKE) -f CMakeFiles/centauro_wheel_node.dir/build.make CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel.cpp.s
 .PHONY : src/centauro_wheel.cpp.s
 
+src/centauro_wheel_for_drawer.o: src/centauro_wheel_for_drawer.cpp.o
+
+.PHONY : src/centauro_wheel_for_drawer.o
+
+# target to build an object file
+src/centauro_wheel_for_drawer.cpp.o:
+	$(MAKE) -f CMakeFiles/centauro_wheel_for_drawer_node.dir/build.make CMakeFiles/centauro_wheel_for_drawer_node.dir/src/centauro_wheel_for_drawer.cpp.o
+.PHONY : src/centauro_wheel_for_drawer.cpp.o
+
+src/centauro_wheel_for_drawer.i: src/centauro_wheel_for_drawer.cpp.i
+
+.PHONY : src/centauro_wheel_for_drawer.i
+
+# target to preprocess a source file
+src/centauro_wheel_for_drawer.cpp.i:
+	$(MAKE) -f CMakeFiles/centauro_wheel_for_drawer_node.dir/build.make CMakeFiles/centauro_wheel_for_drawer_node.dir/src/centauro_wheel_for_drawer.cpp.i
+.PHONY : src/centauro_wheel_for_drawer.cpp.i
+
+src/centauro_wheel_for_drawer.s: src/centauro_wheel_for_drawer.cpp.s
+
+.PHONY : src/centauro_wheel_for_drawer.s
+
+# target to generate assembly for a file
+src/centauro_wheel_for_drawer.cpp.s:
+	$(MAKE) -f CMakeFiles/centauro_wheel_for_drawer_node.dir/build.make CMakeFiles/centauro_wheel_for_drawer_node.dir/src/centauro_wheel_for_drawer.cpp.s
+.PHONY : src/centauro_wheel_for_drawer.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -1450,6 +1490,7 @@ help:
 	@echo "... geometry_msgs_generate_messages_py"
 	@echo "... geometry_msgs_generate_messages_cpp"
 	@echo "... geometry_msgs_generate_messages_lisp"
+	@echo "... centauro_wheel_for_drawer_node"
 	@echo "... apriltag_ros_generate_messages_lisp"
 	@echo "... tf_generate_messages_cpp"
 	@echo "... geometry_msgs_generate_messages_nodejs"
@@ -1498,6 +1539,9 @@ help:
 	@echo "... src/centauro_wheel.o"
 	@echo "... src/centauro_wheel.i"
 	@echo "... src/centauro_wheel.s"
+	@echo "... src/centauro_wheel_for_drawer.o"
+	@echo "... src/centauro_wheel_for_drawer.i"
+	@echo "... src/centauro_wheel_for_drawer.s"
 .PHONY : help
 
 
