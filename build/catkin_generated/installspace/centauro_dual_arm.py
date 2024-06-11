@@ -84,14 +84,14 @@ index_ = 0
 ns = 0
 # with open('/home/wang/horizon_wbc/output_1.txt', 'r') as file:
 #     lines = file.readlines()
-filename = rospkg.RosPack().get_path('centauro_long_task') + "/trajectory/dual_arm1.txt"
+filename = rospkg.RosPack().get_path('centauro_long_task') + "/trajectory/dual_arm2.txt"
 with open(filename, 'r') as file:
     lines = file.readlines()
 matrix = []
 
 global value 
 for line in lines:
-    if index_ % 1 == 0: 
+    if index_ % 5 == 0: 
         value = [float(x) for x in line.strip().split()]
         matrix.append(value)
         ns = ns + 1
