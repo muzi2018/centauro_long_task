@@ -82,8 +82,24 @@ int main(int argc, char **argv)
 
     Eigen::Affine3d L_Arm_ref;
     Eigen::Affine3d R_Arm_ref;
-
     int current_state = 0; // hand-crafted finite state machine!
+
+    /**
+     * Desire L_Arm R_Arm's translation vector
+     */
+        Eigen::Vector3d L_Arm_translation(0.8753, 0.2821, 0.06667);
+        Eigen::Vector3d R_Arm_translation(0.8595, -0.1979, 0.1256);
+
+    /**
+     * Current L_Arm R_Arm's translation vector
+     */
+
+        // L_Arm_position
+            // L_Arm_ref.translation() = 
+            //  0.50576
+            // 0.211833
+            // 0.244283
+
 
     if (argc > 1)
     {
@@ -93,12 +109,22 @@ int main(int argc, char **argv)
     {
         if(current_state == 0) // here we command a reaching motion
         {
-            std::cout << "Commanding left hand forward 0.3m in 3.0 secs" << std::endl;
+            std::cout << "Commanding hand" << std::endl;
+            double target_time = 3.0;
 
             larm_cartesian->getPoseReference(L_Arm_ref);
-            L_Arm_ref.translation()[0] += 0.3;
-            double target_time = 3.0;
+            L_Arm_ref.translation() [0] = L_Arm_translation [0];
+            // L_Arm_ref.translation() [1] = L_Arm_translation [1];
+            // L_Arm_ref.translation() [2] = L_Arm_translation [2];
             larm_cartesian->setPoseTarget(L_Arm_ref, target_time);
+
+
+            // rarm_cartesian->getPoseReference(R_Arm_ref);
+            // R_Arm_ref.translation() [0] = R_Arm_translation[0];
+            // R_Arm_ref.translation() [1] = R_Arm_translation[1];
+            // R_Arm_ref.translation() [2] = R_Arm_translation[2];
+            // rarm_cartesian->setPoseTarget(R_Arm_ref, target_time);
+
             current_state++;
         }
         if(current_state == 1) // here we check that the reaching started
@@ -111,13 +137,19 @@ int main(int argc, char **argv)
         }
         if(current_state == 2) // here we wait for it to be completed
         {
-            if(larm_cartesian->getTaskState() == State::Online)
+            if(larm_cartesian->getTaskState() == State::Online && rarm_cartesian->getTaskState() == State::Online)
             {
                 Eigen::Affine3d T;
                 larm_cartesian->getCurrentPose(T);
-
+                std::cout << "larm_cartesian larm current_state = " << std::endl << T.translation() << std::endl;
                 std::cout << "Motion completed, final error is " <<
                             (T.inverse()*L_Arm_ref).translation().norm() << std::endl;
+
+                rarm_cartesian->getCurrentPose(T);
+                std::cout << "rarm current_state = " << std::endl << T.translation() << std::endl;
+                std::cout << "Motion completed, final error is " <<
+                            (T.inverse()*R_Arm_ref).translation().norm() << std::endl;
+
                 current_state++;
             }
         }
@@ -133,11 +165,9 @@ int main(int argc, char **argv)
 
         }
         if(current_state == 4) break;
-
         solver->update(time, dt);
         model->getJointPosition(q);
         model->getJointVelocity(qdot);
-        // std::cout << "qdot.size() = " << qdot.size() << std::endl;
         model->getJointAcceleration(qddot);
         q += dt * qdot + 0.5 * std::pow(dt, 2) * qddot;
         qdot += dt * qddot;
