@@ -99,11 +99,11 @@ for line in lines:
     index_ = index_ + 1
 print("value = ", value)
 
-# for i in range(20):
-#     value[0] -=  0.01
-#     print("value ", i, "[0] = ", value[0])
-#     matrix.append(value)
-#     ns = ns + 1
+for i in range(20):
+    value[0] -=  0.01
+    print("value ", i, "[0] = ", value[0])
+    matrix.append(value)
+    ns = ns + 1
 # exit()
 # for i in range(30):
 #     value[0] -= i * 0.002
@@ -265,7 +265,7 @@ reference = prb.createParameter('upper_body_reference', 23, nodes=range(ns+1))
 #     reference[i] = matrix[i][0]
 #    x y z;4 quan; yaw_joint , 6 left arm, 6 right arm, 1 grippers + 2 headjoints = 7 + 15
 
-prb.createResidual('upper_body_trajectory', 30 * (cs.vertcat(model.q[:7], model.q[-16:]) - reference))
+prb.createResidual('upper_body_trajectory', 10 * (cs.vertcat(model.q[:7], model.q[-16:]) - reference))
 # print(matrix_np_.shape)
 # exit()
 
