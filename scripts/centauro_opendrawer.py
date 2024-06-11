@@ -39,26 +39,25 @@ from std_msgs.msg import Bool
 
 def openDagana(publisher):
     daganaRefRate = rospy.Rate(1000.0)
-    posTrajectory = np.linspace(1, 0.2, 1000).tolist()
+    posTrajectory = np.linspace(0.8, 0.2, 1000).tolist()
     for posPointNum in range(len(posTrajectory)):
         # print("posPointNum = ", posPointNum)
         daganaMsg = JointState()
         daganaMsg.position.append(posTrajectory[posPointNum])
         publisher.publish(daganaMsg)
         daganaRefRate.sleep()
-    print("Gripper should be open! Continuing..")
-
+        return True
 
 
 def closeDagana(publisher):
-    
     daganaRefRate = rospy.Rate(1000.0)
-    posTrajectory = np.linspace(0.2, 0.9, 1000).tolist()
+    posTrajectory = np.linspace(0.2, 0.8, 1000).tolist()
     for posPointNum in range(len(posTrajectory)):
         daganaMsg = JointState()
         daganaMsg.position.append(posTrajectory[posPointNum])
         publisher.publish(daganaMsg)
         daganaRefRate.sleep()
+        return True
 
 
 
@@ -99,16 +98,12 @@ for line in lines:
     index_ = index_ + 1
 print("value = ", value)
 
-for i in range(20):
-    value[0] -=  0.01
-    print("value ", i, "[0] = ", value[0])
-    matrix.append(value)
-    ns = ns + 1
-# exit()
-# for i in range(30):
-#     value[0] -= i * 0.002
+# for i in range(20):
+#     value[0] -=  0.01
+#     print("value ", i, "[0] = ", value[0])
 #     matrix.append(value)
 #     ns = ns + 1
+
 
 
 ns = ns - 1
@@ -353,14 +348,18 @@ num_T = T // dt
 print("num_T = ", num_T+1)
 data = np.zeros((3, int(num_T+1)))
 print("solution['a'].shape = ", solution['a'].shape)
+# open_dagana = openDagana(pub_dagana)
 
 while time <= T:
-    solution['q'][44,i] = 0
-    solution['v'][43,i] = 0
+
 
     if i >= solution['a'].shape[1]:
         i = solution['a'].shape[1] - 1
+
+    solution['q'][44,i] = 0 # 1 open dagana; 0 close dagana
+    solution['v'][43,i] = 0
     solution['a'][43,i] = 0
+
 
     ## update model
     qdot = solution['v'][:,i]
@@ -382,12 +381,17 @@ while time <= T:
     # if i == 50:
     #     print("openDagana")
     #     closeDagana(pub_dagana)
+    #     open_dagana = False
 
 
         
     time += dt
     rate.sleep()
 # Create a Boolean message
+
+q = model_fk.getJointPosition()
+for i in range(len(q)):
+    print("q[",i, "] = ", q[i])
 msg = Bool()
 msg.data = True
 pub_open_flag.publish(msg)
