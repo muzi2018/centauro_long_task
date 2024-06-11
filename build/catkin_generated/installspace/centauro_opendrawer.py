@@ -39,26 +39,25 @@ from std_msgs.msg import Bool
 
 def openDagana(publisher):
     daganaRefRate = rospy.Rate(1000.0)
-    posTrajectory = np.linspace(1, 0.2, 1000).tolist()
+    posTrajectory = np.linspace(0.8, 0.2, 1000).tolist()
     for posPointNum in range(len(posTrajectory)):
         # print("posPointNum = ", posPointNum)
         daganaMsg = JointState()
         daganaMsg.position.append(posTrajectory[posPointNum])
         publisher.publish(daganaMsg)
         daganaRefRate.sleep()
-    print("Gripper should be open! Continuing..")
-
+        return True
 
 
 def closeDagana(publisher):
-    
     daganaRefRate = rospy.Rate(1000.0)
-    posTrajectory = np.linspace(0.2, 0.9, 1000).tolist()
+    posTrajectory = np.linspace(0.2, 0.8, 1000).tolist()
     for posPointNum in range(len(posTrajectory)):
         daganaMsg = JointState()
         daganaMsg.position.append(posTrajectory[posPointNum])
         publisher.publish(daganaMsg)
         daganaRefRate.sleep()
+        return True
 
 
 
@@ -104,11 +103,7 @@ print("value = ", value)
 #     print("value ", i, "[0] = ", value[0])
 #     matrix.append(value)
 #     ns = ns + 1
-# exit()
-# for i in range(30):
-#     value[0] -= i * 0.002
-#     matrix.append(value)
-#     ns = ns + 1
+
 
 
 ns = ns - 1
@@ -265,7 +260,7 @@ reference = prb.createParameter('upper_body_reference', 23, nodes=range(ns+1))
 #     reference[i] = matrix[i][0]
 #    x y z;4 quan; yaw_joint , 6 left arm, 6 right arm, 1 grippers + 2 headjoints = 7 + 15
 
-prb.createResidual('upper_body_trajectory', 30 * (cs.vertcat(model.q[:7], model.q[-16:]) - reference))
+prb.createResidual('upper_body_trajectory', 10 * (cs.vertcat(model.q[:7], model.q[-16:]) - reference))
 # print(matrix_np_.shape)
 # exit()
 
@@ -353,38 +348,30 @@ num_T = T // dt
 print("num_T = ", num_T+1)
 data = np.zeros((3, int(num_T+1)))
 print("solution['a'].shape = ", solution['a'].shape)
+# open_dagana = openDagana(pub_dagana)
 
 while time <= T:
-    solution['q'][44,i] = 0.9
-    solution['v'][43,i] = 0.0
+
 
     if i >= solution['a'].shape[1]:
         i = solution['a'].shape[1] - 1
+
+    solution['q'][44,i] = 0 # 1 open dagana; 0 close dagana
+    solution['v'][43,i] = 0
+    solution['a'][43,i] = 0
+
+
     ## update model
-    q = model_fk.getJointPosition()
     qdot = solution['v'][:,i]
     qddot = solution['a'][:,i]
     # print("solution['a'].shape = ", solution['a'].shape)
+    q = model_fk.getJointPosition()
     q += dt * qdot + 0.5 * pow(dt, 2) * qddot
     qdot += dt * qddot
     model_fk.setJointPosition(q)
     model_fk.setJointVelocity(qdot)
     model_fk.setJointAcceleration(qddot)
     model_fk.update()
-    ## generate data and save
-    Tee = model_fk.getPose('dagana_2_tcp')
-    # print('end effector pose w.r.t. world frame is:\n{}'.format(Tee))
-    # print(Tee)
-    # print(type(Tee.translation))
-    # print(Tee.translation.shape)
-    # print("i = ", i)
-    # print("time = ", time)
-    
-    # print("data.shape = ", data.shape)
-    data[0, i] = Tee.translation[0]
-    data[1, i] = Tee.translation[1]
-    data[2, i] = Tee.translation[2]
-
 
     robot.setPositionReference(solution['q'][7:,i])
     robot.setVelocityReference(solution['v'][6:,i])
@@ -394,58 +381,19 @@ while time <= T:
     # if i == 50:
     #     print("openDagana")
     #     closeDagana(pub_dagana)
+    #     open_dagana = False
 
-    # if i >=100:
-    #     robot.setPositionReference(solution['q'][7:,100])
-    #     robot.setVelocityReference(solution['v'][6:,100])
 
         
     time += dt
     rate.sleep()
 # Create a Boolean message
+
+q = model_fk.getJointPosition()
+for i in range(len(q)):
+    print("q[",i, "] = ", q[i])
 msg = Bool()
 msg.data = True
 pub_open_flag.publish(msg)
-# now = datetime.now()
-# time_str = now.strftime("%m%d_%H%_M")
-# current_directory = os.getcwd()
-# file_name = f'{current_directory}/data/open_drawer_sim_{time_str}.mat'
-# scipy.io.savemat(file_name, {'xyz': data})
-# print(f"Data saved to {file_name}")
 
 
-# scipy.io.savemat('open_drawer_sim_2110.mat', {'xyz': data})
-# scipy.io.savemat('open_door_sim_2053.mat', {'xyz': data})
-
-
-
-
-# print("solution['q] = ", solution['q'].shape) #solution['q] =  (47, 94)
-
-# while not rospy.is_shutdown():
-#     for i in range(solution['q'].shape[1]):
-#         pose = Pose()
-#         pose.position.x = solution['q'][0,i] 
-#         pose.position.y = solution['q'][1,i]
-#         pose.position.z = solution['q'][2,i]
-#         pose.orientation.x = solution['q'][3,i]
-#         pose.orientation.y = solution['q'][4,i]
-#         pose.orientation.z = solution['q'][5,i]
-#         pose.orientation.w = solution['q'][6,i]
-#         pub_sol.publish(pose)
-#         pose.position.x = matrix_np_[i,0] 
-#         pose.position.y = matrix_np_[i,1]
-#         pose.position.z = matrix_np_[i,2]
-#         pose.orientation.x = matrix_np_[i,3]
-#         pose.orientation.y = matrix_np_[i,4]
-#         pose.orientation.z = matrix_np_[i,5]
-#         pose.orientation.w = matrix_np_[i,6]
-#         pub_ref.publish(pose)
-
-# publish solution
-    
-
-
-    # repl = replay_trajectory.replay_trajectory(prb.getDt(), kin_dyn.joint_names(), solution['q'], kindyn=kin_dyn, trajectory_markers=model.getContactMap().keys())
-    # repl.replay(is_floating_base=True)
-    # rate.sleep()

@@ -34,6 +34,11 @@ bool start_walking(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res
 
 int main(int argc, char **argv)
 {
+    std::string filePath = "/home/wang/forest_ws/src/centauro_long_task/data/file.txt"; 
+
+    std::ofstream outputFile(filePath);
+
+
     const std::string robotName = "centauro";
     // Initialize ros node
     ros::init(argc, argv, robotName);
@@ -100,6 +105,12 @@ int main(int argc, char **argv)
             // 0.211833
             // 0.244283
 
+        // Current R_Arm_ref: 
+        //  0.524846
+        // -0.224064
+        //  0.274411
+
+
 
     if (argc > 1)
     {
@@ -153,6 +164,8 @@ int main(int argc, char **argv)
                 current_state++;
             }
         }
+
+        
         if(current_state == 3) // here we wait the robot to come to a stop
         {
             std::cout << "qdot norm is " << qdot.norm() << std::endl;
@@ -161,9 +174,11 @@ int main(int argc, char **argv)
                 std::cout << "Robot came to a stop, press ENTER to exit.. \n";
                 std::cin.ignore();
                 current_state++;
+                outputFile.close();
             }
 
         }
+        
         if(current_state == 4) break;
         solver->update(time, dt);
         model->getJointPosition(q);
@@ -179,8 +194,18 @@ int main(int argc, char **argv)
         robot->move();
         time += dt;
         rspub.publishTransforms(ros::Time::now(), "");
+
+        // get arm1 state 
+        for (size_t i = 31; i <= 36; i++)
+        {
+            outputFile << q[i] << " " ;
+        }
+        outputFile << std::endl;
+
         r.sleep();
     }
+
+
 }
 
 
