@@ -217,9 +217,15 @@ for c in model.getContactMap():
 # forward kinematics
 FK = (kin_dyn.fk('arm1_8'))
 n_q = kin_dyn.nq()
+n_q = kin_dyn.nq()
+n_v = kin_dyn.nv()
 q = prb.createStateVariable('q', n_q)
+q_dot = prb.createStateVariable('q_dot', n_v)
+# CONTROL variables
+q_ddot = prb.createInputVariable('q_ddot', n_v)
+
 pos = FK(q=q)['ee_pos']
-prb.createCost("tracking_ee_position", pos)
+# prb.createCost("tracking_ee_position", pos)
 
 reference = prb.createParameter("desired_ee_position", 3, nodes=range(ns + 1))
 prb.createResidual('arm1_trajectory', 20 * (pos - reference))
@@ -249,38 +255,23 @@ for i in range(100):
     current_point = init_arm1 + i * segment_size
     segments.append(current_point)
 segments = np.array(segments)
-print("segments size = ", segments.shape())
-exit()
-reference = prb.createParameter('upper_body_reference', 23, nodes=range(ns+1))
-# for i in range(21):
-#     reference[i] = matrix[i][0]
-#    x y z;4 quan; yaw_joint , 6 left arm, 6 right arm, 1 grippers + 2 headjoints = 7 + 15
-prb.createResidual('upper_body_trajectory', 20 * (cs.vertcat(model.q[:7], model.q[-16:]) - reference))
-# print(matrix_np_.shape)
-# exit()
+print("segments size = ", segments.shape)
+reference.assign(segments.T)
 
-reference.assign(matrix_np_.T)
-print (reference.shape)
 
 #
 # reference.assign(matrix 21 x 100)
 
 model.q.setBounds(model.q0, model.q0, nodes=0)
-# model.q[0].setBounds(model.q0[0] + 1, model.q0[0] + 1, nodes=ns)
 model.v.setBounds(np.zeros(model.nv), np.zeros(model.nv), nodes=0)
 model.v.setBounds(np.zeros(model.nv), np.zeros(model.nv), nodes=ns)
 
 q_min = kin_dyn.q_min()
 q_max = kin_dyn.q_max()
 
+# prb.createResidual('lower_limits', 30 * utils.barrier(model.q[-3] - q_min[-3]))
+# prb.createResidual('upper_limits', 30 * utils.barrier1(model.q[-3] - q_max[-3]))
 
-print(kin_dyn.joint_names())
-print(q_min)
-print(q_max)
-prb.createResidual('lower_limits', 30 * utils.barrier(model.q[-3] - q_min[-3]))
-prb.createResidual('upper_limits', 30 * utils.barrier1(model.q[-3] - q_max[-3]))
-
-# prb.createResidual('support_polygon', wheel1 - whheel2 = fixed_disanace)
 f0 = [0, 0, kin_dyn.mass() / 4 * 9.81]
 for cname, cforces in model.getContactMap().items():
     for c in cforces:
