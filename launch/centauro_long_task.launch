@@ -28,6 +28,9 @@
   <param name="problem_description_leg_lower"
           textfile="$(find centauro_long_task)/config/cartesio_stack_leg_lower.yaml"/> 
 
+  <param name="problem_description_manipulation"
+          textfile="$(find centauro_long_task)/config/cartesio_stack_manipulation.yaml"/> 
+
     <!--Test node-->
   <!-- <node pkg="centauro_long_task" name="centauro_wheel" type="centauro_wheel_node" output="screen"/> -->
   <!-- <node pkg="centauro_long_task" name="centauro_turnaround" type="centauro_turnaround_node" output="screen"/> -->
