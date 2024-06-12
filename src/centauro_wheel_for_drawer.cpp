@@ -170,7 +170,7 @@ int main(int argc, char **argv)
     ros::Rate r(10);
 
     double roll_e, pitch_e, yaw_e;
-    double K_x = 5, K_y = 0.2, K_yaw = 0.1;
+    double K_x = 0.5, K_y = 0.2, K_yaw = 0.1;
     Eigen::VectorXd q, qdot, qddot;
 
 
@@ -189,7 +189,7 @@ int main(int argc, char **argv)
             Eigen::Vector3d base_pos;
             const std::string base_frame = "base_link";
             model->getPointPosition(base_frame, Eigen::Vector3d::Zero(),base_pos); 
-            // std::cout << "base_pos = " << base_pos << std::endl;
+            std::cout << "base_pos[0] = " << base_pos[0] << std::endl;
 
             double x_e = 0.5;
             if (direction == -1)
@@ -197,19 +197,21 @@ int main(int argc, char **argv)
                 E[0] = K_x * direction * x_e;
                 count_backward = count_backward + 1;
 
-                // if (count_backward >= 11)
-                // {
-                //     count_backward = 11;
-                //     E[0] = 0;
-                // }
+                if ( abs(base_pos[0]) >= 0.1 )
+                {
+                    E[0] = 0;
+                }
 
-                std::cout << "count_backward = " << count_backward << std::endl;
+                // std::cout << "count_backward = " << count_backward << std::endl;
             }else if (direction == 1)
             {
                 /* code */
                 E[0] = K_x * direction * x_e;
                 count_forward = count_forward + 1;
-                std::cout << "count_forward = " << count_forward << std::endl;
+                if ( abs(base_pos[0]) >= 0.1 )
+                {
+                    E[0] = 0;
+                }
             }
             E[1] = 0;
             E[2] = 0;
@@ -218,7 +220,7 @@ int main(int argc, char **argv)
             E[5] = 0;
 
             
-            std::cout << "E: " << E << std::endl;
+            // std::cout << "E: " << E << std::endl;
             // std::cout << "Running" << E[0] << std::endl;
 
             car_cartesian->setVelocityReference(E);
