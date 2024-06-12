@@ -125,29 +125,56 @@ int main(int argc, char **argv)
     ros::Rate r(10);
 
     double roll_e, pitch_e, yaw_e;
-    double K_x = 0.1, K_y = 0.2, K_yaw = 0.1;
+    double K_x = 5, K_y = 0.2, K_yaw = 0.1;
     Eigen::VectorXd q, qdot, qddot;
 
 
     auto car_task = solver->getTask("base_link");
     auto car_cartesian = std::dynamic_pointer_cast<XBot::Cartesian::CartesianTask>(car_task);
+    
+    int count_forward = 0;
+    int count_backward = 0;
 
     while (ros::ok())
     {
-        std::cout << "backward_bool = " << backward_bool << std::endl;
+        // std::cout << "backward_bool = " << backward_bool << std::endl;
         if (1)
         {
-            // std::cout << "backward -------------"<< std::endl;
-            // direction = -1;
 
-            double x_e = 1;
-            E[0] = K_x * direction * x_e;
+            Eigen::Vector3d base_pos;
+            const std::string base_frame = "base_link";
+            model->getPointPosition(base_frame, Eigen::Vector3d::Zero(),base_pos); 
+            // std::cout << "base_pos = " << base_pos << std::endl;
+
+            double x_e = 0.5;
+            if (direction == -1)
+            {
+                E[0] = 0;
+                count_backward = count_backward + 1;
+
+                // if (count_backward >= 11)
+                // {
+                //     count_backward = 11;
+                //     E[0] = 0;
+                // }
+
+                std::cout << "count_backward = " << count_backward << std::endl;
+            }else if (direction == 1)
+            {
+                /* code */
+                E[0] = direction * x_e;
+                count_forward = count_forward + 1;
+                std::cout << "count_forward = " << count_forward << std::endl;
+            }
             E[1] = 0;
             E[2] = 0;
             E[3] = 0;
             E[4] = 0;
             E[5] = 0;
-            std::cout << "Running" << E[0] << std::endl;
+
+            
+            std::cout << "E: " << E << std::endl;
+            // std::cout << "Running" << E[0] << std::endl;
 
             car_cartesian->setVelocityReference(E);
             solver->update(time_, dt);
@@ -157,36 +184,89 @@ int main(int argc, char **argv)
             
             q += dt * qdot + 0.5 * std::pow(dt, 2) * qddot;
             qdot += dt * qddot;
-            std::cout << "q.size = " << q.size() << std::endl;
-            std::cout << "qdot.size = " << qdot.size() << std::endl;
-            std::cout << "qddot.size = " << qddot.size() << std::endl;
-            // for open drawer
-            q[ 30 ] =  0.4040186546494344;
+            
+            // std::cout << "qdot.size = " << qdot.size() << std::endl;
+            // std::cout << "qddot.size = " << qddot.size() << std::endl;
 
-            q[ 31 ] =  0.5004546384118925;
-            q[ 32 ] =  0.2994964779359518;
-            q[ 33 ] =  0.29943095523842994;
-            q[ 34 ] =  -2.2000963198491195;
-            q[ 35 ] =  -0.00017411275755681196;
-            q[ 36 ] =  -0.8001008562516254;
-            q[ 37 ] =  0.7478534584403171;
-            q[ 38 ] =  -0.9265451550597945;
-            q[ 39 ] =  0.10252270494122193;
-            q[ 40 ] =  -2.316315382418594;
-            q[ 41 ] =  0.9950746571650648;
-            q[ 42 ] =  1.4861354211081454;
-            //dagana
-            q[ 43 ] =  0.0;
+
+            // q[ 0 ] =  -0.0018855216185921957;
+            // q[ 1 ] =  -0.2011719774306072;
+            // q[ 2 ] =  -0.0019966524197081855;
+            // q[ 3 ] =  0.0033993627979932565;
+            // q[ 4 ] =  -0.0034495029327205194;
+            // q[ 5 ] =  0.004439609316802201;
+            q[ 6 ] =  -0.6947201934626644;
+            q[ 7 ] =  -1.6098530170101875;
+            q[ 8 ] =  -1.9261441932454884;
+            q[ 9 ] =  -0.3497121698568159;
+            // q[ 10 ] =  5.506349104977607;
+            // q[ 11 ] =  2.3202287376709005;
+            q[ 12 ] =  0.6947346202330281;
+            q[ 13 ] =  1.621651725779464;
+            q[ 14 ] =  1.9269477417102965;
+            q[ 15 ] =  0.34701567457213983;
+            // q[ 16 ] =  3.5364793112672936;
+            // q[ 17 ] =  -3.528104212517133;
+            q[ 18 ] =  0.7983587818016566;
+            q[ 19 ] =  1.5416675689150114;
+            q[ 20 ] =  1.9684509620219706;
+            q[ 21 ] =  0.40422116604563796;
+            // q[ 22 ] =  3.8193584127612166;
+            // q[ 23 ] =  -0.1550779792485414;
+            q[ 24 ] =  -0.7983096186598166;
+            q[ 25 ] =  -1.5458968273519493;
+            q[ 26 ] =  -1.974789282615135;
+            q[ 27 ] =  -0.3988661353672795;
+            // q[ 28 ] =  4.985883322547674;
+            // q[ 29 ] =  0.11492405835617893;
+            q[ 30 ] =  0.4039944568376299;
+            q[ 31 ] =  0.5006742869402812;
+            q[ 32 ] =  0.29945826485022137;
+            q[ 33 ] =  0.2994408973284771;
+            q[ 34 ] =  -2.200131128120107;
+            q[ 35 ] =  -0.0001740658925413898;
+            q[ 36 ] =  -0.8001159502342114;
+            q[ 37 ] =  0.7479437827362457;
+            q[ 38 ] =  -0.9264480259414567;
+            q[ 39 ] =  0.10258795046200221;
+            q[ 40 ] =  -2.3163770137564526;
+            q[ 41 ] =  0.9950850583600879;
+            q[ 42 ] =  1.4861404917045418;
+            // q[ 43 ] =  0.9;
+            q[ 44 ] =  -0.0036306885623029516;
+            q[ 45 ] =  0.0002926313199609307;
+
+
+            qdot[6] = 0;qdot[7] = 0; qdot[8] = 0; 
+            qdot[9] = 0;qdot[10] = 0; 
+            qdot[12] = 0;qdot[13] = 0; qdot[14] = 0; 
+            qdot[15] = 0;qdot[16] = 0; 
+            qdot[18] = 0;qdot[19] = 0; qdot[20] = 0; 
+            qdot[21] = 0;qdot[22] = 0; 
+            qdot[24] = 0;qdot[25] = 0; qdot[26] = 0; 
+            qdot[27] = 0;qdot[28] = 0; 
 
             qdot[31] = 0;qdot[32] = 0; qdot[33] = 0; 
             qdot[34] = 0;qdot[35] = 0; qdot[36] = 0; 
             qdot[37] = 0;qdot[38] = 0; qdot[39] = 0; 
-            qdot[40] = 0;qdot[41] = 0; qdot[42] = 0; qdot[43] = 0; 
+            qdot[40] = 0;qdot[41] = 0; qdot[42] = 0; qdot[43] = 0; qdot[44] = 0;qdot[45] = 0;
+
+
+            // qddot
+            qddot[6] = 0;qddot[7] = 0; qddot[8] = 0; 
+            qddot[9] = 0;qddot[10] = 0; 
+            qddot[12] = 0;qddot[13] = 0; qddot[14] = 0; 
+            qddot[15] = 0;qddot[16] = 0; 
+            qddot[18] = 0;qddot[19] = 0; qddot[20] = 0; 
+            qddot[21] = 0;qddot[22] = 0; 
+            qddot[24] = 0;qddot[25] = 0; qddot[26] = 0; 
+            qddot[27] = 0;qddot[28] = 0; 
 
             qddot[31] = 0;qddot[32] = 0; qddot[33] = 0; 
             qddot[34] = 0;qddot[35] = 0; qddot[36] = 0; 
             qddot[37] = 0;qddot[38] = 0; qddot[39] = 0; 
-            qddot[40] = 0;qddot[41] = 0; qddot[42] = 0; qddot[43] = 0; 
+            qddot[40] = 0;qddot[41] = 0; qddot[42] = 0; qddot[43] = 0; qddot[44] = 0;qddot[45] = 0;
+
             
             model->setJointPosition(q);
             model->setJointVelocity(qdot);

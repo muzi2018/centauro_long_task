@@ -23,7 +23,7 @@
 using namespace XBot::Cartesian;
 bool start_walking_bool = false;
 double init_heigh;
-int direction = -1; // 1: lower; -1: upper
+int direction = 1; // 1: lower; -1: upper
 
 
 bool start_walking(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)

@@ -51,7 +51,7 @@ def openDagana(publisher):
 
 def closeDagana(publisher):
     daganaRefRate = rospy.Rate(1000.0)
-    posTrajectory = np.linspace(0.2, 0.8, 1000).tolist()
+    posTrajectory = np.linspace(0.2, 0.75, 1000).tolist()
     for posPointNum in range(len(posTrajectory)):
         daganaMsg = JointState()
         daganaMsg.position.append(posTrajectory[posPointNum])
@@ -390,8 +390,8 @@ while time <= T:
 # Create a Boolean message
 
 q = model_fk.getJointPosition()
-for i in range(len(q)):
-    print("q[",i, "] = ", q[i])
+# for i in range(len(q)):
+#     print("q[",i, "] = ", q[i])
 msg = Bool()
 msg.data = True
 pub_open_flag.publish(msg)

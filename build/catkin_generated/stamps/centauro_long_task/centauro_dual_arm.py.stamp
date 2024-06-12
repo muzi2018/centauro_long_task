@@ -91,7 +91,7 @@ matrix = []
 
 global value 
 for line in lines:
-    if index_ % 5 == 0: 
+    if index_ % 2 == 0: 
         value = [float(x) for x in line.strip().split()]
         matrix.append(value)
         ns = ns + 1

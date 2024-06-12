@@ -84,7 +84,7 @@ index_ = 0
 ns = 0
 # with open('/home/wang/horizon_wbc/output_1.txt', 'r') as file:
 #     lines = file.readlines()
-filename = rospkg.RosPack().get_path('centauro_long_task') + "/trajectory/dual_arm1.txt"
+filename = rospkg.RosPack().get_path('centauro_long_task') + "/trajectory/dual_arm_joint.txt"
 with open(filename, 'r') as file:
     lines = file.readlines()
 matrix = []
@@ -253,12 +253,12 @@ print("matrix_np_.shape = ", matrix_np_.shape)
 # exit()
 
 
-reference = prb.createParameter('upper_body_reference', 23, nodes=range(ns+1))
+reference = prb.createParameter('upper_body_reference', 6, nodes=range(ns+1))
 # for i in range(21):
 #     reference[i] = matrix[i][0]
 #    x y z;4 quan; yaw_joint , 6 left arm, 6 right arm, 1 grippers + 2 headjoints = 7 + 15
 
-prb.createResidual('upper_body_trajectory', 20 * (cs.vertcat(model.q[:7], model.q[-16:]) - reference))
+prb.createResidual('upper_body_trajectory', 20 * (cs.vertcat(model.q[32:37], model.q[-16:]) - reference))
 # print(matrix_np_.shape)
 # exit()
 
