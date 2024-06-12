@@ -194,6 +194,19 @@ centauro_lower_node/fast:
 .PHONY : centauro_lower_node/fast
 
 #=============================================================================
+# Target rules for targets named centauro_control_camera_node
+
+# Build rule for target.
+centauro_control_camera_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 centauro_control_camera_node
+.PHONY : centauro_control_camera_node
+
+# fast build rule for target.
+centauro_control_camera_node/fast:
+	$(MAKE) -f CMakeFiles/centauro_control_camera_node.dir/build.make CMakeFiles/centauro_control_camera_node.dir/build
+.PHONY : centauro_control_camera_node/fast
+
+#=============================================================================
 # Target rules for targets named centauro_search_node
 
 # Build rule for target.
@@ -1194,6 +1207,33 @@ gtest/fast:
 	$(MAKE) -f gtest/googletest/CMakeFiles/gtest.dir/build.make gtest/googletest/CMakeFiles/gtest.dir/build
 .PHONY : gtest/fast
 
+src/centauro_control_camera.o: src/centauro_control_camera.cpp.o
+
+.PHONY : src/centauro_control_camera.o
+
+# target to build an object file
+src/centauro_control_camera.cpp.o:
+	$(MAKE) -f CMakeFiles/centauro_control_camera_node.dir/build.make CMakeFiles/centauro_control_camera_node.dir/src/centauro_control_camera.cpp.o
+.PHONY : src/centauro_control_camera.cpp.o
+
+src/centauro_control_camera.i: src/centauro_control_camera.cpp.i
+
+.PHONY : src/centauro_control_camera.i
+
+# target to preprocess a source file
+src/centauro_control_camera.cpp.i:
+	$(MAKE) -f CMakeFiles/centauro_control_camera_node.dir/build.make CMakeFiles/centauro_control_camera_node.dir/src/centauro_control_camera.cpp.i
+.PHONY : src/centauro_control_camera.cpp.i
+
+src/centauro_control_camera.s: src/centauro_control_camera.cpp.s
+
+.PHONY : src/centauro_control_camera.s
+
+# target to generate assembly for a file
+src/centauro_control_camera.cpp.s:
+	$(MAKE) -f CMakeFiles/centauro_control_camera_node.dir/build.make CMakeFiles/centauro_control_camera_node.dir/src/centauro_control_camera.cpp.s
+.PHONY : src/centauro_control_camera.cpp.s
+
 src/centauro_dual_arm.o: src/centauro_dual_arm.cpp.o
 
 .PHONY : src/centauro_dual_arm.o
@@ -1477,6 +1517,7 @@ help:
 	@echo "... centauro_dual_arm_node"
 	@echo "... centauro_lower_node"
 	@echo "... test"
+	@echo "... centauro_control_camera_node"
 	@echo "... centauro_search_node"
 	@echo "... centauro_leg_node"
 	@echo "... centauro_nav_wheel_node"
@@ -1556,6 +1597,9 @@ help:
 	@echo "... gmock"
 	@echo "... gtest_main"
 	@echo "... gtest"
+	@echo "... src/centauro_control_camera.o"
+	@echo "... src/centauro_control_camera.i"
+	@echo "... src/centauro_control_camera.s"
 	@echo "... src/centauro_dual_arm.o"
 	@echo "... src/centauro_dual_arm.i"
 	@echo "... src/centauro_dual_arm.s"

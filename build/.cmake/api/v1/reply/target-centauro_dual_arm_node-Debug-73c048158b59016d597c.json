@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "devel/lib/centauro_long_task/centauro_lower_node"
+			"path" : "devel/lib/centauro_long_task/centauro_dual_arm_node"
 		}
 	],
 	"backtrace" : 1,
@@ -39,13 +39,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 141,
+				"line" : 143,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 216,
+				"line" : 220,
 				"parent" : 0
 			},
 			{
@@ -57,7 +57,7 @@
 			{
 				"command" : 3,
 				"file" : 0,
-				"line" : 170,
+				"line" : 180,
 				"parent" : 0
 			},
 			{
@@ -226,7 +226,7 @@
 			]
 		}
 	],
-	"id" : "centauro_lower_node::@6890427a1f51a3e7e1df",
+	"id" : "centauro_dual_arm_node::@6890427a1f51a3e7e1df",
 	"install" : 
 	{
 		"destinations" : 
@@ -826,8 +826,8 @@
 		],
 		"language" : "CXX"
 	},
-	"name" : "centauro_lower_node",
-	"nameOnDisk" : "centauro_lower_node",
+	"name" : "centauro_dual_arm_node",
+	"nameOnDisk" : "centauro_dual_arm_node",
 	"paths" : 
 	{
 		"build" : ".",
@@ -848,7 +848,7 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "src/centauro_lower.cpp",
+			"path" : "src/centauro_dual_arm.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

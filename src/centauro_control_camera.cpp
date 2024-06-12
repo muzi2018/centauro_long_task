@@ -24,59 +24,23 @@
 
 
 using namespace XBot::Cartesian;
-bool start_searching_bool = false, tagDetected = false;
 const double dt = 0.01;
 double time_ = 0.0 ;
 Eigen::Vector6d E;
-int direction = 1; // 1 : forward; -1 : backward
+double angle = 0; // 1 : forward; -1 : backward
 
-bool start_searching(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
-{
-    start_searching_bool = !start_searching_bool;
-    return true;
-};
-
-void tagDetectionsCallback(const apriltag_ros::AprilTagDetectionArray::ConstPtr& msg)
-{
-    if (msg->detections.size() > 0) {
-        tagDetected = true;
-    }else{
-        tagDetected = false;
-    }
-}
-
-bool backward_bool = false;
-void backwardCallback(const std_msgs::Bool::ConstPtr& msg)
-{
-    backward_bool = msg->data;
-
-    if (backward_bool) {
-        std::cout << "backward started" << std::endl;
-    } else {
-        std::cout << "backward stopped" << std::endl;
-    }
-}
 
 
 int main(int argc, char **argv)
 {
     if (argc > 1)
     {
-        direction = atoi(argv[1]);
+        angle = atof(argv[1]);
     }
-
-
-    
-
     const std::string robotName = "centauro_wheel";
     // Initialize ros node
     ros::init(argc, argv, robotName);
     ros::NodeHandle nodeHandle("");
-
-    std_srvs::Empty srv;
-    // Create a Buffer and a TransformListener
-    tf2_ros::Buffer tfBuffer;
-    tf2_ros::TransformListener tfListener(tfBuffer);
 
     auto cfg = XBot::ConfigOptionsFromParamServer();
     // and we can make the model class
@@ -85,7 +49,6 @@ int main(int argc, char **argv)
     // initialize to a homing configuration
     Eigen::VectorXd qhome;
     model->getRobotState("home", qhome);
-    qhome[44] = -0.13;
     model->setJointPosition(qhome);
     model->update();
     XBot::Cartesian::Utils::RobotStatePublisher rspub (model);
@@ -115,65 +78,37 @@ int main(int argc, char **argv)
                                                        );
     // ros::Subscriber sub = nodeHandle.subscribe("/tag_detections", 1000, tagDetectionsCallback);
 
-    ros::Subscriber sub_backward = nodeHandle.subscribe("/open_flag", 1, backwardCallback);
-
-
-    ros::ServiceServer service = nodeHandle.advertiseService("start_searching", start_searching);
     ros::Rate r(10);
-
-    double roll_e, pitch_e, yaw_e;
-    double K_x = 0.1, K_y = 0.2, K_yaw = 0.1;
     Eigen::VectorXd q, qdot, qddot;
-
-
-    auto car_task = solver->getTask("base_link");
-    auto car_cartesian = std::dynamic_pointer_cast<XBot::Cartesian::CartesianTask>(car_task);
-
+    q.resize(46); qdot.resize(46); qddot.resize(46); 
+    q = qhome; qdot.setZero(); qddot.setZero();
     while (ros::ok())
     {
-        std::cout << "backward_bool = " << backward_bool << std::endl;
-        if (1)
-        {
-            // std::cout << "backward -------------"<< std::endl;
-            // direction = -1;
+        q[44] = angle ;
+        std::cout << "angle" << angle << std::endl;
+        std::cout << "camera = " << q[44] << std::endl;
 
-            double x_e = 1;
-            E[0] = K_x * direction * x_e;
-            E[1] = 0;
-            E[2] = 0;
-            E[3] = 0;
-            E[4] = 0;
-            E[5] = 0;
-            std::cout << "Running" << E[0] << std::endl;
-
-            car_cartesian->setVelocityReference(E);
-            solver->update(time_, dt);
-            model->getJointPosition(q);
-            model->getJointVelocity(qdot);
-            model->getJointAcceleration(qddot);
-            
-            q += dt * qdot + 0.5 * std::pow(dt, 2) * qddot;
-            qdot += dt * qddot;
-            model->setJointPosition(q);
-            model->setJointVelocity(qdot);
-            model->update();
-            // qdot[42] = 0;
-            robot->setPositionReference(q.tail(robot->getJointNum()));
-            robot->setVelocityReference(qdot.tail(robot->getJointNum()));
-            robot->move();
-            time_ += dt;
-            rspub.publishTransforms(ros::Time::now(), "");
-            /**
-             * Move Robot
-            */
-            ros::spinOnce();
-            r.sleep();
-
-
-        }
-
-
-        }        
+        model->getJointPosition(q);
+        model->getJointVelocity(qdot);
+        model->getJointAcceleration(qddot);
+        
+        q += dt * qdot + 0.5 * std::pow(dt, 2) * qddot;
+        qdot += dt * qddot;
+        model->setJointPosition(q);
+        model->setJointVelocity(qdot);
+        model->update();
+        // qdot[42] = 0;
+        robot->setPositionReference(q.tail(robot->getJointNum()));
+        robot->setVelocityReference(qdot.tail(robot->getJointNum()));
+        robot->move();
+        time_ += dt;
+        rspub.publishTransforms(ros::Time::now(), "");
+        /**
+         * Move Robot
+        */
+        ros::spinOnce();
+        r.sleep();
+    }        
 }
 
 

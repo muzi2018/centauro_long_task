@@ -21,7 +21,7 @@ clear && rosrun centauro_long_task centauro_search_node -1
 
 II. wheel 
 clear && rosrun centauro_long_task centauro_nav_wheel_node
-clear && rosrun centauro_long_task centauro_turnaround_node -1
+clear && rosrun centauro_long_task centauro_turnaround_node 1
 clear && rosrun centauro_long_task centauro_lower_node
 
 III. open the drawer

@@ -131,7 +131,7 @@ int main(int argc, char **argv)
             qhome[ 41 ] =  0.9950850583600879;
             qhome[ 42 ] =  1.4861404917045418;
             // q[ 43 ] =  0.9;
-            qhome[ 44 ] =  -0.0036306885623029516;
+            qhome[44] = -0.13;
             qhome[ 45 ] =  0.0002926313199609307;
 
     model->setJointPosition(qhome);
