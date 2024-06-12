@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "devel/lib/centauro_long_task/centauro_leg_node"
+			"path" : "devel/lib/centauro_long_task/centauro_search_node"
 		}
 	],
 	"backtrace" : 1,
@@ -39,13 +39,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 136,
+				"line" : 140,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 209,
+				"line" : 216,
 				"parent" : 0
 			},
 			{
@@ -57,7 +57,7 @@
 			{
 				"command" : 3,
 				"file" : 0,
-				"line" : 158,
+				"line" : 167,
 				"parent" : 0
 			},
 			{
@@ -137,7 +137,7 @@
 			{
 				"command" : 8,
 				"file" : 0,
-				"line" : 122,
+				"line" : 123,
 				"parent" : 0
 			}
 		]
@@ -186,6 +186,10 @@
 				},
 				{
 					"backtrace" : 19,
+					"path" : "/usr/include/python3.8"
+				},
+				{
+					"backtrace" : 19,
 					"isSystem" : true,
 					"path" : "/home/wang/forest_ws/install/include"
 				},
@@ -222,7 +226,7 @@
 			]
 		}
 	],
-	"id" : "centauro_leg_node::@6890427a1f51a3e7e1df",
+	"id" : "centauro_search_node::@6890427a1f51a3e7e1df",
 	"install" : 
 	{
 		"destinations" : 
@@ -822,8 +826,8 @@
 		],
 		"language" : "CXX"
 	},
-	"name" : "centauro_leg_node",
-	"nameOnDisk" : "centauro_leg_node",
+	"name" : "centauro_search_node",
+	"nameOnDisk" : "centauro_search_node",
 	"paths" : 
 	{
 		"build" : ".",
@@ -844,7 +848,7 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "src/centauro_leg.cpp",
+			"path" : "src/centauro_search.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

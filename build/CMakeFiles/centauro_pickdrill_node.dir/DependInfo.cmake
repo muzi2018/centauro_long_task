@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/wang/forest_ws/src/centauro_long_task/src/centauro_dual_arm.cpp" "/home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_dual_arm_node.dir/src/centauro_dual_arm.cpp.o"
+  "/home/wang/forest_ws/src/centauro_long_task/src/centauro_pickdrill.cpp" "/home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_pickdrill_node.dir/src/centauro_pickdrill.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

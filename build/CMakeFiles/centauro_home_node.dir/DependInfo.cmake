@@ -21,6 +21,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
   "../include"
   "/opt/ros/noetic/include/apriltag"
   "/usr/include/opencv4"
+  "/usr/include/python3.8"
   "/home/wang/forest_ws/install/include"
   "/opt/ros/noetic/include"
   "/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp"

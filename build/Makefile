@@ -298,6 +298,19 @@ actionlib_msgs_generate_messages_py/fast:
 .PHONY : actionlib_msgs_generate_messages_py/fast
 
 #=============================================================================
+# Target rules for targets named centauro_pickdrill_node
+
+# Build rule for target.
+centauro_pickdrill_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 centauro_pickdrill_node
+.PHONY : centauro_pickdrill_node
+
+# fast build rule for target.
+centauro_pickdrill_node/fast:
+	$(MAKE) -f CMakeFiles/centauro_pickdrill_node.dir/build.make CMakeFiles/centauro_pickdrill_node.dir/build
+.PHONY : centauro_pickdrill_node/fast
+
+#=============================================================================
 # Target rules for targets named apriltag_ros_generate_messages_eus
 
 # Build rule for target.
@@ -1316,6 +1329,33 @@ src/centauro_nav_wheel.cpp.s:
 	$(MAKE) -f CMakeFiles/centauro_nav_wheel_node.dir/build.make CMakeFiles/centauro_nav_wheel_node.dir/src/centauro_nav_wheel.cpp.s
 .PHONY : src/centauro_nav_wheel.cpp.s
 
+src/centauro_pickdrill.o: src/centauro_pickdrill.cpp.o
+
+.PHONY : src/centauro_pickdrill.o
+
+# target to build an object file
+src/centauro_pickdrill.cpp.o:
+	$(MAKE) -f CMakeFiles/centauro_pickdrill_node.dir/build.make CMakeFiles/centauro_pickdrill_node.dir/src/centauro_pickdrill.cpp.o
+.PHONY : src/centauro_pickdrill.cpp.o
+
+src/centauro_pickdrill.i: src/centauro_pickdrill.cpp.i
+
+.PHONY : src/centauro_pickdrill.i
+
+# target to preprocess a source file
+src/centauro_pickdrill.cpp.i:
+	$(MAKE) -f CMakeFiles/centauro_pickdrill_node.dir/build.make CMakeFiles/centauro_pickdrill_node.dir/src/centauro_pickdrill.cpp.i
+.PHONY : src/centauro_pickdrill.cpp.i
+
+src/centauro_pickdrill.s: src/centauro_pickdrill.cpp.s
+
+.PHONY : src/centauro_pickdrill.s
+
+# target to generate assembly for a file
+src/centauro_pickdrill.cpp.s:
+	$(MAKE) -f CMakeFiles/centauro_pickdrill_node.dir/build.make CMakeFiles/centauro_pickdrill_node.dir/src/centauro_pickdrill.cpp.s
+.PHONY : src/centauro_pickdrill.cpp.s
+
 src/centauro_search.o: src/centauro_search.cpp.o
 
 .PHONY : src/centauro_search.o
@@ -1445,6 +1485,7 @@ help:
 	@echo "... tf2_msgs_generate_messages_cpp"
 	@echo "... centauro_turnaround_node"
 	@echo "... actionlib_msgs_generate_messages_py"
+	@echo "... centauro_pickdrill_node"
 	@echo "... apriltag_ros_generate_messages_eus"
 	@echo "... nodelet_generate_messages_eus"
 	@echo "... actionlib_generate_messages_nodejs"
@@ -1530,6 +1571,9 @@ help:
 	@echo "... src/centauro_nav_wheel.o"
 	@echo "... src/centauro_nav_wheel.i"
 	@echo "... src/centauro_nav_wheel.s"
+	@echo "... src/centauro_pickdrill.o"
+	@echo "... src/centauro_pickdrill.i"
+	@echo "... src/centauro_pickdrill.s"
 	@echo "... src/centauro_search.o"
 	@echo "... src/centauro_search.i"
 	@echo "... src/centauro_search.s"

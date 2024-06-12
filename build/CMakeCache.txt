@@ -327,6 +327,15 @@ OpenSoT_DIR:PATH=/opt/xbot/lib/cmake/OpenSoT
 //Path to a program.
 PYTHON_EXECUTABLE:FILEPATH=/usr/bin/python3
 
+//Path to a file.
+PYTHON_INCLUDE_DIR:PATH=/usr/include/python3.8
+
+//Path to a library.
+PYTHON_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/libpython3.8.so
+
+//Path to a library.
+PYTHON_LIBRARY_DEBUG:FILEPATH=PYTHON_LIBRARY_DEBUG-NOTFOUND
+
 //Specify specific Python version to use ('major.minor' or 'major')
 PYTHON_VERSION:STRING=3
 
@@ -338,6 +347,12 @@ Project_BINARY_DIR:STATIC=/home/wang/forest_ws/src/centauro_long_task/build
 
 //Value Computed by CMake
 Project_SOURCE_DIR:STATIC=/home/wang/forest_ws/src/centauro_long_task
+
+//Path to a library.
+Python_LIBRARY_DEBUG:FILEPATH=
+
+//Path to a library.
+Python_LIBRARY_RELEASE:FILEPATH=/usr/lib/x86_64-linux-gnu/libpython3.8.so
 
 //Path to a library.
 RT_LIBRARY:FILEPATH=/usr/lib/x86_64-linux-gnu/librt.so
@@ -359,6 +374,12 @@ XBotCoreModel_DIR:PATH=/opt/xbot/lib/cmake/XBotCoreModel
 
 //The directory containing a CMake configuration file for XBotInterface.
 XBotInterface_DIR:PATH=/opt/xbot/lib/cmake/XBotInterface
+
+//Path to a file.
+_Python_INCLUDE_DIR:PATH=/usr/include/python3.8
+
+//Path to a library.
+_Python_LIBRARY_RELEASE:FILEPATH=/usr/lib/x86_64-linux-gnu/libpython3.8.so
 
 //Path to a file.
 _gmock_INCLUDES:FILEPATH=/usr/src/googletest/googlemock/include/gmock/gmock.h
@@ -764,8 +785,12 @@ CMAKE_UNAME:INTERNAL=/usr/bin/uname
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding PY_em
 FIND_PACKAGE_MESSAGE_DETAILS_PY_em:INTERNAL=[/usr/lib/python3/dist-packages/em.py][v()]
+//Details about finding Python
+FIND_PACKAGE_MESSAGE_DETAILS_Python:INTERNAL=[/usr/lib/x86_64-linux-gnu/libpython3.8.so][/usr/include/python3.8][cfound components: Development ][v3.8()]
 //Details about finding PythonInterp
 FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp:INTERNAL=[/usr/bin/python3][v3.8.10()]
+//Details about finding PythonLibs
+FIND_PACKAGE_MESSAGE_DETAILS_PythonLibs:INTERNAL=[/usr/lib/x86_64-linux-gnu/libpython3.8.so][/usr/include/python3.8][v3.8.10()]
 //Details about finding Threads
 FIND_PACKAGE_MESSAGE_DETAILS_Threads:INTERNAL=[TRUE][v()]
 GMOCK_FROM_SOURCE_FOUND:INTERNAL=TRUE
@@ -780,12 +805,27 @@ GTEST_FROM_SOURCE_LIBRARY_DIRS:INTERNAL=/home/wang/forest_ws/src/centauro_long_t
 GTEST_FROM_SOURCE_MAIN_LIBRARIES:INTERNAL=gtest_main
 //ADVANCED property for variable: PYTHON_EXECUTABLE
 PYTHON_EXECUTABLE-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: PYTHON_INCLUDE_DIR
+PYTHON_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //This needs to be in PYTHONPATH when 'setup.py install' is called.
 //  And it needs to match.  But setuptools won't tell us where
 // it will install things.
 PYTHON_INSTALL_DIR:INTERNAL=lib/python3/dist-packages
+//ADVANCED property for variable: PYTHON_LIBRARY
+PYTHON_LIBRARY-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: PYTHON_LIBRARY_DEBUG
+PYTHON_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: Python_LIBRARY_DEBUG
+Python_LIBRARY_DEBUG-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: Python_LIBRARY_RELEASE
+Python_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 //CMAKE_INSTALL_PREFIX during last run
 _GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=/usr/local
+_Python_DEVELOPMENT_SIGNATURE:INTERNAL=4a4167209e8a167eff1f1b37da22ba0f
+//ADVANCED property for variable: _Python_INCLUDE_DIR
+_Python_INCLUDE_DIR-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: _Python_LIBRARY_RELEASE
+_Python_LIBRARY_RELEASE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: gmock_build_tests
 gmock_build_tests-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: gtest_build_samples
