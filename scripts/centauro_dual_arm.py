@@ -346,7 +346,10 @@ print("solution['a'].shape = ", solution['a'].shape)
 
 while time <= T:
     solution['q'][44,i] = 0.0
+    solution['q'][45,i] = -0.5
+
     solution['v'][43,i] = 0.0
+    solution['v'][44,i] = 0.0
 
     if i >= solution['a'].shape[1]:
         i = solution['a'].shape[1] - 1
