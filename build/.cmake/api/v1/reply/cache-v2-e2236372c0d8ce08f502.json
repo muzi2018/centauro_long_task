@@ -1642,6 +1642,18 @@
 			"value" : "[/usr/lib/python3/dist-packages/em.py][v()]"
 		},
 		{
+			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_Python",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Details about finding Python"
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "[/usr/lib/x86_64-linux-gnu/libpython3.8.so][/usr/include/python3.8][cfound components: Development ][v3.8()]"
+		},
+		{
 			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_PythonInterp",
 			"properties" : 
 			[
@@ -1652,6 +1664,18 @@
 			],
 			"type" : "INTERNAL",
 			"value" : "[/usr/bin/python3][v3.8.10()]"
+		},
+		{
+			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_PythonLibs",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Details about finding PythonLibs"
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "[/usr/lib/x86_64-linux-gnu/libpython3.8.so][/usr/include/python3.8][v3.8.10()]"
 		},
 		{
 			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_Threads",
@@ -1870,6 +1894,22 @@
 			"value" : "/opt/xbot/lib/cmake/OpenSoT"
 		},
 		{
+			"name" : "PYTHON_DEBUG_LIBRARY",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "(This variable does not exist and should not be used)"
+				}
+			],
+			"type" : "UNINITIALIZED",
+			"value" : ""
+		},
+		{
 			"name" : "PYTHON_EXECUTABLE",
 			"properties" : 
 			[
@@ -1886,6 +1926,22 @@
 			"value" : "/usr/bin/python3"
 		},
 		{
+			"name" : "PYTHON_INCLUDE_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a file."
+				}
+			],
+			"type" : "PATH",
+			"value" : "/usr/include/python3.8"
+		},
+		{
 			"name" : "PYTHON_INSTALL_DIR",
 			"properties" : 
 			[
@@ -1896,6 +1952,54 @@
 			],
 			"type" : "INTERNAL",
 			"value" : "lib/python3/dist-packages"
+		},
+		{
+			"name" : "PYTHON_LIBRARY",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "/usr/lib/x86_64-linux-gnu/libpython3.8.so"
+		},
+		{
+			"name" : "PYTHON_LIBRARY_DEBUG",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "PYTHON_LIBRARY_DEBUG-NOTFOUND"
+		},
+		{
+			"name" : "PYTHON_LIBRARY_RELEASE",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "(This variable does not exist and should not be used)"
+				}
+			],
+			"type" : "UNINITIALIZED",
+			"value" : ""
 		},
 		{
 			"name" : "PYTHON_VERSION",
@@ -1944,6 +2048,38 @@
 			],
 			"type" : "STATIC",
 			"value" : "/home/wang/forest_ws/src/centauro_long_task"
+		},
+		{
+			"name" : "Python_LIBRARY_DEBUG",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : ""
+		},
+		{
+			"name" : "Python_LIBRARY_RELEASE",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "/usr/lib/x86_64-linux-gnu/libpython3.8.so"
 		},
 		{
 			"name" : "RT_LIBRARY",
@@ -2040,6 +2176,50 @@
 			],
 			"type" : "INTERNAL",
 			"value" : "/usr/local"
+		},
+		{
+			"name" : "_Python_DEVELOPMENT_SIGNATURE",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : ""
+				}
+			],
+			"type" : "INTERNAL",
+			"value" : "4a4167209e8a167eff1f1b37da22ba0f"
+		},
+		{
+			"name" : "_Python_INCLUDE_DIR",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a file."
+				}
+			],
+			"type" : "PATH",
+			"value" : "/usr/include/python3.8"
+		},
+		{
+			"name" : "_Python_LIBRARY_RELEASE",
+			"properties" : 
+			[
+				{
+					"name" : "ADVANCED",
+					"value" : "1"
+				},
+				{
+					"name" : "HELPSTRING",
+					"value" : "Path to a library."
+				}
+			],
+			"type" : "FILEPATH",
+			"value" : "/usr/lib/x86_64-linux-gnu/libpython3.8.so"
 		},
 		{
 			"name" : "_gmock_INCLUDES",

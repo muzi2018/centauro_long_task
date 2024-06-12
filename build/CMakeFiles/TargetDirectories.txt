@@ -13,6 +13,7 @@
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/tf2_msgs_generate_messages_cpp.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_turnaround_node.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/actionlib_msgs_generate_messages_py.dir
+/home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_pickdrill_node.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/apriltag_ros_generate_messages_eus.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/nodelet_generate_messages_eus.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/actionlib_generate_messages_nodejs.dir
