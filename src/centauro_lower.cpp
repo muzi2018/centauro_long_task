@@ -17,12 +17,13 @@
 
 
 #include <Eigen/Dense>
-
+#include <std_msgs/Bool.h>
 #include <std_srvs/Empty.h>
 
 using namespace XBot::Cartesian;
 bool start_walking_bool = false;
-
+double init_heigh;
+int direction = 1; // 1: lower; -1: upper
 
 
 bool start_walking(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
@@ -85,7 +86,7 @@ int main(int argc, char **argv)
 
     // load the ik problem given a yaml file
     std::string problem_description_string;
-    nodeHandle.getParam("problem_description", problem_description_string);
+    nodeHandle.getParam("problem_description_leg_lower", problem_description_string);
 
     auto ik_pb_yaml = YAML::Load(problem_description_string);
     XBot::Cartesian::ProblemDescription ik_pb(ik_pb_yaml, ctx);
@@ -207,7 +208,13 @@ int main(int argc, char **argv)
 
     ros::Rate r(100);
     ros::ServiceServer service = nodeHandle.advertiseService("start_walking", start_walking);
-    
+    ros::Publisher publisher = nodeHandle.advertise<std_msgs::Bool>("adjust_com", 100);
+
+    if (argc > 1)
+    {
+        direction = atoi(argv[1]);
+    }
+
     while (ros::ok())
     {
         model->getCOM(com_pos);
@@ -220,19 +227,58 @@ int main(int argc, char **argv)
         const std::string base_link_frame = "base_link";
         model->getPointPosition(base_link_frame, Eigen::Vector3d::Zero(),base_pose);
         double robot_heigh = base_pose[2] - leg_mid[2];
+        // std::cout << "robot_heigh = " << robot_heigh <<std::endl;
 
+        // ROS_INFO("current_state4 = %d", current_state4);
+        std::cout << "robot_heigh = " << robot_heigh << std::endl;
+        // if (robot_heigh > 0.74)
+        // {
+        //     std_msgs::Bool msg;
+        //     msg.data = true;
+        //     publisher.publish(msg);
+        //     current_state4 = 1000;
+            
+        //     ros::shutdown();
+        //     return 0;
+        // }
 
-        // std::cout << "robot_z = " << robot_heigh << std::endl;
-        if (robot_heigh < 0.55)
+        // lower
+        if (direction == 1)
         {
-            current_state4 = 1000;
+            if (robot_heigh < 0.59)
+            {
+                std_msgs::Bool msg;
+                msg.data = true;
+                publisher.publish(msg);
+                current_state4 = 1000;
+                
+                ros::shutdown();
+                return 0;
+            }
         }
         
+        if (direction == -1)
+        {
+            // high
+            if (robot_heigh > 0.78)
+            {
+                std_msgs::Bool msg;
+                msg.data = true;
+                publisher.publish(msg);
+                current_state4 = 1000;
+                
+                ros::shutdown();
+                return 0;
+            }
+        }
+        
+
+
         if (current_state4 == 0 )
         {
             // com trajectory
             com_cartesian->getPoseReference(Com_T_ref);
-            Com_T_ref.pretranslate(Eigen::Vector3d(0, 0, com_shift_z));
+            Com_T_ref.pretranslate(Eigen::Vector3d(0, 0, direction * com_shift_z));
             com_cartesian->setPoseTarget(Com_T_ref, 10);
             current_state4++;
         }

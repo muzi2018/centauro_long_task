@@ -32,32 +32,32 @@ import std_msgs
 from std_srvs.srv import Empty, EmptyResponse
 from cartesian_interface.pyci_all import *
 from std_msgs.msg import Int32MultiArray, Float64MultiArray
+from std_msgs.msg import Bool
 import pkgutil
 import scipy.io
-
+from std_msgs.msg import Bool
 
 def openDagana(publisher):
     daganaRefRate = rospy.Rate(1000.0)
-    posTrajectory = np.linspace(1, 0.2, 1000).tolist()
+    posTrajectory = np.linspace(0.8, 0.2, 1000).tolist()
     for posPointNum in range(len(posTrajectory)):
         # print("posPointNum = ", posPointNum)
         daganaMsg = JointState()
         daganaMsg.position.append(posTrajectory[posPointNum])
         publisher.publish(daganaMsg)
         daganaRefRate.sleep()
-    print("Gripper should be open! Continuing..")
-
+        return True
 
 
 def closeDagana(publisher):
     daganaRefRate = rospy.Rate(1000.0)
-    posTrajectory = np.linspace(0.2, 0.9, 1000).tolist()
+    posTrajectory = np.linspace(0.2, 0.75, 1000).tolist()
     for posPointNum in range(len(posTrajectory)):
         daganaMsg = JointState()
         daganaMsg.position.append(posTrajectory[posPointNum])
         publisher.publish(daganaMsg)
-
         daganaRefRate.sleep()
+        return True
 
 
 
@@ -96,11 +96,13 @@ for line in lines:
         matrix.append(value)
         ns = ns + 1
     index_ = index_ + 1
+print("value = ", value)
 
-for i in range(10):
-    value[0] -= i * 0.03
-    matrix.append(value)
-    ns = ns + 1
+# for i in range(20):
+#     value[0] -=  0.01
+#     print("value ", i, "[0] = ", value[0])
+#     matrix.append(value)
+#     ns = ns + 1
 
 
 
@@ -258,7 +260,7 @@ reference = prb.createParameter('upper_body_reference', 23, nodes=range(ns+1))
 #     reference[i] = matrix[i][0]
 #    x y z;4 quan; yaw_joint , 6 left arm, 6 right arm, 1 grippers + 2 headjoints = 7 + 15
 
-prb.createResidual('upper_body_trajectory', 5 * (cs.vertcat(model.q[:7], model.q[-16:]) - reference))
+prb.createResidual('upper_body_trajectory', 10 * (cs.vertcat(model.q[:7], model.q[-16:]) - reference))
 # print(matrix_np_.shape)
 # exit()
 
@@ -282,7 +284,8 @@ print(q_min)
 print(q_max)
 prb.createResidual('lower_limits', 30 * utils.barrier(model.q[-3] - q_min[-3]))
 prb.createResidual('upper_limits', 30 * utils.barrier1(model.q[-3] - q_max[-3]))
-
+# prb.createResidual('x_vel_Llimits', 30 * utils.barrier(model.v[0] - 2)) # -0.05
+# prb.createResidual('x_vel_Ulimits', 30 * utils.barrier1(model.v[0] + 2)) # 0.05
 # prb.createResidual('support_polygon', wheel1 - whheel2 = fixed_disanace)
 f0 = [0, 0, kin_dyn.mass() / 4 * 9.81]
 for cname, cforces in model.getContactMap().items():
@@ -331,9 +334,11 @@ pub_sol = rospy.Publisher('pose_topic_sol', Pose, queue_size=1)
 pub_ref = rospy.Publisher('pose_topic_ref', Pose, queue_size=1)
 pub_state = rospy.Publisher('centauro_state', Float64MultiArray, queue_size=1)
 
+pub_open_flag = rospy.Publisher('open_flag', Bool, queue_size=1)
 
 
 T_end = 3.5
+T = T
 # T = T_end
 # Tee = model_fk.getPose('base_link')
 # print('end effector pose w.r.t. world frame is:\n{}'.format(Tee))
@@ -343,86 +348,52 @@ num_T = T // dt
 print("num_T = ", num_T+1)
 data = np.zeros((3, int(num_T+1)))
 print("solution['a'].shape = ", solution['a'].shape)
+# open_dagana = openDagana(pub_dagana)
 
 while time <= T:
-    solution['q'][44,i] = 0.0
-    solution['v'][43,i] = 0.0
+
 
     if i >= solution['a'].shape[1]:
         i = solution['a'].shape[1] - 1
+
+    solution['q'][44,i] = 0 # 1 open dagana; 0 close dagana
+    solution['v'][43,i] = 0
+    solution['a'][43,i] = 0
+
+
     ## update model
-    q = model_fk.getJointPosition()
     qdot = solution['v'][:,i]
     qddot = solution['a'][:,i]
-    print("solution['a'].shape = ", solution['a'].shape)
+    # print("solution['a'].shape = ", solution['a'].shape)
+    q = model_fk.getJointPosition()
     q += dt * qdot + 0.5 * pow(dt, 2) * qddot
     qdot += dt * qddot
     model_fk.setJointPosition(q)
     model_fk.setJointVelocity(qdot)
     model_fk.setJointAcceleration(qddot)
     model_fk.update()
-    ## generate data and save
-    Tee = model_fk.getPose('dagana_2_tcp')
-    # print('end effector pose w.r.t. world frame is:\n{}'.format(Tee))
-    # print(Tee)
-    # print(type(Tee.translation))
-    # print(Tee.translation.shape)
-    print("i = ", i)
-    print("time = ", time)
-    
-    print("data.shape = ", data.shape)
-    data[0, i] = Tee.translation[0]
-    data[1, i] = Tee.translation[1]
-    data[2, i] = Tee.translation[2]
 
     robot.setPositionReference(solution['q'][7:,i])
     robot.setVelocityReference(solution['v'][6:,i])
+
     robot.move() 
     i += 1
-    if i == 50:
-        closeDagana(pub_dagana)
+    # if i == 50:
+    #     print("openDagana")
+    #     closeDagana(pub_dagana)
+    #     open_dagana = False
+
+
+        
     time += dt
     rate.sleep()
-# now = datetime.now()
-# time_str = now.strftime("%m%d_%H%_M")
-# current_directory = os.getcwd()
-# file_name = f'{current_directory}/data/open_drawer_sim_{time_str}.mat'
-# scipy.io.savemat(file_name, {'xyz': data})
-# print(f"Data saved to {file_name}")
+# Create a Boolean message
+
+q = model_fk.getJointPosition()
+# for i in range(len(q)):
+#     print("q[",i, "] = ", q[i])
+msg = Bool()
+msg.data = True
+pub_open_flag.publish(msg)
 
 
-# scipy.io.savemat('open_drawer_sim_2110.mat', {'xyz': data})
-# scipy.io.savemat('open_door_sim_2053.mat', {'xyz': data})
-
-
-
-
-# print("solution['q] = ", solution['q'].shape) #solution['q] =  (47, 94)
-
-# while not rospy.is_shutdown():
-#     for i in range(solution['q'].shape[1]):
-#         pose = Pose()
-#         pose.position.x = solution['q'][0,i] 
-#         pose.position.y = solution['q'][1,i]
-#         pose.position.z = solution['q'][2,i]
-#         pose.orientation.x = solution['q'][3,i]
-#         pose.orientation.y = solution['q'][4,i]
-#         pose.orientation.z = solution['q'][5,i]
-#         pose.orientation.w = solution['q'][6,i]
-#         pub_sol.publish(pose)
-#         pose.position.x = matrix_np_[i,0] 
-#         pose.position.y = matrix_np_[i,1]
-#         pose.position.z = matrix_np_[i,2]
-#         pose.orientation.x = matrix_np_[i,3]
-#         pose.orientation.y = matrix_np_[i,4]
-#         pose.orientation.z = matrix_np_[i,5]
-#         pose.orientation.w = matrix_np_[i,6]
-#         pub_ref.publish(pose)
-
-# publish solution
-    
-
-
-    # repl = replay_trajectory.replay_trajectory(prb.getDt(), kin_dyn.joint_names(), solution['q'], kindyn=kin_dyn, trajectory_markers=model.getContactMap().keys())
-    # repl.replay(is_floating_base=True)
-    # rate.sleep()

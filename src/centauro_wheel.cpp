@@ -20,12 +20,16 @@
 #include <Eigen/Dense>
 #include <std_srvs/Empty.h>
 #include <xbot_msgs/JointCommand.h>
+#include <std_msgs/Bool.h>
+
 
 using namespace XBot::Cartesian;
 bool start_searching_bool = false, tagDetected = false;
 const double dt = 0.01;
 double time_ = 0.0 ;
 Eigen::Vector6d E;
+int direction = 1; // 1 : forward; -1 : backward
+
 bool start_searching(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
 {
     start_searching_bool = !start_searching_bool;
@@ -41,11 +45,30 @@ void tagDetectionsCallback(const apriltag_ros::AprilTagDetectionArray::ConstPtr&
     }
 }
 
+bool backward_bool = false;
+void backwardCallback(const std_msgs::Bool::ConstPtr& msg)
+{
+    backward_bool = msg->data;
+
+    if (backward_bool) {
+        std::cout << "backward started" << std::endl;
+    } else {
+        std::cout << "backward stopped" << std::endl;
+    }
+}
 
 
 int main(int argc, char **argv)
 {
-    const std::string robotName = "centauro";
+    if (argc > 1)
+    {
+        direction = atoi(argv[1]);
+    }
+
+
+    
+
+    const std::string robotName = "centauro_wheel";
     // Initialize ros node
     ros::init(argc, argv, robotName);
     ros::NodeHandle nodeHandle("");
@@ -89,7 +112,11 @@ int main(int argc, char **argv)
     auto solver = XBot::Cartesian::CartesianInterfaceImpl::MakeInstance("OpenSot",
                                                        ik_pb, ctx
                                                        );
-    ros::Subscriber sub = nodeHandle.subscribe("/tag_detections", 1000, tagDetectionsCallback);
+    // ros::Subscriber sub = nodeHandle.subscribe("/tag_detections", 1000, tagDetectionsCallback);
+
+    ros::Subscriber sub_backward = nodeHandle.subscribe("/open_flag", 1, backwardCallback);
+
+
     ros::ServiceServer service = nodeHandle.advertiseService("start_searching", start_searching);
     ros::Rate r(10);
 
@@ -103,38 +130,48 @@ int main(int argc, char **argv)
 
     while (ros::ok())
     {
-        double x_e = 2;
-        E[0] = K_x * x_e;
-        E[1] = 0;
-        E[2] = 0;
-        E[3] = 0;
-        E[4] = 0;
-        E[5] = 0;
-       std::cout << "Running" << E[0] << std::endl;
+        std::cout << "backward_bool = " << backward_bool << std::endl;
+        if (1)
+        {
+            // std::cout << "backward -------------"<< std::endl;
+            // direction = -1;
 
-        car_cartesian->setVelocityReference(E);
-        solver->update(time_, dt);
-        model->getJointPosition(q);
-        model->getJointVelocity(qdot);
-        model->getJointAcceleration(qddot);
-        q += dt * qdot + 0.5 * std::pow(dt, 2) * qddot;
-        qdot += dt * qddot;
-        model->setJointPosition(q);
-        model->setJointVelocity(qdot);
-        model->update();
-        robot->setPositionReference(q.tail(robot->getJointNum()));
-        robot->setVelocityReference(qdot.tail(robot->getJointNum()));
-        robot->move();
-        time_ += dt;
-        rspub.publishTransforms(ros::Time::now(), "");
-        /**
-         * Move Robot
-        */
+            double x_e = 1;
+            E[0] = K_x * direction * x_e;
+            E[1] = 0;
+            E[2] = 0;
+            E[3] = 0;
+            E[4] = 0;
+            E[5] = 0;
+            std::cout << "Running" << E[0] << std::endl;
 
-        
-
+            car_cartesian->setVelocityReference(E);
+            solver->update(time_, dt);
+            model->getJointPosition(q);
+            model->getJointVelocity(qdot);
+            model->getJointAcceleration(qddot);
+            
+            q += dt * qdot + 0.5 * std::pow(dt, 2) * qddot;
+            qdot += dt * qddot;
+            model->setJointPosition(q);
+            model->setJointVelocity(qdot);
+            model->update();
+            // qdot[42] = 0;
+            robot->setPositionReference(q.tail(robot->getJointNum()));
+            robot->setVelocityReference(qdot.tail(robot->getJointNum()));
+            robot->move();
+            time_ += dt;
+            rspub.publishTransforms(ros::Time::now(), "");
+            /**
+             * Move Robot
+            */
             ros::spinOnce();
             r.sleep();
+
+
+        }
+
+
         }        
 }
 

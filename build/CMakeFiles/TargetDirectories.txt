@@ -2,6 +2,7 @@
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/install/local.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/list_install_components.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/rebuild_cache.dir
+/home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_dual_arm_node.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_lower_node.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/test.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_search_node.dir
@@ -57,6 +58,7 @@
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/geometry_msgs_generate_messages_py.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/geometry_msgs_generate_messages_cpp.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/geometry_msgs_generate_messages_lisp.dir
+/home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_wheel_for_drawer_node.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/apriltag_ros_generate_messages_lisp.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/tf_generate_messages_cpp.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/geometry_msgs_generate_messages_nodejs.dir

@@ -84,14 +84,14 @@ index_ = 0
 ns = 0
 # with open('/home/wang/horizon_wbc/output_1.txt', 'r') as file:
 #     lines = file.readlines()
-filename = rospkg.RosPack().get_path('centauro_long_task') + "/trajectory/dual_arm.txt"
+filename = rospkg.RosPack().get_path('centauro_long_task') + "/trajectory/dual_arm2.txt"
 with open(filename, 'r') as file:
     lines = file.readlines()
 matrix = []
 
 global value 
 for line in lines:
-    if index_ % 1 == 0: 
+    if index_ % 2 == 0: 
         value = [float(x) for x in line.strip().split()]
         matrix.append(value)
         ns = ns + 1
@@ -258,7 +258,7 @@ reference = prb.createParameter('upper_body_reference', 23, nodes=range(ns+1))
 #     reference[i] = matrix[i][0]
 #    x y z;4 quan; yaw_joint , 6 left arm, 6 right arm, 1 grippers + 2 headjoints = 7 + 15
 
-prb.createResidual('upper_body_trajectory', 5 * (cs.vertcat(model.q[:7], model.q[-16:]) - reference))
+prb.createResidual('upper_body_trajectory', 20 * (cs.vertcat(model.q[:7], model.q[-16:]) - reference))
 # print(matrix_np_.shape)
 # exit()
 
@@ -379,7 +379,5 @@ while time <= T:
     robot.setVelocityReference(solution['v'][6:,i])
     robot.move() 
     i += 1
-    if i == 50:
-        closeDagana(pub_dagana)
     time += dt
     rate.sleep()

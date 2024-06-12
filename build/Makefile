@@ -168,6 +168,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named centauro_dual_arm_node
+
+# Build rule for target.
+centauro_dual_arm_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 centauro_dual_arm_node
+.PHONY : centauro_dual_arm_node
+
+# fast build rule for target.
+centauro_dual_arm_node/fast:
+	$(MAKE) -f CMakeFiles/centauro_dual_arm_node.dir/build.make CMakeFiles/centauro_dual_arm_node.dir/build
+.PHONY : centauro_dual_arm_node/fast
+
+#=============================================================================
 # Target rules for targets named centauro_lower_node
 
 # Build rule for target.
@@ -844,6 +857,19 @@ geometry_msgs_generate_messages_lisp/fast:
 .PHONY : geometry_msgs_generate_messages_lisp/fast
 
 #=============================================================================
+# Target rules for targets named centauro_wheel_for_drawer_node
+
+# Build rule for target.
+centauro_wheel_for_drawer_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 centauro_wheel_for_drawer_node
+.PHONY : centauro_wheel_for_drawer_node
+
+# fast build rule for target.
+centauro_wheel_for_drawer_node/fast:
+	$(MAKE) -f CMakeFiles/centauro_wheel_for_drawer_node.dir/build.make CMakeFiles/centauro_wheel_for_drawer_node.dir/build
+.PHONY : centauro_wheel_for_drawer_node/fast
+
+#=============================================================================
 # Target rules for targets named apriltag_ros_generate_messages_lisp
 
 # Build rule for target.
@@ -1155,6 +1181,33 @@ gtest/fast:
 	$(MAKE) -f gtest/googletest/CMakeFiles/gtest.dir/build.make gtest/googletest/CMakeFiles/gtest.dir/build
 .PHONY : gtest/fast
 
+src/centauro_dual_arm.o: src/centauro_dual_arm.cpp.o
+
+.PHONY : src/centauro_dual_arm.o
+
+# target to build an object file
+src/centauro_dual_arm.cpp.o:
+	$(MAKE) -f CMakeFiles/centauro_dual_arm_node.dir/build.make CMakeFiles/centauro_dual_arm_node.dir/src/centauro_dual_arm.cpp.o
+.PHONY : src/centauro_dual_arm.cpp.o
+
+src/centauro_dual_arm.i: src/centauro_dual_arm.cpp.i
+
+.PHONY : src/centauro_dual_arm.i
+
+# target to preprocess a source file
+src/centauro_dual_arm.cpp.i:
+	$(MAKE) -f CMakeFiles/centauro_dual_arm_node.dir/build.make CMakeFiles/centauro_dual_arm_node.dir/src/centauro_dual_arm.cpp.i
+.PHONY : src/centauro_dual_arm.cpp.i
+
+src/centauro_dual_arm.s: src/centauro_dual_arm.cpp.s
+
+.PHONY : src/centauro_dual_arm.s
+
+# target to generate assembly for a file
+src/centauro_dual_arm.cpp.s:
+	$(MAKE) -f CMakeFiles/centauro_dual_arm_node.dir/build.make CMakeFiles/centauro_dual_arm_node.dir/src/centauro_dual_arm.cpp.s
+.PHONY : src/centauro_dual_arm.cpp.s
+
 src/centauro_home.o: src/centauro_home.cpp.o
 
 .PHONY : src/centauro_home.o
@@ -1344,6 +1397,33 @@ src/centauro_wheel.cpp.s:
 	$(MAKE) -f CMakeFiles/centauro_wheel_node.dir/build.make CMakeFiles/centauro_wheel_node.dir/src/centauro_wheel.cpp.s
 .PHONY : src/centauro_wheel.cpp.s
 
+src/centauro_wheel_for_drawer.o: src/centauro_wheel_for_drawer.cpp.o
+
+.PHONY : src/centauro_wheel_for_drawer.o
+
+# target to build an object file
+src/centauro_wheel_for_drawer.cpp.o:
+	$(MAKE) -f CMakeFiles/centauro_wheel_for_drawer_node.dir/build.make CMakeFiles/centauro_wheel_for_drawer_node.dir/src/centauro_wheel_for_drawer.cpp.o
+.PHONY : src/centauro_wheel_for_drawer.cpp.o
+
+src/centauro_wheel_for_drawer.i: src/centauro_wheel_for_drawer.cpp.i
+
+.PHONY : src/centauro_wheel_for_drawer.i
+
+# target to preprocess a source file
+src/centauro_wheel_for_drawer.cpp.i:
+	$(MAKE) -f CMakeFiles/centauro_wheel_for_drawer_node.dir/build.make CMakeFiles/centauro_wheel_for_drawer_node.dir/src/centauro_wheel_for_drawer.cpp.i
+.PHONY : src/centauro_wheel_for_drawer.cpp.i
+
+src/centauro_wheel_for_drawer.s: src/centauro_wheel_for_drawer.cpp.s
+
+.PHONY : src/centauro_wheel_for_drawer.s
+
+# target to generate assembly for a file
+src/centauro_wheel_for_drawer.cpp.s:
+	$(MAKE) -f CMakeFiles/centauro_wheel_for_drawer_node.dir/build.make CMakeFiles/centauro_wheel_for_drawer_node.dir/src/centauro_wheel_for_drawer.cpp.s
+.PHONY : src/centauro_wheel_for_drawer.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -1354,6 +1434,7 @@ help:
 	@echo "... install/local"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
+	@echo "... centauro_dual_arm_node"
 	@echo "... centauro_lower_node"
 	@echo "... test"
 	@echo "... centauro_search_node"
@@ -1409,6 +1490,7 @@ help:
 	@echo "... geometry_msgs_generate_messages_py"
 	@echo "... geometry_msgs_generate_messages_cpp"
 	@echo "... geometry_msgs_generate_messages_lisp"
+	@echo "... centauro_wheel_for_drawer_node"
 	@echo "... apriltag_ros_generate_messages_lisp"
 	@echo "... tf_generate_messages_cpp"
 	@echo "... geometry_msgs_generate_messages_nodejs"
@@ -1433,6 +1515,9 @@ help:
 	@echo "... gmock"
 	@echo "... gtest_main"
 	@echo "... gtest"
+	@echo "... src/centauro_dual_arm.o"
+	@echo "... src/centauro_dual_arm.i"
+	@echo "... src/centauro_dual_arm.s"
 	@echo "... src/centauro_home.o"
 	@echo "... src/centauro_home.i"
 	@echo "... src/centauro_home.s"
@@ -1454,6 +1539,9 @@ help:
 	@echo "... src/centauro_wheel.o"
 	@echo "... src/centauro_wheel.i"
 	@echo "... src/centauro_wheel.s"
+	@echo "... src/centauro_wheel_for_drawer.o"
+	@echo "... src/centauro_wheel_for_drawer.i"
+	@echo "... src/centauro_wheel_for_drawer.s"
 .PHONY : help
 
 

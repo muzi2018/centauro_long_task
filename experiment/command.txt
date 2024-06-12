@@ -13,18 +13,22 @@ clear && roslaunch apriltag_ros continuous_detection.launch
 clear && roslaunch centauro_long_task centauro_long_task.launch
 
 Task
+0. lower
+
+
 I. search for tag
-clear && rosrun centauro_long_task centauro_search_node
+clear && rosrun centauro_long_task centauro_search_node -1
 
 II. wheel 
 clear && rosrun centauro_long_task centauro_nav_wheel_node
+clear && rosrun centauro_long_task centauro_turnaround_node -1
+clear && rosrun centauro_long_task centauro_lower_node
 
 III. open the drawer
 clear && rosrun centauro_long_task centauro_opendrawer.py
 
 IV. open dagana && homing 
-open dagana
-clear && rosrun centauro_long_task centauro_home_node
+clear && rosrun centauro_long_task centauro_dagana.py 1
 
 V. pick
 clear && rosrun centauro_long_task centauro_pick.py
@@ -34,8 +38,9 @@ VII. turn right around && wheel && turn left around
 clear && rosrun centauro_long_task centauro_turnaround_node -1
 clear && rosrun centauro_long_task centauro_wheel_node
 clear && rosrun centauro_long_task centauro_turnaround_node 1
+clear && rosrun centauro_long_task centauro_wheel_node
 
-VIII. put && homing
+VIII. dual_arm && homing
 clear && rosrun centauro_long_task centauro_pick.py
 open_dagana
 clear && rosrun centauro_long_task centauro_home_node
@@ -56,7 +61,7 @@ roslaunch kyon_controller centauro_controller.launch
 rosservice call /horizon/crawl/switch 1
 
 rostopic pub /horizon/base_velocity/reference geometry_msgs/Twist "linear:
-  x: 0.05
+  x: 0.1
   y: 0.0
   z: 0.0
 angular:

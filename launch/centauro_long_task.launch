@@ -2,7 +2,7 @@
 
   <!-- Load the URDF/SRDF into the ROS Parameter Server -->
     <!-- visualization config -->
-  <arg name="rviz"               default="true" />
+  <arg name="rviz"               default="false" />
 
   <!-- external launch file  -->
   <!-- <include file="$(find centauro_gazebo)/launch/centauro_world.launch"/> -->
@@ -25,8 +25,11 @@
           textfile="$(find centauro_long_task)/config/cartesio_stack_wheel.yaml"/> 
   <param name="problem_description_leg"
           textfile="$(find centauro_long_task)/config/cartesio_stack_leg.yaml"/> 
-  <!-- <param name="problem_description"
-          textfile="$(find centauro_long_task)/config/cartesio_stack_leg_lower.yaml"/>  -->
+  <param name="problem_description_leg_lower"
+          textfile="$(find centauro_long_task)/config/cartesio_stack_leg_lower.yaml"/> 
+
+  <param name="problem_description_manipulation"
+          textfile="$(find centauro_long_task)/config/cartesio_stack_manipulation.yaml"/> 
 
     <!--Test node-->
   <!-- <node pkg="centauro_long_task" name="centauro_wheel" type="centauro_wheel_node" output="screen"/> -->
