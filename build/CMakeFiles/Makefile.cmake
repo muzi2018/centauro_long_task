@@ -331,6 +331,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/centauro_dual_arm_node.dir/DependInfo.cmake"
   "CMakeFiles/centauro_lower_node.dir/DependInfo.cmake"
+  "CMakeFiles/centauro_control_camera_node.dir/DependInfo.cmake"
   "CMakeFiles/centauro_search_node.dir/DependInfo.cmake"
   "CMakeFiles/centauro_leg_node.dir/DependInfo.cmake"
   "CMakeFiles/centauro_nav_wheel_node.dir/DependInfo.cmake"

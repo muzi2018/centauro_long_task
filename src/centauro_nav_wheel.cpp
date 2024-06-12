@@ -41,7 +41,7 @@ void tagDetectionsCallback(const apriltag_ros::AprilTagDetectionArray::ConstPtr&
         tagDetected = false;
     }
 }
-bool search_bool = false;
+bool search_bool = true;
 void searchCallback(const std_msgs::Bool::ConstPtr& msg)
 {
     search_bool = msg->data;
@@ -73,6 +73,7 @@ int main(int argc, char **argv)
     // initialize to a homing configuration
     Eigen::VectorXd qhome;
     model->getRobotState("home", qhome);
+    qhome[44] = 0.33;
     model->setJointPosition(qhome);
     model->update();
     XBot::Cartesian::Utils::RobotStatePublisher rspub (model);
@@ -122,10 +123,11 @@ int main(int argc, char **argv)
 
     while (ros::ok())
     {
-       
+       std::cout << "tagDetected = " << tagDetected << std::endl;
+
         if (tagDetected && search_bool)
         {
-            // std::cout << "tagDetected = " << tagDetected << std::endl;
+            
             tag_base_T = tfBuffer.lookupTransform(parent_frame, child_frame, ros::Time(0));
             /**
              * Error Calculate

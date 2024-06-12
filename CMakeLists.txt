@@ -143,6 +143,7 @@ add_executable(centauro_home_node src/centauro_home.cpp)
 add_executable(centauro_dual_arm_node src/centauro_dual_arm.cpp)
 add_executable(centauro_wheel_for_drawer_node src/centauro_wheel_for_drawer.cpp)
 add_executable(centauro_pickdrill_node src/centauro_pickdrill.cpp)
+add_executable(centauro_control_camera_node src/centauro_control_camera.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -187,6 +188,9 @@ target_link_libraries(centauro_pickdrill_node
   ${catkin_LIBRARIES} ${cartesian_interface_LIBRARIES} ${PYTHON_LIBRARIES}
 )
 
+target_link_libraries(centauro_control_camera_node 
+  ${catkin_LIBRARIES} ${cartesian_interface_LIBRARIES}
+)
 #############
 ## Install ##
 #############
@@ -217,7 +221,7 @@ catkin_install_python(PROGRAMS
                  centauro_search_node centauro_leg_node
                  centauro_lower_node centauro_home_node
                  centauro_wheel_node centauro_dual_arm_node
-                 centauro_wheel_for_drawer_node centauro_pickdrill_node
+                 centauro_wheel_for_drawer_node centauro_pickdrill_node centauro_control_camera_node
    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

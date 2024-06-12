@@ -5,6 +5,7 @@
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_dual_arm_node.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_lower_node.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/test.dir
+/home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_control_camera_node.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_search_node.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_leg_node.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_nav_wheel_node.dir

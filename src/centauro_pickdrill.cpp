@@ -50,6 +50,7 @@ int main(int argc, char **argv)
     
     Eigen::VectorXd qhome;
     model->getRobotState("home", qhome);
+    qhome[44] = -0.13;
     model->setJointPosition(qhome);
     model->update();
     XBot::Cartesian::Utils::RobotStatePublisher rspub (model);
