@@ -139,14 +139,17 @@ int main(int argc, char **argv)
             model->getPointPosition(base_frame, Eigen::Vector3d::Zero(),base_pos); 
             std::cout << "base_pos[0] = " << base_pos[0] << std::endl;
 
-            // if (abs(base_pos[0]) >= 0.029)
-            // {
-            //     /* code */
-            // }
+
             
 
             double x_e = 1;
-            E[0] =0.8 * K_x * direction * x_e;
+            E[0] = K_x * direction * x_e;
+
+            if (abs(base_pos[0]) >= 0.029)
+            {
+                E[0] = 0;
+            }
+
             E[1] = 0;
             E[2] = 0;
             E[3] = 0;

@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "devel/lib/centauro_long_task/centauro_pickdrill_node"
+			"path" : "devel/lib/centauro_long_task/centauro_wheel_for_drawer_backward_node"
 		}
 	],
 	"backtrace" : 1,
@@ -39,13 +39,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 145,
+				"line" : 144,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 220,
+				"line" : 227,
 				"parent" : 0
 			},
 			{
@@ -57,7 +57,7 @@
 			{
 				"command" : 3,
 				"file" : 0,
-				"line" : 187,
+				"line" : 184,
 				"parent" : 0
 			},
 			{
@@ -226,7 +226,7 @@
 			]
 		}
 	],
-	"id" : "centauro_pickdrill_node::@6890427a1f51a3e7e1df",
+	"id" : "centauro_wheel_for_drawer_backward_node::@6890427a1f51a3e7e1df",
 	"install" : 
 	{
 		"destinations" : 
@@ -620,10 +620,6 @@
 				"role" : "libraries"
 			},
 			{
-				"fragment" : "-lpython3.8",
-				"role" : "libraries"
-			},
-			{
 				"fragment" : "/opt/xbot/lib/libOpenSoT.so.3.4.0",
 				"role" : "libraries"
 			},
@@ -830,8 +826,8 @@
 		],
 		"language" : "CXX"
 	},
-	"name" : "centauro_pickdrill_node",
-	"nameOnDisk" : "centauro_pickdrill_node",
+	"name" : "centauro_wheel_for_drawer_backward_node",
+	"nameOnDisk" : "centauro_wheel_for_drawer_backward_node",
 	"paths" : 
 	{
 		"build" : ".",
@@ -852,7 +848,7 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "src/centauro_pickdrill.cpp",
+			"path" : "src/centauro_wheel_for_drawer_backward.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

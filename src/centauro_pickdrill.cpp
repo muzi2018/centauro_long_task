@@ -62,7 +62,7 @@ int main(int argc, char **argv)
                 std::make_shared<XBot::Cartesian::Parameters>(dt),
                 model
             );
-
+    
     // load the ik problem given a yaml file
     std::string problem_description_string;
     nodeHandle.getParam("problem_description_manipulation", problem_description_string);
@@ -82,6 +82,8 @@ int main(int argc, char **argv)
     auto rarm_cartesian = std::dynamic_pointer_cast<XBot::Cartesian::CartesianTask>(right_arm_task);
     int current_state4 = 0;
 
+
+
     ros::Rate r(100);
     ros::ServiceServer service = nodeHandle.advertiseService("start_walking", start_walking);
     ros::Publisher publisher = nodeHandle.advertise<std_msgs::Bool>("adjust_com", 100);
@@ -93,8 +95,9 @@ int main(int argc, char **argv)
     /**
      * Desire L_Arm R_Arm's translation vector
      */
-        Eigen::Vector3d L_Arm_translation(0.8753, 0.2821, 0.06667);
-        Eigen::Vector3d R_Arm_translation(0.8595, -0.1979, 0.1256);
+        Eigen::Vector3d L_Arm_translation(0.6845, -0.2458, 0.1221);
+        Eigen::Vector3d R_Arm_translation(0.6845, -0.2458, 0.1221);
+        // Eigen::Vector3d R_Arm_rotation(0.3764, -0.1884, 0.122);
 
     /**
      * Current L_Arm R_Arm's translation vector
@@ -111,7 +114,16 @@ int main(int argc, char **argv)
         // -0.224064
         //  0.274411
 
-
+        // // Eigen::Vector6d 
+	    // Trajectory::WayPointVector wp;
+        // wp[0].frame.translation() << 0.7406, -0.1884, 0.122;
+        // // wp[0].frame;
+	    // wp.emplace_back(w_T_f1, 2.0);    
+	    // wp.emplace_back(w_T_f2, 4.0);
+        
+        // Trajectory::WayPoint wp;
+        // Eigen::Matrix3d EEE;
+        // wp.frame.rotate() 
 
     if (argc > 1)
     {
@@ -125,14 +137,14 @@ int main(int argc, char **argv)
             double target_time = 3.0;
 
             // larm_cartesian->getPoseReference(L_Arm_ref);
-            // L_Arm_ref.translation() [0] = L_Arm_translation [0];
+            // L_Arm_ref.translation() [0] = + 0.2;
             // L_Arm_ref.translation() [1] = L_Arm_translation [1];
             // L_Arm_ref.translation() [2] = L_Arm_translation [2];
             // larm_cartesian->setPoseTarget(L_Arm_ref, target_time);
 
 
             rarm_cartesian->getPoseReference(R_Arm_ref);
-            R_Arm_ref.translation() [0] = R_Arm_translation[0];
+            R_Arm_ref.translation() [0] += 0.2 ;
             // R_Arm_ref.translation() [1] = R_Arm_translation[1];
             // R_Arm_ref.translation() [2] = R_Arm_translation[2];
             rarm_cartesian->setPoseTarget(R_Arm_ref, target_time);
@@ -197,11 +209,11 @@ int main(int argc, char **argv)
         rspub.publishTransforms(ros::Time::now(), "");
 
         // get arm1 state 
-        for (size_t i = 31; i <= 36; i++)
-        {
-            outputFile << q[i] << " " ;
-        }
-        outputFile << std::endl;
+        // for (size_t i = 31; i <= 36; i++)
+        // {
+        //     outputFile << q[i] << " " ;
+        // }
+        // outputFile << std::endl;
 
         r.sleep();
     }

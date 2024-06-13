@@ -356,9 +356,11 @@ while time <= T:
     if i >= solution['a'].shape[1]:
         i = solution['a'].shape[1] - 1
 
-    solution['q'][44,i] = 0 # 1 open dagana; 0 close dagana
-    solution['v'][43,i] = 0
-    solution['a'][43,i] = 0
+    solution['q'][44,i] = 0.0
+    solution['q'][45,i] = -0.5
+
+    solution['v'][43,i] = 0.0
+    solution['v'][44,i] = 0.0
 
 
     ## update model

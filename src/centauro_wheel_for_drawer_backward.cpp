@@ -28,7 +28,7 @@ bool start_searching_bool = false, tagDetected = false;
 const double dt = 0.01;
 double time_ = 0.0 ;
 Eigen::Vector6d E;
-int direction = 1; // 1 : forward; -1 : backward
+int direction = -1; // 1 : forward; -1 : backward
 
 bool start_searching(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
 {
@@ -131,7 +131,7 @@ int main(int argc, char **argv)
             qhome[ 41 ] =  0.9950850583600879;
             qhome[ 42 ] =  1.4861404917045418;
             // q[ 43 ] =  0.9;
-            qhome[44] = -0.13;
+            qhome[44] = -0.5;
             qhome[ 45 ] =  0.0002926313199609307;
 
     model->setJointPosition(qhome);
@@ -197,7 +197,7 @@ int main(int argc, char **argv)
                 E[0] = K_x * direction * x_e;
                 count_backward = count_backward + 1;
 
-                if ( abs(base_pos[0]) >= 0.1 )
+                if ( abs(base_pos[0]) >= 0.035 )
                 {
                     E[0] = 0;
                 }
@@ -213,6 +213,9 @@ int main(int argc, char **argv)
                     E[0] = 0;
                 }
             }
+            std::cout << "base_pos[0] = " << base_pos[0] << std::endl;
+
+            
             E[1] = 0;
             E[2] = 0;
             E[3] = 0;

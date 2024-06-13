@@ -70,5 +70,5 @@ angular:
   z: 0.0" 
 
 XII. stop
-rosservice call /horizon/crawl/switch 1
+rosservice call /horizon/crawl/switch 0
 
