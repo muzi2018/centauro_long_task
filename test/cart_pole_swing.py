@@ -26,7 +26,7 @@ urdffile = os.path.join(path_to_examples, 'urdf', 'cart_pole.urdf')
 urdf = open(urdffile, 'r').read()
 kindyn = cas_kin_dyn.CasadiKinDyn(urdf)
 
-exit()
+
 
 # Get dimension of pos and vel
 nq = kindyn.nq()
