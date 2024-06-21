@@ -68,17 +68,24 @@ def closeDagana(publisher):
 
 
 
-
+################################################################
+### Setting urdf parameters
+################################################################
 
 rospy.init_node('horizon_wbc_node')
 # load urdf and srdf to create model
 urdf = rospy.get_param('robot_description', default='')
+
 if urdf == '':
     raise print('urdf not set')
 
 srdf = rospy.get_param('robot_description_semantic', default='')
 if srdf == '':
     raise print('urdf semantic not set')
+
+################################################################
+### Get trajectory and set nodes
+################################################################
 
 index_ = 0
 ns = 0
@@ -107,12 +114,20 @@ for line in lines:
 ns = ns - 1
 T = 5.
 dt = T / ns
+
+################################################################
+### Create optimization problem
+################################################################
+
+
 prb = Problem(ns, receding=True, casadi_type=cs.SX)
 prb.setDt(dt)
 print("ns = ", ns) # 120
 print("dt = ", dt) # 0.04
 
-# try construct RobotInterface
+################################################################
+### Setting parameter of Xbot RobotInterface 
+################################################################
 cfg = co.ConfigOptions()
 cfg.set_urdf(urdf)
 cfg.set_srdf(srdf)
@@ -136,6 +151,11 @@ ctrl_mode_override = {
     'ankle_yaw_3': xbot.ControlMode.Velocity(),
     'ankle_yaw_4': xbot.ControlMode.Velocity()
 }
+
+################################################################
+### Setting controlmode, sense and getting initial joints position
+################################################################
+
 robot.setControlMode(ctrl_mode_override)
 robot.sense()
 q_init = robot.getJointPositionMap()
@@ -195,12 +215,17 @@ urdf = urdf.replace('continuous', 'revolute')
 fixed_joints_map = dict()
 # fixed_joints_map.update({'j_wheel_1': 0., 'j_wheel_2': 0., 'j_wheel_3': 0., 'j_wheel_4': 0.})
 
+################################################################
+### Setting symbol-based model kin_dynamic
+#################################################################
+
 kin_dyn  = casadi_kin_dyn.CasadiKinDyn(urdf)
 
 model = FullModelInverseDynamics(problem=prb,
                                  kd=kin_dyn,
                                  q_init=q_init,
                                  base_init=base_init)
+
 
 
 # print(model.getState())

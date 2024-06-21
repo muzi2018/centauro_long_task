@@ -71,13 +71,11 @@ qdot.setInitialGuess(qdot_init)
 qddot.setInitialGuess(qddot_init)
 ```
 
-
 set transcription method
 
 ```python
 th = Transcriptor.make_method(transcription_method, prb, opts=transcription_opts)
 ```
-
 
 **set constraints**
 
