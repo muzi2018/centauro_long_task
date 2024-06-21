@@ -54,7 +54,7 @@ qdot = prb.createStateVariable("qdot", nv)
 qddot = prb.createInputVariable("qddot", nv)
 
 # Creates double integrator
-xdot = utils.double_integrator(q, qdot, qddot)
+xdot = utils.double_integrator(q, qdot, qddot) # =[v a]
 
 # Set dynamics of the system and the relative dt
 prb.setDynamics(xdot)
