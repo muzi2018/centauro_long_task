@@ -22,10 +22,8 @@ constraints:
 	-contact_3
 	-contact_4
 
-    
-
 costs:
 	-joint_regularization
 		type: Regularization (penalt the joints' vel and acc for stability)
 	-joint_posture
-		type:Postural (tracking joint orders)
+		type:Postural (tracking joint_ref keeping initial position)

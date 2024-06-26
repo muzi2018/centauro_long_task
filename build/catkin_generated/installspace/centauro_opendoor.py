@@ -237,6 +237,9 @@ process = subprocess.Popen(bashCommand.split(), start_new_session=True)
 ti = TaskInterface(prb=prb, model=model)
 ti.setTaskFromYaml(rospkg.RosPack().get_path('centauro_long_task') + '/config/centauro_wbc_config.yaml')
 
+exit()
+
+
 pm = pymanager.PhaseManager(ns+1)
 
 c_timelines = dict()
