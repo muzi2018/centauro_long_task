@@ -1,5 +1,16 @@
 # Optimization
 
+## pipeline
+
+1. Setting urdf model parameter + xbot2 parameter
+2. Setting problem
+   1. nodes and dt
+3. Setting model
+   1. Casadi
+4. Setting TaskInterface
+   1. ti=TaskInterface(prb=prb,model=model): combine problem + model
+
+
 ## set parameter
 
 the horizon period : $t_f$
