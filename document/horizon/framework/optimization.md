@@ -7,7 +7,7 @@
 
    1. nodes and dt
 
-   ```cpp
+   ```python
    prb = Problem(ns, receding=True, casadi_type=cs.SX)  # initializing VariablesContainer, FunctionsContainer
 
    ```
@@ -15,7 +15,7 @@
 
    1. Casadi
 
-   ```cpp
+   ```python
    kin_dyn  = casadi_kin_dyn.CasadiKinDyn(urdf)
    model = FullModelInverseDynamics(problem=prb,
                                     kd=kin_dyn,
@@ -28,10 +28,42 @@
 
    1. ti=TaskInterface(prb=prb,model=model): combine problem + model
 
-   ```cpp
+   ```python
    ti = TaskInterface(prb=prb, model=model)
    ti.setTaskFromYaml(rospkg.RosPack().get_path('centauro_long_task') + '/config/centauro_wbc_config.yaml')
    ```
+5. setInitialGuess
+
+```python
+f0 = [0, 0, kin_dyn.mass() / 4 * 9.81]
+for cname, cforces in model.getContactMap().items():
+    for c in cforces:
+        c.setInitialGuess(f0)
+```
+
+Final. solver
+
+PS:
+
+Create state and input variable bounds
+
+```python
+model.q.setBounds(model.q0, model.q0, nodes=0)
+# model.q[0].setBounds(model.q0[0] + 1, model.q0[0] + 1, nodes=ns)
+model.v.setBounds(np.zeros(model.nv), np.zeros(model.nv), nodes=0)
+model.v.setBounds(np.zeros(model.nv), np.zeros(model.nv), nodes=ns)
+```
+
+
+
+Create your own cost or contrain
+
+```python
+prb.createResidual('lower_limits', 30 * utils.barrier(model.q[-3] - q_min[-3]))
+prb.createResidual('upper_limits', 30 * utils.barrier1(model.q[-3] - q_max[-3]))
+```
+
+
 
 ## set parameter
 

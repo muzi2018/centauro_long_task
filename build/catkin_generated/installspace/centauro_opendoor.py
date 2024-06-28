@@ -295,8 +295,7 @@ print (reference.shape)
 
 #
 # reference.assign(matrix 21 x 100)
-print(model.q)
-exit()
+
 model.q.setBounds(model.q0, model.q0, nodes=0)
 # model.q[0].setBounds(model.q0[0] + 1, model.q0[0] + 1, nodes=ns)
 model.v.setBounds(np.zeros(model.nv), np.zeros(model.nv), nodes=0)
