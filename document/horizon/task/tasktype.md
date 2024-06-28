@@ -1,14 +1,14 @@
 # Task Type
 
 1. CartesianTask
-3. ContactTask
-4. SurfaceContact
-5. VertexContact
-6. PosturalTask
-7. JointLimitsTask
-8. RegularizationTask
-9. RollingTask
-10. ZmpTask
+2. ContactTask
+3. SurfaceContact
+4. VertexContact
+5. PosturalTask
+6. JointLimitsTask
+7. RegularizationTask
+8. RollingTask
+9. ZmpTask
 
 constraints:
 	-contact_1
@@ -26,4 +26,4 @@ costs:
 	-joint_regularization
 		type: Regularization (penalt the joints' vel and acc for stability)
 	-joint_posture
-		type:Postural (tracking joint_ref keeping initial position)
+		type:Postural (keeping initial position)

@@ -3,13 +3,35 @@
 ## pipeline
 
 1. Setting urdf model parameter + xbot2 parameter
-2. Setting problem
+2. setting problem impletement
+
    1. nodes and dt
-3. Setting model
+
+   ```cpp
+   prb = Problem(ns, receding=True, casadi_type=cs.SX)  # initializing VariablesContainer, FunctionsContainer
+
+   ```
+3. create problem state and input variables according to the model
+
    1. Casadi
-4. Setting TaskInterface
+
+   ```cpp
+   kin_dyn  = casadi_kin_dyn.CasadiKinDyn(urdf)
+   model = FullModelInverseDynamics(problem=prb,
+                                    kd=kin_dyn,
+                                    q_init=q_init,
+                                    base_init=base_init) 
+   #        self.state_vec['q'] = self.prb.createStateVariable('q', self.nq)
+   #        self.state_vec['v'] = self.prb.createStateVariable('v', self.nv) according to kin_dyn model
+   ```
+4. create problem from yaml file about constrain and cost
+
    1. ti=TaskInterface(prb=prb,model=model): combine problem + model
 
+   ```cpp
+   ti = TaskInterface(prb=prb, model=model)
+   ti.setTaskFromYaml(rospkg.RosPack().get_path('centauro_long_task') + '/config/centauro_wbc_config.yaml')
+   ```
 
 ## set parameter
 

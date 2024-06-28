@@ -120,7 +120,7 @@ dt = T / ns
 ################################################################
 
 
-prb = Problem(ns, receding=True, casadi_type=cs.SX)
+prb = Problem(ns, receding=True, casadi_type=cs.SX) 
 prb.setDt(dt)
 print("ns = ", ns) # 120
 print("dt = ", dt) # 0.04
@@ -237,7 +237,7 @@ process = subprocess.Popen(bashCommand.split(), start_new_session=True)
 ti = TaskInterface(prb=prb, model=model)
 ti.setTaskFromYaml(rospkg.RosPack().get_path('centauro_long_task') + '/config/centauro_wbc_config.yaml')
 
-exit()
+# exit()
 
 
 pm = pymanager.PhaseManager(ns+1)
@@ -295,7 +295,8 @@ print (reference.shape)
 
 #
 # reference.assign(matrix 21 x 100)
-
+print(model.q)
+exit()
 model.q.setBounds(model.q0, model.q0, nodes=0)
 # model.q[0].setBounds(model.q0[0] + 1, model.q0[0] + 1, nodes=ns)
 model.v.setBounds(np.zeros(model.nv), np.zeros(model.nv), nodes=0)
