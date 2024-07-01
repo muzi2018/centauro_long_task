@@ -3,7 +3,7 @@
 ## pipeline
 
 1. Setting urdf model parameter + xbot2 parameter
-2. setting problem impletement
+2. Setting problem impletement
 
    1. nodes and dt
 
@@ -43,6 +43,20 @@ for cname, cforces in model.getContactMap().items():
 
 Final. solver
 
+```python
+ti.finalize()
+#    def finalize(self, rti=True):
+#        """
+#        to be called after all variables have been created
+#        """
+#        self.model.setDynamics()
+#        self._create_solver(rti)
+```
+
+```python
+ti.bootstrap()
+```
+
 PS:
 
 Create state and input variable bounds
@@ -54,16 +68,12 @@ model.v.setBounds(np.zeros(model.nv), np.zeros(model.nv), nodes=0)
 model.v.setBounds(np.zeros(model.nv), np.zeros(model.nv), nodes=ns)
 ```
 
-
-
 Create your own cost or contrain
 
 ```python
 prb.createResidual('lower_limits', 30 * utils.barrier(model.q[-3] - q_min[-3]))
 prb.createResidual('upper_limits', 30 * utils.barrier1(model.q[-3] - q_max[-3]))
 ```
-
-
 
 ## set parameter
 
