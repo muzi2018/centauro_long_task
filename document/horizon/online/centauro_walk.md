@@ -86,8 +86,6 @@ void Controller::run()
 }
 ```
 
-
-
 # executable2
 
 ## config
@@ -98,8 +96,48 @@ Setting constraints & costs
 
 ## resource
 
+```python
 solution_publisher = rospy.Publisher('/mpc_solution', WBTrajectory, queue_size=1, tcp_nodelay=True)
+```
 
+```python
 solution_time_publisher = rospy.Publisher('/mpc_solution_time', Float64, queue_size=1, tcp_nodelay=True)
+```
 
 ## execution
+
+firstly using bootstrap get a initial data
+
+```python
+ti.bootstrap()
+# exit()
+ti.load_initial_guess()
+```
+
+secondly using the initial data to warmstart the real-time mpc
+
+```python
+  while not rospy.is_shutdown():
+    ti.rti()
+    solution = ti.solution
+```
+
+
+
+defbootstrap(self):
+	t=time.time()
+	self.solver_bs.solve()
+
+
+defrti(self):
+	t=time.time()
+	check=self.solver_rti.solve()
+
+
+
+bootstrapping solver configurations...
+{'ipopt.linear_solver': 'ma57', 'ipopt.tol': 0.1, 'ipopt.constr_viol_tol': 0.01, 'ilqr.constraint_violation_threshold': 0.01, 'ipopt.print_level': 5, 'ipopt.suppress_all_output': 'yes', 'ipopt.sb': 'yes', 'ilqr.suppress_all_output': 'yes', 'ilqr.codegen_enabled': True, 'ilqr.codegen_workdir': '/tmp/tyhio', 'ilqr.enable_gn': True, 'ilqr.hxx_reg_base': 0.0, 'ilqr.n_threads': 0, 'print_time': 0}
+
+
+realtime_iter solver configurations...
+{'ipopt.linear_solver': 'ma57', 'ipopt.tol': 0.1, 'ipopt.constr_viol_tol': 0.01, 'ilqr.constraint_violation_threshold': 0.01, 'ipopt.print_level': 5, 'ipopt.suppress_all_output': 'yes', 'ipopt.sb': 'yes', 'ilqr.suppress_all_output': 'yes', 'ilqr.codegen_enabled': True, 'ilqr.codegen_workdir': '/tmp/tyhio', 'ilqr.enable_gn': True, 'ilqr.hxx_reg_base': 0.0, 'ilqr.n_threads': 0, 'print_time': 0, 'ilqr.enable_line_search': False, 'ilqr.max_iter': 1}
