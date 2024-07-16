@@ -1,79 +1,53 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 from horizon.problem import Problem
 from horizon.rhc.model_description import FullModelInverseDynamics
 from horizon.rhc.taskInterface import TaskInterface
+from horizon.utils import trajectoryGenerator, resampler_trajectory, utils, analyzer
 from horizon.ros import replay_trajectory
-from horizon.utils import utils
+import casadi_kin_dyn.py3casadi_kin_dyn as casadi_kin_dyn
 import phase_manager.pymanager as pymanager
 import phase_manager.pyphase as pyphase
 import phase_manager.pytimeline as pytimeline
+import phase_manager.pyrosserver as pyrosserver
 
-import std_msgs.msg
+from horizon.rhc.gait_manager import GaitManager
+from horizon.rhc.ros.gait_manager_ros import GaitManagerROS
+
+import cartesian_interface.roscpp_utils as roscpp
+import cartesian_interface.pyci as pyci
+import cartesian_interface.affine3
+import horizon.utils.analyzer as analyzer
+
+from base_estimation.msg import ContactWrenches
+from geometry_msgs.msg import Wrench
+from sensor_msgs.msg import Imu
+from std_msgs.msg import Float64
+
+from scipy.spatial.transform import Rotation
+
 from xbot_interface import config_options as co
 from xbot_interface import xbot_interface as xbot
-from datetime import datetime
 
-import rospkg
-import casadi_kin_dyn.py3casadi_kin_dyn as casadi_kin_dyn
-from scipy.spatial.transform import Rotation as R
-from pyquaternion import Quaternion
-from std_msgs.msg import Float64
+from geometry_msgs.msg import PoseStamped, TwistStamped, Vector3
+from kyon_controller.msg import WBTrajectory
+
 import casadi as cs
-import numpy as np
 import rospy
+import rospkg
+import numpy as np
 import subprocess
-import os
-from geometry_msgs.msg import PoseStamped
-from nav_msgs.msg import Path
-from sensor_msgs.msg import JointState
-from geometry_msgs.msg import PoseArray, Pose
-# from std_msgs.msg import Float64
-import std_msgs
-from std_srvs.srv import Empty, EmptyResponse
-from cartesian_interface.pyci_all import *
-from std_msgs.msg import Int32MultiArray, Float64MultiArray
-import pkgutil
-import scipy.io
+import time
 
+def imu_callback(msg: Imu):
+    global base_pose
+    base_pose = np.zeros(7)
+    base_pose[3:] = np.array([msg.orientation.x, msg.orientation.y, msg.orientation.z, msg.orientation.w])
 
-def openDagana(publisher):
-    daganaRefRate = rospy.Rate(1000.0)
-    posTrajectory = np.linspace(1, 0.2, 1000).tolist()
-    for posPointNum in range(len(posTrajectory)):
-        # print("posPointNum = ", posPointNum)
-        daganaMsg = JointState()
-        daganaMsg.position.append(posTrajectory[posPointNum])
-        publisher.publish(daganaMsg)
-        daganaRefRate.sleep()
-    print("Gripper should be open! Continuing..")
-
-
-
-def closeDagana(publisher):
-    daganaRefRate = rospy.Rate(1000.0)
-    posTrajectory = np.linspace(0.2, 0.9, 1000).tolist()
-    for posPointNum in range(len(posTrajectory)):
-        daganaMsg = JointState()
-        daganaMsg.position.append(posTrajectory[posPointNum])
-        publisher.publish(daganaMsg)
-
-        daganaRefRate.sleep()
-
-
-
-# package_path = [path for _, path, _ in pkgutil.iter_modules(xbot_interface.__path__)]
-# model_names = [name for _, name, _ in pkgutil.iter_modules(package_path)]
-# print("model_names = ")
-# print(model_names)
-
-
-
-################################################################
-### Setting urdf parameters
-################################################################
 
 rospy.init_node('horizon_wbc_node')
-# load urdf and srdf to create model
+'''
+Load urdf and srdf
+'''
 urdf = rospy.get_param('robot_description', default='')
 
 if urdf == '':
@@ -83,51 +57,20 @@ srdf = rospy.get_param('robot_description_semantic', default='')
 if srdf == '':
     raise print('urdf semantic not set')
 
-################################################################
-### Get trajectory and set nodes
-################################################################
-
-index_ = 0
-ns = 0
-# with open('/home/wang/horizon_wbc/output_1.txt', 'r') as file:
-#     lines = file.readlines()
-filename = rospkg.RosPack().get_path('centauro_long_task') + "/trajectory/opendoor.txt"
-with open(filename, 'r') as file:
-    lines = file.readlines()
-matrix = []
-
-global value 
-for line in lines:
-    if index_ % 6 == 0: 
-        value = [float(x) for x in line.strip().split()]
-        matrix.append(value)
-        ns = ns + 1
-    index_ = index_ + 1
-
-# for i in range(15):
-#     value[0] -= i * 0.002
-#     matrix.append(value)
-#     ns = ns + 1
 
 
-
-ns = ns - 1
-T = 5.
+'''
+Initialize Horizon problem
+'''
+ns = 40
+T = 2.
 dt = T / ns
-
-################################################################
-### Create optimization problem
-################################################################
-
-
 prb = Problem(ns, receding=True, casadi_type=cs.SX) 
 prb.setDt(dt)
-print("ns = ", ns) # 120
-print("dt = ", dt) # 0.04
 
-################################################################
-### Setting parameter of Xbot RobotInterface 
-################################################################
+'''
+Build ModelInterface and RobotStatePublisher
+'''
 cfg = co.ConfigOptions()
 cfg.set_urdf(urdf)
 cfg.set_srdf(srdf)
@@ -136,8 +79,105 @@ cfg.set_string_parameter('model_type', 'RBDL')
 cfg.set_string_parameter('framework', 'ROS')
 cfg.set_bool_parameter('is_model_floating_base', True)
 
+
+base_pose = None
+base_twist = None
+
 # Xbot
+
+base_pose = None
+base_twist = None
+
 robot = xbot.RobotInterface(cfg)
+robot.sense()
+
+rospy.Subscriber('/xbotcore/imu/imu_link', Imu, imu_callback)
+while base_pose is None:
+    rospy.sleep(0.01)
+base_pose[0:3] = [0.07, 0., 0.8]
+base_twist = np.zeros(6)
+q_init = robot.getJointPosition()
+q_init = robot.eigenToMap(q_init)
+
+'''fixed joint 1
+wheels_map: {'j_wheel_1': 0.0, 'j_wheel_2': 0.0, 'j_wheel_3': 0.0, 'j_wheel_4': 0.0}
+'''
+wheels = [f'j_wheel_{i + 1}' for i in range(4)]
+wheels_map = dict(zip(wheels, 4 * [0.]))
+
+'''fixed joint 2
+ankle_yaws_map: {'ankle_yaw_1': 0.7853981633974483, 'ankle_yaw_2': -0.7853981633974483, 'ankle_yaw_3': -0.7853981633974483, 'ankle_yaw_4': 0.7853981633974483}
+'''
+ankle_yaws = [f'ankle_yaw_{i + 1}' for i in range(4)]
+ankle_yaws_map = dict(zip(ankle_yaws, [np.pi/4, -np.pi/4, -np.pi/4, np.pi/4]))
+print("ankle_yaws_map: {}".format(ankle_yaws_map))
+
+'''fixed joint 3
+arm_joints_map: {'j_arm1_1': 0.75, 'j_arm1_2': 0.1, 'j_arm1_3': 0.2, 'j_arm1_4': -2.2, 'j_arm1_5': 0.0, 'j_arm1_6': -1.3, 'j_arm2_1': 0.75, 'j_arm2_2': 0.1, 'j_arm2_3': -0.2, 'j_arm2_4': -2.2, 'j_arm2_5': 0.0, 'j_arm2_6': -1.3}
+'''
+arm_joints = [f'j_arm1_{i + 1}' for i in range(6)] + [f'j_arm2_{i + 1}' for i in range(6)]
+arm_joints_map = dict(zip(arm_joints, [0.75, 0.1, 0.2, -2.2, 0., -1.3, 0.75, 0.1, -0.2, -2.2, 0.0, -1.3]))
+
+'''fixed joint 4 and 5
+'''
+torso_map = {'torso_yaw': 0.}
+head_map = {'d435_head_joint': 0.0, 'velodyne_joint': 0.0}
+
+fixed_joint_map = dict()
+fixed_joint_map.update(wheels_map)
+fixed_joint_map.update(ankle_yaws_map)
+fixed_joint_map.update(arm_joints_map)
+fixed_joint_map.update(torso_map)
+fixed_joint_map.update(head_map)
+
+
+# replace continuous joints with revolute
+urdf = urdf.replace('continuous', 'revolute')
+
+kin_dyn = casadi_kin_dyn.CasadiKinDyn(urdf, fixed_joints=fixed_joint_map)
+
+model = FullModelInverseDynamics(problem=prb,
+                                 kd=kin_dyn,
+                                 q_init=q_init,
+                                 base_init=base_pose,
+                                 fixed_joint_map=fixed_joint_map
+                                 )
+rospy.set_param('robot_description', urdf)
+bashCommand = 'rosrun robot_state_publisher robot_state_publisher robot_description:=robot_description'
+process = subprocess.Popen(bashCommand.split(), start_new_session=True)
+
+ti = TaskInterface(prb=prb, model=model)
+ti.setTaskFromYaml(rospkg.RosPack().get_path('centauro_long_task') + '/config/centauro_wbc_armswing.yaml')
+
+tg = trajectoryGenerator.TrajectoryGenerator()
+
+pm = pymanager.PhaseManager(ns)
+
+# phase manager handling
+c_timelines = dict()
+for c in model.cmap.keys():
+    c_timelines[c] = pm.createTimeline(f'{c}_timeline')
+exit()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 model_fk = robot.model()
 
 
@@ -151,23 +191,14 @@ ctrl_mode_override = {
     'ankle_yaw_3': xbot.ControlMode.Velocity(),
     'ankle_yaw_4': xbot.ControlMode.Velocity()
 }
-
-################################################################
-### Setting controlmode, sense and getting initial joints position
-################################################################
-
 robot.setControlMode(ctrl_mode_override)
-robot.sense()
-q_init = robot.getJointPositionMap()
+
+q_init = robot.getJointPosition()
+q_init = robot.eigenToMap(q_init)
+exit()
 # robot.setControlMode('position')
 
-# server
-opendoor_flag = False
-def opendoor(req):
-    global opendoor_flag
-    opendoor_flag = not opendoor_flag
-    return EmptyResponse()
-service = rospy.Service('opendoor', Empty, opendoor)
+
 
 # q_init = {
 #     "ankle_pitch_1": -0.301666,
