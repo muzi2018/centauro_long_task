@@ -25,7 +25,6 @@ constraints:
   - contact_4
 
 costs:
-  - joint_regularization
   - joint_posture
 
 .define:
@@ -61,8 +60,8 @@ interaction_1:
   type: VertexForce
   frame: contact_1
   fn_min: 10.0
-  # enable_fc: true
-  # friction_coeff: 0.5
+  enable_fc: true
+  friction_coeff: 0.5
   vertex_frames:
     - contact_1
 
@@ -70,8 +69,8 @@ interaction_2:
   type: VertexForce
   frame: contact_2
   fn_min: 10.0
-  # enable_fc: true
-  # friction_coeff: 0.5
+  enable_fc: true
+  friction_coeff: 0.5
   vertex_frames:
     - contact_2
 
@@ -79,8 +78,8 @@ interaction_3:
   type: VertexForce
   frame: contact_3
   fn_min: 10.0
-  # enable_fc: true
-  # friction_coeff: 0.5
+  enable_fc: true
+  friction_coeff: 0.5
   vertex_frames:
     - contact_3
 
@@ -88,8 +87,8 @@ interaction_4:
   type: VertexForce
   frame: contact_4
   fn_min: 10.0
-  # enable_fc: true
-  # friction_coeff: 0.5
+  enable_fc: true
+  friction_coeff: 0.5
   vertex_frames:
     - contact_4
 
