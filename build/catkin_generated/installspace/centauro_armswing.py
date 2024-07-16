@@ -235,7 +235,7 @@ bashCommand = 'rosrun robot_state_publisher robot_state_publisher'
 process = subprocess.Popen(bashCommand.split(), start_new_session=True)
 
 ti = TaskInterface(prb=prb, model=model)
-ti.setTaskFromYaml(rospkg.RosPack().get_path('centauro_long_task') + '/config/centauro_wbc_armswing.yaml')
+ti.setTaskFromYaml(rospkg.RosPack().get_path('centauro_long_task') + '/config/centauro_wbc_config.yaml')
 
 # exit()
 
@@ -281,15 +281,23 @@ print("matrix_np_.shape = ", matrix_np_.shape)
 # exit()
 
 
-# reference = prb.createParameter('upper_body_reference', 23, nodes=range(ns+1))
+reference = prb.createParameter('upper_body_reference', 23, nodes=range(ns+1))
+# for i in range(21):
+#     reference[i] = matrix[i][0]
+#    x y z;4 quan; yaw_joint , 6 left arm, 6 right arm, 1 grippers + 2 headjoints = 7 + 15
 
-# prb.createResidual('upper_body_trajectory', 5 * (cs.vertcat(model.q[:7], model.q[-16:]) - reference))
+prb.createResidual('upper_body_trajectory', 5 * (cs.vertcat(model.q[:7], model.q[-16:]) - reference))
+# print(matrix_np_.shape)
+# exit()
 
+reference.assign(matrix_np_.T)
+print (reference.shape)
 
-# reference.assign(matrix_np_.T)
-# print (reference.shape)
+#
+# reference.assign(matrix 21 x 100)
 
 model.q.setBounds(model.q0, model.q0, nodes=0)
+# model.q[0].setBounds(model.q0[0] + 1, model.q0[0] + 1, nodes=ns)
 model.v.setBounds(np.zeros(model.nv), np.zeros(model.nv), nodes=0)
 model.v.setBounds(np.zeros(model.nv), np.zeros(model.nv), nodes=ns)
 
