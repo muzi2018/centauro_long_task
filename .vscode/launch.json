@@ -3,10 +3,10 @@
     "configurations": [
         {
             "name": "Python: Current File",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "/home/wang/forest_ws/install/lib/centauro_long_task/centauro_armswing.py",
-            "console": "integratedTerminal"
+            "console": "internalConsole"
         }
     ]
 }

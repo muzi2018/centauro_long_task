@@ -88,16 +88,51 @@ base_twist = None
 base_pose = None
 base_twist = None
 
-robot = xbot.RobotInterface(cfg)
-robot.sense()
+print('RobotInterface not created')
 
-rospy.Subscriber('/xbotcore/imu/imu_link', Imu, imu_callback)
-while base_pose is None:
-    rospy.sleep(0.01)
-base_pose[0:3] = [0.07, 0., 0.8]
+q_init = {
+    # 'torso_yaw': 0.00,  # 0.00,
+    # 'j_arm1_1': 1.50,  # 1.60,
+    # 'j_arm1_2': 0.1,  # 0.,
+    # 'j_arm1_3': 0.2,  # 1.5,
+    # 'j_arm1_4': -2.2,  # 0.3,
+    # 'j_arm1_5': 0.00,  # 0.00,
+    # 'j_arm1_6': -1.3,  # 0.,
+    # 'j_arm1_7': 0.0,    # 0.0,
+
+    # 'j_arm2_1': 1.50,  # 1.60,
+    # 'j_arm2_2': 0.1,  # 0.,
+    # 'j_arm2_3': -0.2,  # 1.5,
+    # 'j_arm2_4': -2.2,  # -0.3,
+    # 'j_arm2_5': 0.0,  # 0.0,
+    # 'j_arm2_6': -1.3,  # 0.,
+    # 'j_arm2_7': 0.0,    # 0.0,
+
+    # 'd435_head_joint': 0.0,
+    # 'velodyne_joint': 0.0,
+    'hip_yaw_1': -0.746,
+    'hip_pitch_1': -1.254,
+    'knee_pitch_1': -1.555,
+    'ankle_pitch_1': -0.3,
+
+    'hip_yaw_2': 0.746,
+    'hip_pitch_2': 1.254,
+    'knee_pitch_2': 1.555,
+    'ankle_pitch_2': 0.3,
+
+    'hip_yaw_3': 0.746,
+    'hip_pitch_3': 1.254,
+    'knee_pitch_3': 1.555,
+    'ankle_pitch_3': 0.3,
+
+    'hip_yaw_4': -0.746,
+    'hip_pitch_4': -1.254,
+    'knee_pitch_4': -1.555,
+    'ankle_pitch_4': -0.3,
+}
+
+base_pose = np.array([0.07, 0., 0.8, 0., 0., 0., 1.])
 base_twist = np.zeros(6)
-q_init = robot.getJointPosition()
-q_init = robot.eigenToMap(q_init)
 
 '''fixed joint 1
 wheels_map: {'j_wheel_1': 0.0, 'j_wheel_2': 0.0, 'j_wheel_3': 0.0, 'j_wheel_4': 0.0}
@@ -157,9 +192,81 @@ pm = pymanager.PhaseManager(ns)
 c_timelines = dict()
 for c in model.cmap.keys():
     c_timelines[c] = pm.createTimeline(f'{c}_timeline')
+
+short_stance_duration = 5
+stance_duration = 15
+flight_duration = 15
+c_i = 0
+
+# for c in model.getContactMap():
+#     c_ori = model.kd.fk(c)(q=model.q)['ee_rot'][2, :]
+#     prb.createResidual(f'{c}_ori', c_ori.T - np.array([0, 0, 1]))
+
+for c in model.getContactMap():
+    c_i += 1  # because contact task start from contact_1
+    # stance phase normal
+    stance_phase = c_timelines[c].createPhase(stance_duration, f'stance_{c}')
+    stance_phase_short = c_timelines[c].createPhase(short_stance_duration, f'stance_{c}_short')
+    if ti.getTask(f'contact_{c_i}') is not None:
+        stance_phase.addItem(ti.getTask(f'contact_{c_i}'))
+        stance_phase_short.addItem(ti.getTask(f'contact_{c_i}'))
+    else:
+        raise Exception('task not found')
+
+    # flight phase normal
+    flight_phase = c_timelines[c].createPhase(flight_duration, f'flight_{c}')
+    init_z_foot = model.kd.fk(c)(q=model.q0)['ee_pos'].elements()[2]
+    ee_vel = model.kd.frameVelocity(c, model.kd_frame)(q=model.q, qdot=model.v)['ee_vel_linear']
+    ref_trj = np.zeros(shape=[7, flight_duration])
+    ref_trj[2, :] = np.atleast_2d(tg.from_derivatives(flight_duration, init_z_foot, init_z_foot + 0.01, 0.1, [None, 0, None]))
+    if ti.getTask(f'z_contact_{c_i}') is not None:
+        flight_phase.addItemReference(ti.getTask(f'z_contact_{c_i}'), ref_trj)
+    else:
+        raise Exception('task not found')
+
+    cstr = prb.createConstraint(f'{c}_vert', ee_vel[0:2], [])
+    flight_phase.addConstraint(cstr, nodes=[0, flight_duration-1])
+
+    c_ori = model.kd.fk(c)(q=model.q)['ee_rot'][2, :]
+    cost_ori = prb.createResidual(f'{c}_ori', 5. * (c_ori.T - np.array([0, 0, 1])))
+    flight_phase.addCost(cost_ori)
+
+for c in model.cmap.keys():
+    stance = c_timelines[c].getRegisteredPhase(f'stance_{c}')
+    while c_timelines[c].getEmptyNodes() > 0:
+        c_timelines[c].addPhase(stance)
+
+ti.model.q.setBounds(ti.model.q0, ti.model.q0, nodes=0)
+# ti.model.v.setBounds(ti.model.v0, ti.model.v0, nodes=0)
+# ti.model.a.setBounds(np.zeros([model.a.shape[0], 1]), np.zeros([model.a.shape[0], 1]), nodes=0)
+ti.model.q.setInitialGuess(ti.model.q0)
+ti.model.v.setInitialGuess(ti.model.v0)
+
+f0 = [0, 0, kin_dyn.mass() / 4 * 9.8]
+for cname, cforces in ti.model.cmap.items():
+    for c in cforces:
+        c.setInitialGuess(f0)
+
+vel_lims = model.kd.velocityLimits()
+prb.createResidual('max_vel', 1e1 * utils.barrier(vel_lims[7:] - model.v[7:]))
+prb.createResidual('min_vel', 1e1 * utils.barrier1(-1 * vel_lims[7:] - model.v[7:]))
+
+# finalize taskInterface and solve bootstrap problem
+ti.finalize()
+
+rs = pyrosserver.RosServerClass(pm)
+def dont_print(*args, **kwargs):
+    pass
+ti.solver_rti.set_iteration_callback(dont_print)
+
+ti.bootstrap()
+# exit()
+ti.load_initial_guess()
+solution = ti.solution
+
+print("end ................")
+
 exit()
-
-
 
 
 
@@ -195,7 +302,7 @@ robot.setControlMode(ctrl_mode_override)
 
 q_init = robot.getJointPosition()
 q_init = robot.eigenToMap(q_init)
-exit()
+
 # robot.setControlMode('position')
 
 

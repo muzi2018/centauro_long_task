@@ -15,7 +15,7 @@ solver:
   ilqr.codegen_workdir: /tmp/tyhio
   ilqr.enable_gn: true
   ilqr.hxx_reg_base: 0.0
-  ilqr.n_threads: 0
+  ilqr.n_threads: 1
   print_time: 0
 
 constraints:
