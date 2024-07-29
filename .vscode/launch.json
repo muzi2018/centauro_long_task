@@ -5,7 +5,7 @@
             "name": "Python: Current File",
             "type": "debugpy",
             "request": "launch",
-            "program": "/home/wang/forest_ws/install/lib/centauro_long_task/centauro_armswing.py",
+            "program": "/home/wang/forest_ws/src/centauro_long_task/scripts/centauro_opendoor.py",
             "console": "internalConsole"
         }
     ]
