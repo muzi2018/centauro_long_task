@@ -1,5 +1,31 @@
 # Task Type
 
+horizon/rhc/taskInterface.py
+
+```python
+class TaskInterface(ProblemInterface):
+    def __init__(self,
+                 prb,
+                 model):
+
+        super().__init__(prb, model)
+
+        # here I register the the default tasks
+        # todo: should I do it here?
+        # todo: name of task should be inherited from the task class itself:
+        #  --> task_factory.register(CartesianTask.signature(), CartesianTask)
+        # uniform the names of these tasks
+        task_factory.register('Cartesian', CartesianTask)
+        task_factory.register('Contact', ContactTask)
+        task_factory.register('Wrench', SurfaceContact)
+        task_factory.register('VertexForce', VertexContact)
+        task_factory.register('Postural', PosturalTask)
+        task_factory.register('JointLimits', JointLimitsTask)
+        task_factory.register('Regularization', RegularizationTask)
+        task_factory.register('Rolling', RollingTask)
+        task_factory.register('Zmp', ZmpTask)
+```
+
 1. CartesianTask
 2. ContactTask
 3. SurfaceContact

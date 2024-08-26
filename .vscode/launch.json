@@ -2,24 +2,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "(gdb) Launch",
-            "type": "cppdbg",
+            "name": "Python: Current File",
+            "type": "debugpy",
             "request": "launch",
-            "program": "${workspaceFolder}/centauro_turnaround",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ],
-            "preLaunchTask": "build"
+            "program": "/home/wang/forest_ws/src/centauro_long_task/scripts/centauro_opendoor.py",
+            "console": "internalConsole"
         }
     ]
 }

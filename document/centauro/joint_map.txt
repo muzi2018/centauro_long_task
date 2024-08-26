@@ -1,0 +1,57 @@
+horizon joints map:
+(0-6)
+'universe', 
+'reference', 
+
+7: 'hip_yaw_1', 
+8: 'hip_pitch_1', 
+9: 'knee_pitch_1', 
+10: 'ankle_pitch_1', 
+11: 'ankle_yaw_1', 
+12: 'j_wheel_1', 
+
+13: 'hip_yaw_2', 
+14: 'hip_pitch_2', 
+15: 'knee_pitch_2', 
+16: 'ankle_pitch_2', 
+17: 'ankle_yaw_2', 
+18: 'j_wheel_2', 
+
+19: 'hip_yaw_3', 
+20: 'hip_pitch_3', 
+21: 'knee_pitch_3', 
+22: 'ankle_pitch_3', 
+23: 'ankle_yaw_3', 
+24: 'j_wheel_3', 
+
+25: 'hip_yaw_4', 
+26: 'hip_pitch_4', 
+27: 'knee_pitch_4', 
+28: 'ankle_pitch_4', 
+29: 'ankle_yaw_4', 
+30: 'j_wheel_4', 
+
+31: 'torso_yaw', 
+
+32: 'j_arm1_1', 
+33: 'j_arm1_2', 
+34: 'j_arm1_3', 
+35: 'j_arm1_4', 
+36: 'j_arm1_5', 
+37: 'j_arm1_6',
+ 
+38: 'j_arm2_1', 
+39: 'j_arm2_2', 
+40: 'j_arm2_3', 
+41: 'j_arm2_4', 
+42: 'j_arm2_5', 
+43: 'j_arm2_6', 
+
+44: 'dagana_2_claw_joint', 
+45: 'd435_head_joint', 
+46: 'velodyne_joint'
+
+
+
+
+

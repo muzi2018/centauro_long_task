@@ -378,30 +378,30 @@ while time <= T:
 
     if i >= solution['a'].shape[1]:
         i = solution['a'].shape[1] - 1
-    ## update model
-    q = model_fk.getJointPosition()
-    qdot = solution['v'][:,i]
-    qddot = solution['a'][:,i]
-    print("solution['a'].shape = ", solution['a'].shape)
-    q += dt * qdot + 0.5 * pow(dt, 2) * qddot
-    qdot += dt * qddot
-    model_fk.setJointPosition(q)
-    model_fk.setJointVelocity(qdot)
-    model_fk.setJointAcceleration(qddot)
-    model_fk.update()
-    ## generate data and save
-    Tee = model_fk.getPose('dagana_2_tcp')
+    # ## update model
+    # q = model_fk.getJointPosition()
+    # qdot = solution['v'][:,i]
+    # qddot = solution['a'][:,i]
+    # print("solution['a'].shape = ", solution['a'].shape)
+    # q += dt * qdot + 0.5 * pow(dt, 2) * qddot
+    # qdot += dt * qddot
+    # model_fk.setJointPosition(q)
+    # model_fk.setJointVelocity(qdot)
+    # model_fk.setJointAcceleration(qddot)
+    # model_fk.update()
+    # ## generate data and save
+    # Tee = model_fk.getPose('dagana_2_tcp')
     # print('end effector pose w.r.t. world frame is:\n{}'.format(Tee))
     # print(Tee)
     # print(type(Tee.translation))
     # print(Tee.translation.shape)
     print("i = ", i)
-    print("time = ", time)
+    print("time _ close kin tree= ", time)
     
-    print("data.shape = ", data.shape)
-    data[0, i] = Tee.translation[0]
-    data[1, i] = Tee.translation[1]
-    data[2, i] = Tee.translation[2]
+    # print("data.shape = ", data.shape)
+    # data[0, i] = Tee.translation[0]
+    # data[1, i] = Tee.translation[1]
+    # data[2, i] = Tee.translation[2]
 
     robot.setPositionReference(solution['q'][7:,i])
     robot.setVelocityReference(solution['v'][6:,i])

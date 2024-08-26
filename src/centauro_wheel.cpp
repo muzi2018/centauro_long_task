@@ -40,7 +40,7 @@ void tagDetectionsCallback(const apriltag_ros::AprilTagDetectionArray::ConstPtr&
 {
     if (msg->detections.size() > 0) {
         tagDetected = true;
-    }else{
+    } else {
         tagDetected = false;
     }
 }
