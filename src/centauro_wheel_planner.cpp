@@ -21,7 +21,7 @@
 #include <std_srvs/Empty.h>
 #include <xbot_msgs/JointCommand.h>
 #include <std_msgs/Bool.h>
-
+#include <nav_msgs/Path.h> 
 
 using namespace XBot::Cartesian;
 bool start_searching_bool = false, tagDetected = false;
@@ -58,16 +58,22 @@ void backwardCallback(const std_msgs::Bool::ConstPtr& msg)
 }
 
 
+void pathCallback(const nav_msgs::Path::ConstPtr& msg) {
+    // Handle the received path message here
+    ROS_INFO("Received a path with %lu poses", msg->poses.size());
+    // You can access the poses like this:
+    for (const auto& pose : msg->poses) {
+        ROS_INFO("Pose: [%.2f, %.2f, %.2f]", pose.pose.position.x, pose.pose.position.y, pose.pose.position.z);
+    }
+}
+
+
 int main(int argc, char **argv)
 {
     if (argc > 1)
     {
         direction = atoi(argv[1]);
     }
-
-
-    
-
     const std::string robotName = "centauro_wheel";
     // Initialize ros node
     ros::init(argc, argv, robotName);
@@ -75,8 +81,8 @@ int main(int argc, char **argv)
 
     std_srvs::Empty srv;
     // Create a Buffer and a TransformListener
-    tf2_ros::Buffer tfBuffer;
-    tf2_ros::TransformListener tfListener(tfBuffer);
+    // tf2_ros::Buffer tfBuffer;
+    // tf2_ros::TransformListener tfListener(tfBuffer);
 
     auto cfg = XBot::ConfigOptionsFromParamServer();
     // and we can make the model class
@@ -113,12 +119,11 @@ int main(int argc, char **argv)
     auto solver = XBot::Cartesian::CartesianInterfaceImpl::MakeInstance("OpenSot",
                                                        ik_pb, ctx
                                                        );
-    // ros::Subscriber sub = nodeHandle.subscribe("/tag_detections", 1000, tagDetectionsCallback);
 
-    ros::Subscriber sub_backward = nodeHandle.subscribe("/open_flag", 1, backwardCallback);
+    // ros::Subscriber sub_backward = nodeHandle.subscribe("/open_flag", 1, backwardCallback);
+    ros::Subscriber sub_path = nodeHandle.subscribe("/path", 10 , pathCallback);
 
-
-    ros::ServiceServer service = nodeHandle.advertiseService("start_searching", start_searching);
+    // ros::ServiceServer service = nodeHandle.advertiseService("start_searching", start_searching);
     ros::Rate r(10);
 
     double roll_e, pitch_e, yaw_e;
@@ -131,13 +136,13 @@ int main(int argc, char **argv)
 
     while (ros::ok())
     {
-        std::cout << "backward_bool = " << backward_bool << std::endl;
+        // std::cout << "backward_bool = " << backward_bool << std::endl;
         if (1)
         {
             Eigen::Vector3d base_pos;
             const std::string base_frame = "base_link";
             model->getPointPosition(base_frame, Eigen::Vector3d::Zero(),base_pos); 
-            std::cout << "base_pos[0] = " << base_pos[0] << std::endl;
+            // std::cout << "base_pos[0] = " << base_pos[0] << std::endl;
 
             // if (abs(base_pos[0]) >= 0.029)
             // {
@@ -146,13 +151,14 @@ int main(int argc, char **argv)
             
 
             double x_e = 1;
-            E[0] =0.8 * K_x * direction * x_e;
+            // E[0] = 0.8 * K_x * direction * x_e;
+            E[0] = 0;
             E[1] = 0;
             E[2] = 0;
             E[3] = 0;
             E[4] = 0;
             E[5] = 0;
-            std::cout << "Running" << E[0] << std::endl;
+            // std::cout << "Running" << E[0] << std::endl;
 
             car_cartesian->setVelocityReference(E);
             solver->update(time_, dt);
@@ -176,8 +182,6 @@ int main(int argc, char **argv)
             */
             ros::spinOnce();
             r.sleep();
-
-
         }
 
 
