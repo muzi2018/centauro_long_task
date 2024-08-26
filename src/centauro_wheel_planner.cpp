@@ -22,13 +22,17 @@
 #include <xbot_msgs/JointCommand.h>
 #include <std_msgs/Bool.h>
 #include <nav_msgs/Path.h> 
-
+#include <vector>
 using namespace XBot::Cartesian;
-bool start_searching_bool = false, tagDetected = false;
+bool start_searching_bool = false, tagDetected = false, find_path = false;
 const double dt = 0.01;
 double time_ = 0.0 ;
 Eigen::Vector6d E;
 int direction = 1; // 1 : forward; -1 : backward
+
+std::vector<double> global_x;
+std::vector<double> global_y;
+
 
 bool start_searching(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
 {
@@ -61,10 +65,20 @@ void backwardCallback(const std_msgs::Bool::ConstPtr& msg)
 void pathCallback(const nav_msgs::Path::ConstPtr& msg) {
     // Handle the received path message here
     ROS_INFO("Received a path with %lu poses", msg->poses.size());
+    find_path = true;
+    global_x.resize(msg->poses.size(), 0);
+    global_y.resize(msg->poses.size(), 0);
     // You can access the poses like this:
+    int i = 0;
     for (const auto& pose : msg->poses) {
         ROS_INFO("Pose: [%.2f, %.2f, %.2f]", pose.pose.position.x, pose.pose.position.y, pose.pose.position.z);
+
+        global_x[i] = pose.pose.position.x;
+        // std::cout << "global x = " <<  global_x[i] << std::endl;
+        global_y[i] = pose.pose.position.y;
+        i++;
     }
+    
 }
 
 
@@ -121,7 +135,7 @@ int main(int argc, char **argv)
                                                        );
 
     // ros::Subscriber sub_backward = nodeHandle.subscribe("/open_flag", 1, backwardCallback);
-    ros::Subscriber sub_path = nodeHandle.subscribe("/path", 10 , pathCallback);
+    ros::Subscriber sub_path = nodeHandle.subscribe("/path", 1 , pathCallback);
 
     // ros::ServiceServer service = nodeHandle.advertiseService("start_searching", start_searching);
     ros::Rate r(10);
@@ -134,25 +148,35 @@ int main(int argc, char **argv)
     auto car_task = solver->getTask("base_link");
     auto car_cartesian = std::dynamic_pointer_cast<XBot::Cartesian::CartesianTask>(car_task);
 
+    int path_index = 0;
+
     while (ros::ok())
     {
-        // std::cout << "backward_bool = " << backward_bool << std::endl;
-        if (1)
+        // std::cout << "loop "<< std::endl;
+        if (find_path)
         {
             Eigen::Vector3d base_pos;
             const std::string base_frame = "base_link";
             model->getPointPosition(base_frame, Eigen::Vector3d::Zero(),base_pos); 
+            double current_base_x = base_pos[0];
             // std::cout << "base_pos[0] = " << base_pos[0] << std::endl;
 
             // if (abs(base_pos[0]) >= 0.029)
             // {
             //     /* code */
             // }
-            
 
-            double x_e = 1;
-            // E[0] = 0.8 * K_x * direction * x_e;
-            E[0] = 0;
+            path_index ++ ;
+            if (path_index >= global_x.size())
+            {
+                path_index = global_x.size()-1;
+            }
+            double x_e = global_x[path_index] - current_base_x;
+            // std::cout << "path_index = " << path_index << std::endl;
+            // std::cout << "global_x[path_index] = " << global_x[path_index] << std::endl;
+            std::cout << "x_e = " << x_e << std::endl;
+            E[0] = 0.8 * K_x * direction * x_e;
+            // E[0] = 0;
             E[1] = 0;
             E[2] = 0;
             E[3] = 0;
@@ -180,9 +204,10 @@ int main(int argc, char **argv)
             /**
              * Move Robot
             */
+        }
             ros::spinOnce();
             r.sleep();
-        }
+
 
 
         }        

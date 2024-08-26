@@ -90,20 +90,20 @@ def main():
     goal_pub.publish(goal_pose)
     rospy.loginfo("Published test goal PoseStamped")
 
-    rospy.sleep(2)
-    pointcloud = create_test_pointcloud2()
-    map_pub.publish(pointcloud)
-    rospy.loginfo("again PointCloud2")
-    rospy.sleep(2)
-    # 发布测试起点 PoseStamped 消息
-    start_pose = create_test_posestamped("map", 10.0, 5.0, 0.0)
-    start_pub.publish(start_pose)
-    rospy.loginfo("Published test start PoseStamped")
-    rospy.sleep(4)
-    # 发布测试终点 PoseStamped 消息
-    goal_pose = create_test_posestamped("map", 25.0, -7.0, 0.0)
-    goal_pub.publish(goal_pose)
-    rospy.loginfo("Published test goal PoseStamped")
+    # rospy.sleep(2)
+    # pointcloud = create_test_pointcloud2()
+    # map_pub.publish(pointcloud)
+    # rospy.loginfo("again PointCloud2")
+    # rospy.sleep(2)
+    # # 发布测试起点 PoseStamped 消息
+    # start_pose = create_test_posestamped("map", 10.0, 5.0, 0.0)
+    # start_pub.publish(start_pose)
+    # rospy.loginfo("Published test start PoseStamped")
+    # rospy.sleep(4)
+    # # 发布测试终点 PoseStamped 消息
+    # goal_pose = create_test_posestamped("map", 25.0, -7.0, 0.0)
+    # goal_pub.publish(goal_pose)
+    # rospy.loginfo("Published test goal PoseStamped")
     rate.sleep()
 
 if __name__ == '__main__':
