@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "devel/lib/centauro_long_task/centauro_dual_arm_node"
+			"path" : "devel/lib/centauro_long_task/centauro_pickdrill_node"
 		}
 	],
 	"backtrace" : 1,
@@ -39,13 +39,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 143,
+				"line" : 145,
 				"parent" : 0
 			},
 			{
 				"command" : 2,
 				"file" : 0,
-				"line" : 231,
+				"line" : 230,
 				"parent" : 0
 			},
 			{
@@ -57,7 +57,7 @@
 			{
 				"command" : 3,
 				"file" : 0,
-				"line" : 181,
+				"line" : 188,
 				"parent" : 0
 			},
 			{
@@ -226,7 +226,7 @@
 			]
 		}
 	],
-	"id" : "centauro_dual_arm_node::@6890427a1f51a3e7e1df",
+	"id" : "centauro_pickdrill_node::@6890427a1f51a3e7e1df",
 	"install" : 
 	{
 		"destinations" : 
@@ -620,6 +620,10 @@
 				"role" : "libraries"
 			},
 			{
+				"fragment" : "-lpython3.8",
+				"role" : "libraries"
+			},
+			{
 				"fragment" : "/opt/xbot/lib/libOpenSoT.so.3.4.0",
 				"role" : "libraries"
 			},
@@ -826,8 +830,8 @@
 		],
 		"language" : "CXX"
 	},
-	"name" : "centauro_dual_arm_node",
-	"nameOnDisk" : "centauro_dual_arm_node",
+	"name" : "centauro_pickdrill_node",
+	"nameOnDisk" : "centauro_pickdrill_node",
 	"paths" : 
 	{
 		"build" : ".",
@@ -848,7 +852,7 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "src/centauro_dual_arm.cpp",
+			"path" : "src/centauro_pickdrill.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

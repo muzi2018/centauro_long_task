@@ -216,8 +216,7 @@ catkin_install_python(PROGRAMS
   scripts/centauro_single_pick.py
   scripts/centauro_phase_manager.py
   scripts/centauro_armswing.py
-  scripts/planner.py 
-  scripts/plannerbase.py
+  scripts/planner.py  scripts/plannerbase.py scripts/tastar.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 ## Mark executables for installation
