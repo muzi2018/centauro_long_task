@@ -216,6 +216,8 @@ catkin_install_python(PROGRAMS
   scripts/centauro_single_pick.py
   scripts/centauro_phase_manager.py
   scripts/centauro_armswing.py
+  scripts/planner.py 
+  scripts/plannerbase.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 ## Mark executables for installation
@@ -259,6 +261,9 @@ install(DIRECTORY launch/
  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/trajectory
  PATTERN ".svn" EXCLUDE
 )
+
+install (DIRECTORY )
+
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 # install(FILES
 #   # myfile1
