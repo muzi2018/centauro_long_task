@@ -135,6 +135,7 @@ message("PYTHON_INCLUDE_DIRS = " ,  ${PYTHON_INCLUDE_DIRS} )
 ## The recommended prefix ensures that target names across packages don't collide
 add_executable(centauro_nav_wheel_node src/centauro_nav_wheel.cpp)
 add_executable(centauro_wheel_node src/centauro_wheel.cpp)
+add_executable(centauro_wheel_planner_node src/centauro_wheel_planner.cpp)
 add_executable(centauro_leg_node src/centauro_leg.cpp)
 add_executable(centauro_turnaround_node src/centauro_turnaround.cpp)
 add_executable(centauro_search_node src/centauro_search.cpp)
@@ -178,6 +179,11 @@ target_link_libraries(centauro_home_node
 target_link_libraries(centauro_wheel_node 
   ${catkin_LIBRARIES} ${cartesian_interface_LIBRARIES}
 )
+
+target_link_libraries(centauro_wheel_planner_node 
+  ${catkin_LIBRARIES} ${cartesian_interface_LIBRARIES}
+)
+
 target_link_libraries(centauro_dual_arm_node 
   ${catkin_LIBRARIES} ${cartesian_interface_LIBRARIES}
 )
@@ -233,6 +239,7 @@ catkin_install_python(PROGRAMS
                  centauro_wheel_node centauro_dual_arm_node
                  centauro_wheel_for_drawer_backward_node centauro_pickdrill_node centauro_control_camera_node
                  centauro_wheel_for_drawer_forward_node
+                 centauro_wheel_planner_node
    ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
    RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

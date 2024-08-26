@@ -9,6 +9,7 @@
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_control_camera_node.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_search_node.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_leg_node.dir
+/home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_wheel_planner_node.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/centauro_nav_wheel_node.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/tf2_msgs_generate_messages_nodejs.dir
 /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles/tf2_msgs_generate_messages_lisp.dir
