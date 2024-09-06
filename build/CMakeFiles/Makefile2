@@ -59,6 +59,7 @@ all: CMakeFiles/centauro_lower_node.dir/all
 all: CMakeFiles/centauro_control_camera_node.dir/all
 all: CMakeFiles/centauro_search_node.dir/all
 all: CMakeFiles/centauro_leg_node.dir/all
+all: CMakeFiles/centauro_wheel_planner_node.dir/all
 all: CMakeFiles/centauro_nav_wheel_node.dir/all
 all: CMakeFiles/centauro_turnaround_node.dir/all
 all: CMakeFiles/centauro_pickdrill_node.dir/all
@@ -81,6 +82,7 @@ clean: CMakeFiles/centauro_lower_node.dir/clean
 clean: CMakeFiles/centauro_control_camera_node.dir/clean
 clean: CMakeFiles/centauro_search_node.dir/clean
 clean: CMakeFiles/centauro_leg_node.dir/clean
+clean: CMakeFiles/centauro_wheel_planner_node.dir/clean
 clean: CMakeFiles/centauro_nav_wheel_node.dir/clean
 clean: CMakeFiles/tf2_msgs_generate_messages_nodejs.dir/clean
 clean: CMakeFiles/tf2_msgs_generate_messages_lisp.dir/clean
@@ -374,6 +376,33 @@ centauro_leg_node: CMakeFiles/centauro_leg_node.dir/rule
 CMakeFiles/centauro_leg_node.dir/clean:
 	$(MAKE) -f CMakeFiles/centauro_leg_node.dir/build.make CMakeFiles/centauro_leg_node.dir/clean
 .PHONY : CMakeFiles/centauro_leg_node.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/centauro_wheel_planner_node.dir
+
+# All Build rule for target.
+CMakeFiles/centauro_wheel_planner_node.dir/all:
+	$(MAKE) -f CMakeFiles/centauro_wheel_planner_node.dir/build.make CMakeFiles/centauro_wheel_planner_node.dir/depend
+	$(MAKE) -f CMakeFiles/centauro_wheel_planner_node.dir/build.make CMakeFiles/centauro_wheel_planner_node.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles --progress-num=25,26 "Built target centauro_wheel_planner_node"
+.PHONY : CMakeFiles/centauro_wheel_planner_node.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/centauro_wheel_planner_node.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles 2
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/centauro_wheel_planner_node.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles 0
+.PHONY : CMakeFiles/centauro_wheel_planner_node.dir/rule
+
+# Convenience name for target.
+centauro_wheel_planner_node: CMakeFiles/centauro_wheel_planner_node.dir/rule
+
+.PHONY : centauro_wheel_planner_node
+
+# clean rule for target.
+CMakeFiles/centauro_wheel_planner_node.dir/clean:
+	$(MAKE) -f CMakeFiles/centauro_wheel_planner_node.dir/build.make CMakeFiles/centauro_wheel_planner_node.dir/clean
+.PHONY : CMakeFiles/centauro_wheel_planner_node.dir/clean
 
 #=============================================================================
 # Target rules for target CMakeFiles/centauro_nav_wheel_node.dir
@@ -2300,7 +2329,7 @@ gtest/googlemock/CMakeFiles/gmock_main.dir/all: gtest/googlemock/CMakeFiles/gmoc
 gtest/googlemock/CMakeFiles/gmock_main.dir/all: gtest/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) -f gtest/googlemock/CMakeFiles/gmock_main.dir/build.make gtest/googlemock/CMakeFiles/gmock_main.dir/depend
 	$(MAKE) -f gtest/googlemock/CMakeFiles/gmock_main.dir/build.make gtest/googlemock/CMakeFiles/gmock_main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles --progress-num=27,28 "Built target gmock_main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles --progress-num=29,30 "Built target gmock_main"
 .PHONY : gtest/googlemock/CMakeFiles/gmock_main.dir/all
 
 # Build rule for subdir invocation for target.
@@ -2327,7 +2356,7 @@ gtest/googlemock/CMakeFiles/gmock_main.dir/clean:
 gtest/googlemock/CMakeFiles/gmock.dir/all: gtest/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) -f gtest/googlemock/CMakeFiles/gmock.dir/build.make gtest/googlemock/CMakeFiles/gmock.dir/depend
 	$(MAKE) -f gtest/googlemock/CMakeFiles/gmock.dir/build.make gtest/googlemock/CMakeFiles/gmock.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles --progress-num=25,26 "Built target gmock"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles --progress-num=27,28 "Built target gmock"
 .PHONY : gtest/googlemock/CMakeFiles/gmock.dir/all
 
 # Build rule for subdir invocation for target.
@@ -2354,7 +2383,7 @@ gtest/googlemock/CMakeFiles/gmock.dir/clean:
 gtest/googletest/CMakeFiles/gtest_main.dir/all: gtest/googletest/CMakeFiles/gtest.dir/all
 	$(MAKE) -f gtest/googletest/CMakeFiles/gtest_main.dir/build.make gtest/googletest/CMakeFiles/gtest_main.dir/depend
 	$(MAKE) -f gtest/googletest/CMakeFiles/gtest_main.dir/build.make gtest/googletest/CMakeFiles/gtest_main.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles --progress-num=31,32 "Built target gtest_main"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles --progress-num=33,34 "Built target gtest_main"
 .PHONY : gtest/googletest/CMakeFiles/gtest_main.dir/all
 
 # Build rule for subdir invocation for target.
@@ -2381,7 +2410,7 @@ gtest/googletest/CMakeFiles/gtest_main.dir/clean:
 gtest/googletest/CMakeFiles/gtest.dir/all:
 	$(MAKE) -f gtest/googletest/CMakeFiles/gtest.dir/build.make gtest/googletest/CMakeFiles/gtest.dir/depend
 	$(MAKE) -f gtest/googletest/CMakeFiles/gtest.dir/build.make gtest/googletest/CMakeFiles/gtest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles --progress-num=29,30 "Built target gtest"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/wang/forest_ws/src/centauro_long_task/build/CMakeFiles --progress-num=31,32 "Built target gtest"
 .PHONY : gtest/googletest/CMakeFiles/gtest.dir/all
 
 # Build rule for subdir invocation for target.

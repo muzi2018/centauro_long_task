@@ -246,6 +246,19 @@ centauro_leg_node/fast:
 .PHONY : centauro_leg_node/fast
 
 #=============================================================================
+# Target rules for targets named centauro_wheel_planner_node
+
+# Build rule for target.
+centauro_wheel_planner_node: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 centauro_wheel_planner_node
+.PHONY : centauro_wheel_planner_node
+
+# fast build rule for target.
+centauro_wheel_planner_node/fast:
+	$(MAKE) -f CMakeFiles/centauro_wheel_planner_node.dir/build.make CMakeFiles/centauro_wheel_planner_node.dir/build
+.PHONY : centauro_wheel_planner_node/fast
+
+#=============================================================================
 # Target rules for targets named centauro_nav_wheel_node
 
 # Build rule for target.
@@ -1544,6 +1557,33 @@ src/centauro_wheel_for_drawer_forward.cpp.s:
 	$(MAKE) -f CMakeFiles/centauro_wheel_for_drawer_forward_node.dir/build.make CMakeFiles/centauro_wheel_for_drawer_forward_node.dir/src/centauro_wheel_for_drawer_forward.cpp.s
 .PHONY : src/centauro_wheel_for_drawer_forward.cpp.s
 
+src/centauro_wheel_planner.o: src/centauro_wheel_planner.cpp.o
+
+.PHONY : src/centauro_wheel_planner.o
+
+# target to build an object file
+src/centauro_wheel_planner.cpp.o:
+	$(MAKE) -f CMakeFiles/centauro_wheel_planner_node.dir/build.make CMakeFiles/centauro_wheel_planner_node.dir/src/centauro_wheel_planner.cpp.o
+.PHONY : src/centauro_wheel_planner.cpp.o
+
+src/centauro_wheel_planner.i: src/centauro_wheel_planner.cpp.i
+
+.PHONY : src/centauro_wheel_planner.i
+
+# target to preprocess a source file
+src/centauro_wheel_planner.cpp.i:
+	$(MAKE) -f CMakeFiles/centauro_wheel_planner_node.dir/build.make CMakeFiles/centauro_wheel_planner_node.dir/src/centauro_wheel_planner.cpp.i
+.PHONY : src/centauro_wheel_planner.cpp.i
+
+src/centauro_wheel_planner.s: src/centauro_wheel_planner.cpp.s
+
+.PHONY : src/centauro_wheel_planner.s
+
+# target to generate assembly for a file
+src/centauro_wheel_planner.cpp.s:
+	$(MAKE) -f CMakeFiles/centauro_wheel_planner_node.dir/build.make CMakeFiles/centauro_wheel_planner_node.dir/src/centauro_wheel_planner.cpp.s
+.PHONY : src/centauro_wheel_planner.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -1561,6 +1601,7 @@ help:
 	@echo "... centauro_control_camera_node"
 	@echo "... centauro_search_node"
 	@echo "... centauro_leg_node"
+	@echo "... centauro_wheel_planner_node"
 	@echo "... centauro_nav_wheel_node"
 	@echo "... tf2_msgs_generate_messages_nodejs"
 	@echo "... tf2_msgs_generate_messages_lisp"
@@ -1674,6 +1715,9 @@ help:
 	@echo "... src/centauro_wheel_for_drawer_forward.o"
 	@echo "... src/centauro_wheel_for_drawer_forward.i"
 	@echo "... src/centauro_wheel_for_drawer_forward.s"
+	@echo "... src/centauro_wheel_planner.o"
+	@echo "... src/centauro_wheel_planner.i"
+	@echo "... src/centauro_wheel_planner.s"
 .PHONY : help
 
 
