@@ -245,9 +245,12 @@ while time <= T:
         i = solution['a'].shape[1] - 1
     ## update model
     q = model_fk.getJointPosition()
+    # print("model q.size = ", q.size())
     qdot = solution['v'][:,i]
     qddot = solution['a'][:,i]
-    print("solution['a'].shape = ", solution['a'].shape)
+    print("solution['q'].shape = ", solution['q'].shape)
+    # print("solution['v'].shape = ", solution['v'].shape)
+    # print("solution['a'].shape = ", solution['a'].shape)
     q += dt * qdot + 0.5 * pow(dt, 2) * qddot
     qdot += dt * qddot
     model_fk.setJointPosition(q)
